@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+
+{% block 'head' %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'mainapp/css/mainapp.css' %}">
+{% endblock %}
+
+{% block 'dashboard' %}
+
+<div class="container mt-5">
+    <div aria-live="polite" aria-atomic="true" style="position: relative; min-height: 200px;">
+        <div id="toastContainer" style="position: absolute; top: 0;">
+        </div>
+    </div>
+    <h2>Adicione um novo livro</h2>
+    <form method="post" class="mt-3">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="titulo">Título:</label>
+            <input type="text" class="form-control" id="titulo" name="titulo" required>
+        </div>
+        <div class="form-group">
+            <label for="autor">Autor:</label>
+            <input type="text" class="form-control" id="autor" name="autor" required>
+        </div>
+        <div class="form-group">
+            <label for="anopublicado">Ano publicado:</label>
+            <input type="number" class="form-control" id="anopublicado" name="anopublicado" required>
+        </div>
+        <div class="form-group">
+            <label for="genero">Categoria:</label>
+            <select class="form-control" id="genero" name="genero">
+                {% for categoria in categorias %}
+                <option value="{{ categoria.id }}">{{ categoria.genero }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Salve</button>
+    </form>
+    <div class="container mt-5">
+        <div aria-live="polite" aria-atomic="true" style="position: relative; min-height: 200px;">
+            <div id="toastContainer" style="position: absolute; top: 0;">
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        {% if messages %}
+            {% for message in messages %}
+            const toastContainer = document.getElementById('toastContainer');
+            let toastClass = "";
+            switch("{{ message.tags }}") {
+                case "success":
+                    toastClass = "bg-success text-white";
+                    break;
+                case "error":
+                    toastClass = "bg-danger text-white";
+                    break;
+                
+                default:
+                    toastClass = "bg-primary text-white";
+            }
+    
+            const toastHtml = `
+                <div class="toast ${toastClass}" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000">
+                    <div class="toast-header">
+                        <strong class="mr-auto">Notificação</strong>
+                        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="toast-body">
+                        {{ message }}
+                    </div>
+                </div>`;
+            toastContainer.insertAdjacentHTML('beforeend', toastHtml);
+            {% endfor %}
+            $('.toast').toast('show');
+        {% endif %}
+    });
+    </script>
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block 'head' %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'mainapp/css/mainapp.css' %}">
+{% endblock %}
+
+{% block 'dashboard' %}
+<div class="container mt-5">
+    <div aria-live="polite" aria-atomic="true" style="position: relative; min-height: 200px;">
+        <div id="toastContainer" style="position: absolute; top: 0;">
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <h2>Mudar Senha</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="senha_antiga">Senha antiga:</label>
+            <input type="password" class="form-control" id="senha_antiga" name="senha_antiga" required>
+        </div>
+        <div class="form-group">
+            <label for="nova_senha">Nova senha: </label>
+            <input type="password" class="form-control" id="nova_senha" name="nova_senha" required>
+        </div>
+        <div class="form-group">
+            <label for="nova_senha_confirm">Confirmar nova senha: </label>
+            <input type="password" class="form-control" id="confirmar" name="confirmar" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Confirmar mudança</button>
+    </form>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        {% if messages %}
+            {% for message in messages %}
+            const toastContainer = document.getElementById('toastContainer');
+            let toastClass = "";
+            switch("{{ message.tags }}") {
+                case "success":
+                    toastClass = "bg-success text-white";
+                    break;
+                case "error":
+                    toastClass = "bg-danger text-white";
+                    break;
+                
+                default:
+                    toastClass = "bg-primary text-white";
+            }
+    
+            const toastHtml = `
+                <div class="toast ${toastClass}" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000">
+                    <div class="toast-header">
+                        <strong class="mr-auto">Notificação</strong>
+                        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="toast-body">
+                        {{ message }}
+                    </div>
+                </div>`;
+            toastContainer.insertAdjacentHTML('beforeend', toastHtml);
+            {% endfor %}
+            $('.toast').toast('show');
+        {% endif %}
+    });
+    </script>
+{% endblock %}

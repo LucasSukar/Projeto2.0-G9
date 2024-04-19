@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+
+{% block 'head' %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'mainapp/css/mainapp.css' %}">
+{% endblock %}
+
+{% block 'dashboard' %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            Detalhes do Livro
+        </div>
+        <div class="card-body row"> 
+            <div class="col-md-8">
+                <h5 class="card-title">{{ livro.titulo }}</h5>
+                <p class="card-text"><strong>Autor:</strong> {{ livro.autor }}</p>
+                <p class="card-text"><strong>Ano Publicado:</strong> {{ livro.anopublicado }}</p>
+                <p class="card-text"><strong>Categoria:</strong> {{ livro.genero.genero }}</p>
+                <p class="card-text"><strong>Status de leitura:</strong> {{ livro.get_status_leitura_display }}</p>
+                <a href="{% url 'biblioteca' %}" class="btn btn-primary">Voltar</a>
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteConfirmationModal">
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAKRJREFUSEvtlcERgCAMBNdOtBMtxUosxVK0FDvRYUZ4xImHIj/5SSR7SQauofJqKudHAXpgBlpHyAaMwOoJVYAFCJC7FSDdW8B+HvSEqLhskUqg4hdAPFA6+1SxLb06ICqXpZsS3f9fD+9rgFWovhM/twKVsLhFP+Byr5625J+BfJqKW6QIjwE5RmOhwdUGu+nd5OBiU4abxXyudSrLVK2R8eqAA04lOBnZrFOdAAAAAElFTkSuQmCC"/>
+                </button>
+            </div>
+            <div class="col-md-4">
+                {% if livro.cover_url %}
+                <img src="{{ livro.cover_url }}" alt="Capa para {{ livro.titulo }}" class="book-cover img-fluid"> 
+                {% else %}
+                <p>Capa não disponível.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteConfirmationModalLabel">Confirmar Deleção</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Tem certeza que deseja deletar este livro?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <form action="{% url 'livro_delete' livro.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Deletar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+ 
+  {% endblock %}
+

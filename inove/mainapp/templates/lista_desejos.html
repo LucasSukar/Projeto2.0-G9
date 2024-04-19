@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+
+{% block 'head' %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'mainapp/css/mainapp.css' %}">
+{% endblock %}
+
+{% block 'dashboard' %}
+<div class="container mt-4">
+    <h2>Lista de Desejos de {{user.username}}</h2>
+    {% if messages %}
+    <div class="alert alert-info">
+        {% for message in messages %}
+        <p>{{ message }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <div class="list-group mt-3">
+        {% for livro in livros_desejados %}
+        <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+            {{ livro.titulo }} - {{ livro.autor }} ({{ livro.anopublicado }})
+            <div>
+                <form action="{% url 'add_book_colecao' livro.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary btn-sm">Mover para Coleção</button>
+                </form>
+                <form action="{% url 'remove_lista_desejos' livro_id=livro.id %}" method="post" style="display:inline-block;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-sm">Remover</button>
+                </form>
+            </div>
+        </div>
+        {% empty %}
+        <p>Nenhum livro na sua lista de desejos.</p>
+        {% endfor %}
+        <a href="{% url 'add_lista_desejos' %}" class="btn btn-success">Adicionar Livro</a>
+    </div>
+</div>
+{% endblock %}

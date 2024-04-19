@@ -1,0 +1,56 @@
+.card-dashboard{
+
+    background-color: var(--main-color);
+    width: 50%;
+    margin-left: 10px;
+    margin-top: 40px;
+    text-align: center;
+    padding: 20px;
+
+}
+
+.text-card{
+
+    font-size: 25px;
+
+}
+
+
+
+.btn-principal{
+    color:white;
+    border: none;
+    background-color: var(--dark-color);
+    padding: 5px;
+    font-size: 30px;
+}
+
+.welcome-card-header {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.welcome-card-body {
+    padding: 1rem;
+}
+
+.welcome-card-text {
+    font-size: 1.2rem;
+}
+
+.user-info {
+    font-size: 20px; 
+    margin-top: 20px;
+}
+
+.user-info p {
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: #f2f2f2; 
+    border-radius: 5px; 
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+}
+.book-cover {
+    width: 175px; 
+    height: auto; 
+}
