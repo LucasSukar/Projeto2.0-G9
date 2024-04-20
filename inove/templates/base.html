@@ -1,0 +1,91 @@
+{% load static %}
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static '/css/base.css' %}">
+    <link rel="stylesheet" href="{% static '/css/general.css' %}">
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    
+    {% block 'head' %}{% endblock %}
+
+    <title>{% block 'title' %}{% endblock %}</title>
+  </head>
+  <body>
+    
+    <div class="sidebar">
+        <div class="logo-details">
+            <div class="logo_name"><img src="{% static 'interface/images/vpag_logo.jpg' %}" alt="vpag_logo.jpg" style="width: 50px; height: 50px;"></a></div>
+            <i class='bx bx-menu' id="btn" ></i>
+        </div>
+        <ul class="nav-list">
+          <li>
+            <a href="/mainapp/">
+              <i class='bx bx-grid-alt'></i>
+              <span class="links_name">Página inicial</span>
+            </a>
+            <span class="tooltip">Página inicial</span>
+          </li>
+          <li>
+          <a href="/mainapp/perfil/">
+            <i class='bx bx-user' ></i>
+            <span class="links_name">Perfil</span>
+          </a>
+          <span class="tooltip">Perfil</span>
+        </li>
+        <li>
+          <a href="/mainapp/biblioteca/">
+            <i class='bx bx-book' ></i>
+            <span class="links_name">Biblioteca</span>
+          </a>
+          <span class="tooltip">Biblioteca</span>
+        </li>
+        <li>
+          <a href="/mainapp/lista_desejos/">
+            <i class='bx bx-list-check' ></i>
+            <span class="links_name">Lista de desejos</span>
+          </a>
+          <span class="tooltip">Lista de desejos</span>
+        </li>
+        <li>
+          <a href="#">
+            <i class='bx bx-time-five' ></i>
+            <span class="links_name">Histórico</span>
+          </a>
+          <span class="tooltip">Histórico</span>
+        </li>
+      
+      
+        <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
+          {% csrf_token %}
+        </form>
+          <li class="logout">
+            <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+              <i class='bx bx-log-out'></i>
+              <span class="links_name">Logout</span>
+            </a>
+          </li>
+        
+        </ul>
+      </div>
+      
+      <section class="home-section">
+          {% block 'dashboard'%}
+          {% endblock %}
+
+      </section>
+
+    {% block 'body' %}
+    {% endblock %}
+    <script src="{% static 'general/js/base.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+  
+  </body>
+
+</html>
