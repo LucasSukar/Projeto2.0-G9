@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block 'head' %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'mainapp/css/mainapp.css' %}">
+{% endblock %}
+
+{% block 'dashboard' %}
+
+<div class="container mt-5">
+    <div aria-live="polite" aria-atomic="true" style="position: relative; min-height: 200px;">
+        <div id="toastContainer" style="position: absolute; top: 0;">
+        </div>
+    </div>
+    <h2>Atualize a cafeteria</h2>
+    <form method="post" class="mt-3">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="titulo">Nome da cafeteria:</label>
+            <input type="text" class="form-control" id="titulo" name="titulo" value="{{ livro.titulo }}" required>
+        </div>
+        <div class="form-group">
+            <label for="autor">Lugar:</label>
+            <input type="text" class="form-control" id="autor" name="autor" value="{{ livro.autor }}" required>
+        </div>
+        <div class="form-group">
+            <label for="anopublicado">avaliação 1-10:</label>
+            <input type="number" class="form-control" id="anopublicado" name="anopublicado" value="{{ livro.anopublicado }}" required>
+        </div>
+        <div class="form-group">
+            <label for="genero">tipo de cafeteria:</label>
+            <select class="form-control" id="genero" name="genero">
+                {% for categoria in categorias %}
+                    <option value="{{ categoria.id }}" {% if categoria.id == livro.genero.id %}selected{% endif %}>{{ categoria.genero }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="status_leitura">Status da cafeteria:</label>
+            <select class="form-control" id="status_leitura" name="status_leitura">
+                {% for status in livro.STATUS_LEITURA_CHOICES %}
+                    <option value="{{ status.0 }}" {% if status.0 == livro.status_leitura %}selected{% endif %}>{{ status.1 }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Atualizar</button>
+    </form>
+</div>
+
+{% endblock %}

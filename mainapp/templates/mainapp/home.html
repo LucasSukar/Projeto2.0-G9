@@ -23,29 +23,29 @@
             
             <div class="col-lg-6">
                 <div class="card text-white bg-info mb-3 p-4">
-                    <div class="card-header"><i class="bx bx-book"></i> Livros na Biblioteca <i class="bx bx-book"></i></div>
+                    <div class="card-header"> cafeterias frequentadas </div>
                     <div class="card-body">
                         <h5 class="card-title">{{ total_livros }}</h5>
-                        <p class="card-text">Este é o total de livros disponíveis na sua biblioteca. </p>
+                        <p class="card-text">Este é o total de cafeterias que voce frenquentou. </p>
                     </div>
                 </div>
             </div>
             <div class="col-lg-6">
                 <div class="card text-white bg-info mb-3 p-4">
-                    <div class="card-header">Gênero mais comum</div>
+                    <div class="card-header">cafeteria mais visitada</div>
                     <div class="card-body">
                         <h5 class="card-title">{{ genero_mais_comum }}</h5>
-                        <p class="card-text">Este é o gênero mais presente em sua biblioteca.</p>
+                        <p class="card-text">Este é o tipo de cafeteria que voce mais frequentou.</p>
                     </div>
                 </div>
             </div>
             
             <div class="col-lg-6">
                 <div class="card text-white bg-info mb-3 p-4">
-                    <div class="card-header">Gênero menos comum</div>
+                    <div class="card-header">cafeteria menos visitada</div>
                     <div class="card-body">
                         <h5 class="card-title">{{ genero_menos_comum }}</h5>
-                        <p class="card-text">Este é o gênero menos presente em sua biblioteca.</p>
+                        <p class="card-text">Este é o tipo de cafeteria que voce menos frequentou.</p>
                     </div>
                 </div>
             </div>
@@ -55,7 +55,7 @@
     {% else %}
     <div class="card text-center">
         <div class="welcome-card-header">
-            Bem-vindo ao iNove-Coffee!
+            Bem-vindo ao INove Coffee!
         </div>
         <div class="welcome-card-body">
             <h5 class="card-title">Parece que você não está logado.</h5>
