@@ -7,7 +7,7 @@
 
 {% block 'dashboard' %}
 <div class="container mt-4">
-    <h2>Histórico de {{ user.username }}</h2>
+    <h2>Favoitos de {{ user.username }}</h2>
     {% if messages %}
     <div class="alert alert-danger">
         {% for message in messages %}
@@ -30,7 +30,7 @@
             </div>
         </div>
         {% empty %}
-        <p>Nenhuma cafeteria no histórico.</p>
+        <p>Nenhuma cafeteria no favoritos.</p>
         {% endfor %}
     </div>
 </div>

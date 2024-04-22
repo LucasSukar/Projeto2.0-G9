@@ -11,8 +11,8 @@ class Categoria(models.Model):
 
 class Cafe(models.Model):
     STATUS_CAFETERIA_CHOICES = [
-        ('NL', 'Fui'),
-        ('EL', 'Quero ir'),
+        ('NL', 'Não Favorita'),
+        ('EL', 'Favorita'),
     ]
     AVALIACAO_CHOICES = [
         (0, '0 Estrelas'),

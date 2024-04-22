@@ -145,7 +145,7 @@ class CafeUpdateView(LoginRequiredMixin, View):
                 CoffeeHistory.objects.filter(user=request.user, coffee_title=cafe.nome, author=cafe.autor).delete()
                 messages.success(request, 'cafeteria editada com sucesso!')
 
-        elif novo_status_cafeteria in ['L', 'EL']:
+        elif novo_status_cafeteria in ['EL']:
             if not CoffeeHistory.objects.filter(user=request.user, coffee_title=cafe.nome, author=cafe.autor).exists():
                 CoffeeHistory.objects.create(
                     user=request.user,
