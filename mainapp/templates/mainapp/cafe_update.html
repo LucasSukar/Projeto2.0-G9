@@ -17,29 +17,29 @@
         {% csrf_token %}
         <div class="form-group">
             <label for="titulo">Nome da cafeteria:</label>
-            <input type="text" class="form-control" id="titulo" name="titulo" value="{{ livro.titulo }}" required>
+            <input type="text" class="form-control" id="titulo" name="titulo" value="{{ cafe.titulo }}" required>
         </div>
         <div class="form-group">
             <label for="autor">Lugar:</label>
-            <input type="text" class="form-control" id="autor" name="autor" value="{{ livro.autor }}" required>
+            <input type="text" class="form-control" id="autor" name="autor" value="{{ cafe.autor }}" required>
         </div>
         <div class="form-group">
             <label for="anopublicado">avaliação 1-10:</label>
-            <input type="number" class="form-control" id="anopublicado" name="anopublicado" value="{{ livro.anopublicado }}" required>
+            <input type="number" class="form-control" id="anopublicado" name="anopublicado" value="{{ cafe.anopublicado }}" required>
         </div>
         <div class="form-group">
             <label for="genero">tipo de cafeteria:</label>
             <select class="form-control" id="genero" name="genero">
                 {% for categoria in categorias %}
-                    <option value="{{ categoria.id }}" {% if categoria.id == livro.genero.id %}selected{% endif %}>{{ categoria.genero }}</option>
+                    <option value="{{ categoria.id }}" {% if categoria.id == cafe.genero.id %}selected{% endif %}>{{ categoria.genero }}</option>
                 {% endfor %}
             </select>
         </div>
         <div class="form-group">
             <label for="status_leitura">Status da cafeteria:</label>
             <select class="form-control" id="status_leitura" name="status_leitura">
-                {% for status in livro.STATUS_LEITURA_CHOICES %}
-                    <option value="{{ status.0 }}" {% if status.0 == livro.status_leitura %}selected{% endif %}>{{ status.1 }}</option>
+                {% for status in cafe.STATUS_LEITURA_CHOICES %}
+                    <option value="{{ status.0 }}" {% if status.0 == cafe.status_leitura %}selected{% endif %}>{{ status.1 }}</option>
                 {% endfor %}
             </select>
         </div>

@@ -23,7 +23,7 @@
                 <div>{{ book.book_title }} - {{ book.author }} ({{ book.date_started|date:"M/Y" }})</div>
             </div>
             <div>
-                <form action="{% url 'remove_history' livro_id=book.id %}" method="post" style="display:inline-block;">
+                <form action="{% url 'remove_history' cafe_id=book.id %}" method="post" style="display:inline-block;">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-danger btn-sm">Remover</button>
                 </form>

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
-from .models import Livro, Categoria
+from .models import Cafe, Categoria
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
@@ -10,20 +10,19 @@ from django.db.models import Count
 from django.views.decorators.csrf import csrf_protect
 from django.utils.decorators import method_decorator
 from django.contrib import messages
-from .models import Livro, Categoria, ListaDesejos
+from .models import Cafe, Categoria, ListaDesejos
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.hashers import make_password
-from .utils import fetch_book_info_by_title
-from .models import Livro,BookHistory
+from .models import Cafe,BookHistory
 from django.utils import timezone
 
 class HomeView(View):
     def get(self, request):
         contexto = {'user': request.user if request.user.is_authenticated else None}
         if request.user.is_authenticated:
-            livros_usuario = Livro.objects.filter(usuario=request.user)
-            total_livros = livros_usuario.count()
-            generos_ordenados = livros_usuario.values('genero__genero').annotate(total=Count('genero')).order_by('-total')
+            cafes_usuario = Cafe.objects.filter(usuario=request.user)
+            total_cafes = cafes_usuario.count()
+            generos_ordenados = cafes_usuario.values('genero__genero').annotate(total=Count('genero')).order_by('-total')
 
             if generos_ordenados:
                 generos_mais_comuns = generos_ordenados.filter(total=generos_ordenados.first()['total'])
@@ -35,7 +34,7 @@ class HomeView(View):
                 contexto['genero_mais_comum'] = 'Indisponível'
                 contexto['genero_menos_comum'] = 'Indisponível'
 
-            contexto['total_livros'] = total_livros
+            contexto['total_cafes'] = total_cafes
 
         return render(request, 'mainapp/home.html', contexto)
 
@@ -82,35 +81,35 @@ class Biblioteca(View):
             
             return redirect('home')
         else:
-            livros = Livro.objects.filter(usuario=request.user, in_collection=True)
-            for livro in livros:
-                book_info = fetch_book_info_by_title(livro.titulo)
-                if book_info:
-                    livro.cover_url = book_info.get('cover_url')
-            return render(request, 'mainapp/biblioteca.html', {'livros': livros})
+            cafes = Cafe.objects.filter(usuario=request.user, in_collection=True)
+            #for cafe in cafes:
+                #book_info = fetch_book_info_by_title(cafe.titulo)
+                #if book_info:
+                    #cafe.cover_url = book_info.get('cover_url')
+            return render(request, 'mainapp/biblioteca.html', {'cafes': cafes})
 
 
-class LivroEmDetalhe(LoginRequiredMixin,View):
+class CafesEmDetalhe(LoginRequiredMixin,View):
     def get(self, request, pk):
-        livro = get_object_or_404(Livro, pk=pk)
+        cafe = get_object_or_404(Cafe, pk=pk)
         book_info = None
        
-        if not livro.isbn:
-            book_info = fetch_book_info_by_title(livro.titulo)
+        if not cafe.isbn:
+            #book_info = fetch_book_info_by_title(cafe.titulo)
             if book_info:
-                livro.isbn = book_info.get('isbn')
-                livro.cover_url = book_info.get('cover_url')
-                livro.save()
+                cafe.isbn = book_info.get('isbn')
+                cafe.cover_url = book_info.get('cover_url')
+                cafe.save()
             else:
             
-                livro.cover_url = book_info.get('cover_url') if livro.isbn else None
-        return render(request, 'mainapp/livro_detail.html', {'livro': livro})
+                cafe.cover_url = book_info.get('cover_url') if cafe.isbn else None
+        return render(request, 'mainapp/cafe_detail.html', {'cafe': cafe})
 
 
-class LivroCreateView(LoginRequiredMixin, View):
+class CafeCreateView(LoginRequiredMixin, View):
     def get(self, request):
         categorias = Categoria.objects.all()
-        return render(request, 'mainapp/livro_form.html', {'categorias': categorias})
+        return render(request, 'mainapp/cafe_form.html', {'categorias': categorias})
 
     def post(self, request):
         titulo = request.POST.get('titulo').strip()
@@ -120,58 +119,58 @@ class LivroCreateView(LoginRequiredMixin, View):
         
         if not titulo or not autor or not anopublicado:
             messages.error(request, 'Todos os campos são obrigatórios.')
-            return redirect('livro_create')
+            return redirect('cafe_create')
 
-        if Livro.objects.filter(titulo__iexact=titulo, usuario=request.user).exists():
+        if Cafe.objects.filter(titulo__iexact=titulo, usuario=request.user).exists():
             messages.error(request, 'Uma cafeteria com este nome já existe na sua biblioteca.')
-            return redirect('livro_create')
+            return redirect('cafe_create')
 
         genero = get_object_or_404(Categoria, id=genero_id)
-        Livro.objects.create(titulo=titulo, autor=autor, anopublicado=anopublicado, genero=genero, usuario=request.user)
+        Cafe.objects.create(titulo=titulo, autor=autor, anopublicado=anopublicado, genero=genero, usuario=request.user)
         messages.success(request, 'cafeteria adicionada com sucesso!')
         return redirect('biblioteca')
 
 
-class LivroUpdateView(LoginRequiredMixin, View):
+class CafeUpdateView(LoginRequiredMixin, View):
     def get(self, request, pk):
-        livro = get_object_or_404(Livro, pk=pk)
-        status_leitura = livro.status_leitura
-        return render(request, 'mainapp/livro_update.html', {'livro': livro, 'categorias': Categoria.objects.all(), 'status_leitura': status_leitura})
+        cafe = get_object_or_404(Cafe, pk=pk)
+        status_leitura = cafe.status_leitura
+        return render(request, 'mainapp/cafe_update.html', {'cafe': cafe, 'categorias': Categoria.objects.all(), 'status_leitura': status_leitura})
 
     def post(self, request, pk):
-        livro = get_object_or_404(Livro, pk=pk)
-        livro.titulo = request.POST.get('titulo')
-        livro.autor = request.POST.get('autor')
-        livro.anopublicado = request.POST.get('anopublicado')
-        livro.genero = get_object_or_404(Categoria, pk=request.POST.get('genero'))
+        cafe = get_object_or_404(Cafe, pk=pk)
+        cafe.titulo = request.POST.get('titulo')
+        cafe.autor = request.POST.get('autor')
+        cafe.anopublicado = request.POST.get('anopublicado')
+        cafe.genero = get_object_or_404(Categoria, pk=request.POST.get('genero'))
         novo_status_leitura = request.POST.get('status_leitura')
 
-        if livro.status_leitura != 'NL' and novo_status_leitura == 'NL':
-            if BookHistory.objects.filter(user=request.user, book_title=livro.titulo, author=livro.autor).exists():
-                BookHistory.objects.filter(user=request.user, book_title=livro.titulo, author=livro.autor).delete()
+        if cafe.status_leitura != 'NL' and novo_status_leitura == 'NL':
+            if BookHistory.objects.filter(user=request.user, book_title=cafe.titulo, author=cafe.autor).exists():
+                BookHistory.objects.filter(user=request.user, book_title=cafe.titulo, author=cafe.autor).delete()
                 messages.success(request, 'cafeteria editada com sucesso!')
 
         elif novo_status_leitura in ['L', 'EL']:
-            if not BookHistory.objects.filter(user=request.user, book_title=livro.titulo, author=livro.autor).exists():
+            if not BookHistory.objects.filter(user=request.user, book_title=cafe.titulo, author=cafe.autor).exists():
                 BookHistory.objects.create(
                     user=request.user,
-                    book_title=livro.titulo,
-                    author=livro.autor,
+                    book_title=cafe.titulo,
+                    author=cafe.autor,
                 )
                 messages.success(request, 'cafeteria editada com sucesso!')
 
-        livro.status_leitura = novo_status_leitura
-        livro.save()
+        cafe.status_leitura = novo_status_leitura
+        cafe.save()
         return redirect('biblioteca')
 
-class LivroDeleteView(LoginRequiredMixin,View):
+class CafeDeleteView(LoginRequiredMixin,View):
     def get(self, request, pk):
-        livro = get_object_or_404(Livro, pk=pk)
-        return render(request, 'mainapp/livro_confirm_delete.html', {'livro': livro})
+        cafe = get_object_or_404(Cafe, pk=pk)
+        return render(request, 'mainapp/cafe_confirm_delete.html', {'cafe': cafe})
 
     def post(self, request, pk):
-        livro = get_object_or_404(Livro, pk=pk)
-        livro.delete()
+        cafe = get_object_or_404(Cafe, pk=pk)
+        cafe.delete()
         return redirect('biblioteca')
 
 class PerfilView(LoginRequiredMixin,View):
@@ -221,17 +220,17 @@ class AddListaDesejosView(LoginRequiredMixin, View):
         
         if not titulo or not autor or not anopublicado:
             messages.error(request, 'Todos os campos são obrigatórios.')
-            return redirect('livro_create')
+            return redirect('cafe_create')
 
         genero = get_object_or_404(Categoria, id=genero_id)
         
         
-        livro = Livro(titulo=titulo, autor=autor, anopublicado=anopublicado, genero=genero, in_wishlist=True, in_collection=False,usuario=request.user)
-        livro.save()
+        cafe = Cafe(titulo=titulo, autor=autor, anopublicado=anopublicado, genero=genero, in_wishlist=True, in_collection=False,usuario=request.user)
+        cafe.save()
         
        
         wishlist, created = ListaDesejos.objects.get_or_create(usuario=request.user)
-        wishlist.livros.add(livro)  
+        wishlist.cafes.add(cafe)  
         
         messages.success(request, "cafeteria adicionada à lista de desejos com sucesso.")
         return redirect('lista_desejos')
@@ -241,29 +240,29 @@ class AddListaDesejosView(LoginRequiredMixin, View):
 class ListaDesejosView(LoginRequiredMixin, View):
     def get(self, request):
         wishlist, created = ListaDesejos.objects.get_or_create(usuario=request.user)
-        livros_desejados = wishlist.livros.all()
-        return render(request, 'mainapp/lista_desejos.html', {'livros_desejados': livros_desejados})    
+        cafes_desejados = wishlist.cafes.all()
+        return render(request, 'mainapp/lista_desejos.html', {'cafes_desejados': cafes_desejados})    
 
 class RemoverDaListaView(LoginRequiredMixin, View):
     def post(self, request,**kwargs):
-        livro_id = kwargs.get('livro_id')
-        livro = get_object_or_404(Livro, id=livro_id)
+        cafe_id = kwargs.get('cafe_id')
+        cafe = get_object_or_404(Cafe, id=cafe_id)
         wishlist = ListaDesejos.objects.get(usuario=request.user)
-        wishlist.livros.remove(livro)
-        livro.delete()
+        wishlist.cafes.remove(cafe)
+        cafe.delete()
         messages.success(request, "cafeteria removida da lista de desejos com sucesso.")
         return redirect('lista_desejos')
     
 class AddParaColecaoView(LoginRequiredMixin, View):
-    def post(self, request, livro_id):
-        livro = get_object_or_404(Livro, id=livro_id, usuario=request.user)
-        livro.in_wishlist = False
-        livro.in_collection = True
-        livro.save()
+    def post(self, request, cafe_id):
+        cafe = get_object_or_404(Cafe, id=cafe_id, usuario=request.user)
+        cafe.in_wishlist = False
+        cafe.in_collection = True
+        cafe.save()
         
         wishlist = ListaDesejos.objects.filter(usuario=request.user).first()
         if wishlist:
-            wishlist.livros.remove(livro)
+            wishlist.cafes.remove(cafe)
 
         messages.success(request, "cafeteria adicionada com sucesso.")
         return redirect('lista_desejos')  
@@ -274,21 +273,21 @@ class BookHistoryView(LoginRequiredMixin, View):
         book_history = BookHistory.objects.filter(user=request.user)
         return render(request, 'mainapp/book_history.html', {'book_history': book_history})
 
-    def post(self, request, livro_id):
-        livro = get_object_or_404(Livro, id=livro_id, usuario=request.user)
+    def post(self, request, cafe_id):
+        cafe = get_object_or_404(Cafe, id=cafe_id, usuario=request.user)
         BookHistory.objects.create(
             user=request.user,
-            book_title=livro.titulo,
-            author=livro.autor,
-            date_started=livro.date_added,
+            book_title=cafe.titulo,
+            author=cafe.autor,
+            date_started=cafe.date_added,
             date_finished=timezone.now()
         )
-        livro.delete()      
+        cafe.delete()      
         return redirect('book_history')
     
 class RemoveFromHistoryView(View):
-    def post(self, request, livro_id):
-        book = get_object_or_404(BookHistory, pk=livro_id, user=request.user)
+    def post(self, request, cafe_id):
+        book = get_object_or_404(BookHistory, pk=cafe_id, user=request.user)
         book.delete()
         messages.success(request, "cafeteria removida do histórico.")
         return redirect('book_history')

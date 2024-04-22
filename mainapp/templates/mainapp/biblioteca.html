@@ -13,19 +13,19 @@
 <div class="container mt-4">
     <h2>Cafeterias</h2>
     <div class="list-group mt-3">
-        {% for livro in livros %}
+        {% for cafe in cafes %}
         <a href="{% url 'livro_detail' livro.id %}" class="list-group-item list-group-item-action d-flex align-items-start">
             
             <div>
-                <div>{{ livro.titulo }} por {{ livro.autor }} ({{ livro.anopublicado }})</div>
-                <div>Status da cafeteria: {{ livro.get_status_leitura_display }}</div>
+                <div>{{ cafe.titulo }} por {{ cafe.autor }} ({{ cafe.anopublicado }})</div>
+                <div>Status da cafeteria: {{ cafe.get_status_leitura_display }}</div>
             </div>
         </a>
         {% empty %}
         <p>Nenhuma cafeterias adicionada ainda.</p>
         {% endfor %}
     </div>
-    <a href="{% url 'livro_create' %}" class="btn btn-primary mt-3">Adicione uma nova cafeteria.</a>
+    <a href="{% url 'cafe_create' %}" class="btn btn-primary mt-3">Adicione uma nova cafeteria.</a>
        
 </div>
 <script>
