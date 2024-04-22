@@ -107,21 +107,21 @@ class CafeCreateView(LoginRequiredMixin, View):
         return render(request, 'mainapp/cafe_form.html', {'categorias': categorias})
 
     def post(self, request):
-        titulo = request.POST.get('titulo').strip()
+        nome = request.POST.get('nome').strip()
         autor = request.POST.get('autor').strip()
         anopublicado = request.POST.get('anopublicado').strip()
         genero_id = request.POST.get('genero').strip()
         
-        if not titulo or not autor or not anopublicado:
+        if not nome or not autor or not anopublicado:
             messages.error(request, 'Todos os campos são obrigatórios.')
             return redirect('cafe_create')
 
-        if Cafe.objects.filter(titulo__iexact=titulo, usuario=request.user).exists():
+        if Cafe.objects.filter(nome__iexact=nome, usuario=request.user).exists():
             messages.error(request, 'Uma cafeteria com este nome já existe na sua biblioteca.')
             return redirect('cafe_create')
 
         genero = get_object_or_404(Categoria, id=genero_id)
-        Cafe.objects.create(titulo=titulo, autor=autor, anopublicado=anopublicado, genero=genero, usuario=request.user)
+        Cafe.objects.create(nome=nome, autor=autor, anopublicado=anopublicado, genero=genero, usuario=request.user)
         messages.success(request, 'cafeteria adicionada com sucesso!')
         return redirect('biblioteca')
 
@@ -134,22 +134,22 @@ class CafeUpdateView(LoginRequiredMixin, View):
 
     def post(self, request, pk):
         cafe = get_object_or_404(Cafe, pk=pk)
-        cafe.titulo = request.POST.get('titulo')
+        cafe.nome = request.POST.get('nome')
         cafe.autor = request.POST.get('autor')
         cafe.anopublicado = request.POST.get('anopublicado')
         cafe.genero = get_object_or_404(Categoria, pk=request.POST.get('genero'))
         novo_status_cafeteria = request.POST.get('status_cafeteria')
 
         if cafe.status_cafeteria != 'NL' and novo_status_cafeteria == 'NL':
-            if CoffeeHistory.objects.filter(user=request.user, coffee_title=cafe.titulo, author=cafe.autor).exists():
-                CoffeeHistory.objects.filter(user=request.user, coffee_title=cafe.titulo, author=cafe.autor).delete()
+            if CoffeeHistory.objects.filter(user=request.user, coffee_title=cafe.nome, author=cafe.autor).exists():
+                CoffeeHistory.objects.filter(user=request.user, coffee_title=cafe.nome, author=cafe.autor).delete()
                 messages.success(request, 'cafeteria editada com sucesso!')
 
         elif novo_status_cafeteria in ['L', 'EL']:
-            if not CoffeeHistory.objects.filter(user=request.user, coffee_title=cafe.titulo, author=cafe.autor).exists():
+            if not CoffeeHistory.objects.filter(user=request.user, coffee_title=cafe.nome, author=cafe.autor).exists():
                 CoffeeHistory.objects.create(
                     user=request.user,
-                    coffee_title=cafe.titulo,
+                    coffee_title=cafe.nome,
                     author=cafe.autor,
                 )
                 messages.success(request, 'cafeteria editada com sucesso!')
@@ -208,19 +208,19 @@ class AddListaDesejosView(LoginRequiredMixin, View):
         return render(request, 'mainapp/add_lista.html', {'categorias': categorias})
 
     def post(self, request):
-        titulo = request.POST.get('titulo').strip()
+        nome = request.POST.get('nome').strip()
         autor = request.POST.get('autor').strip()
         anopublicado = request.POST.get('anopublicado').strip()
         genero_id = request.POST.get('genero').strip()
         
-        if not titulo or not autor or not anopublicado:
+        if not nome or not autor or not anopublicado:
             messages.error(request, 'Todos os campos são obrigatórios.')
             return redirect('cafe_create')
 
         genero = get_object_or_404(Categoria, id=genero_id)
         
         
-        cafe = Cafe(titulo=titulo, autor=autor, anopublicado=anopublicado, genero=genero, in_wishlist=True, in_collection=False,usuario=request.user)
+        cafe = Cafe(nome=nome, autor=autor, anopublicado=anopublicado, genero=genero, in_wishlist=True, in_collection=False,usuario=request.user)
         cafe.save()
         
        
@@ -272,7 +272,7 @@ class CoffeeHistoryView(LoginRequiredMixin, View):
         cafe = get_object_or_404(Cafe, id=cafe_id, usuario=request.user)
         CoffeeHistory.objects.create(
             user=request.user,
-            coffee_title=cafe.titulo,
+            coffee_title=cafe.nome,
             author=cafe.autor,
             date_started=cafe.date_added,
             date_finished=timezone.now()

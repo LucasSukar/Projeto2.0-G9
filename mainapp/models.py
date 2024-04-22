@@ -22,7 +22,7 @@ class Cafe(models.Model):
         (4, '4 Estrelas'),
         (5, '5 Estrelas'),
     ]
-    titulo = models.CharField(max_length=100)
+    nome = models.CharField(max_length=100)
     autor = models.CharField(max_length=100)
     anopublicado = models.IntegerField()
     genero=models.ForeignKey(Categoria, on_delete=models.SET_NULL, null=True)
@@ -33,7 +33,7 @@ class Cafe(models.Model):
     in_wishlist = models.BooleanField(default=False)
     in_collection = models.BooleanField(default=True)
     def __str__(self):
-        return self.titulo
+        return self.nome
     
 class ListaDesejos(models.Model):
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='lista_desejos',null=True)
