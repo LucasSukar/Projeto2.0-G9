@@ -18,7 +18,7 @@
                 <p class="card-text"><strong>Nome da Cafeteria:</strong> {{ cafe.autor }}</p>
                 <p class="card-text"><strong>Avaliação 1-10:</strong> {{ cafe.anopublicado }}</p>
                 <p class="card-text"><strong>Tipo de cafeteria:</strong> {{ cafe.genero.genero }}</p>
-                <p class="card-text"><strong>Status da cafeteria:</strong> {{ cafe.get_status_leitura_display }}</p>
+                <p class="card-text"><strong>Status da cafeteria:</strong> {{ cafe.get_status_cafeteria_display }}</p>
                 <a href="{% url 'biblioteca' %}" class="btn btn-primary">Voltar</a>
                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteConfirmationModal">
                     <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAKRJREFUSEvtlcERgCAMBNdOtBMtxUosxVK0FDvRYUZ4xImHIj/5SSR7SQauofJqKudHAXpgBlpHyAaMwOoJVYAFCJC7FSDdW8B+HvSEqLhskUqg4hdAPFA6+1SxLb06ICqXpZsS3f9fD+9rgFWovhM/twKVsLhFP+Byr5625J+BfJqKW6QIjwE5RmOhwdUGu+nd5OBiU4abxXyudSrLVK2R8eqAA04lOBnZrFOdAAAAAElFTkSuQmCC"/>

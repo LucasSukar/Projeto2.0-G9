@@ -129,8 +129,8 @@ class CafeCreateView(LoginRequiredMixin, View):
 class CafeUpdateView(LoginRequiredMixin, View):
     def get(self, request, pk):
         cafe = get_object_or_404(Cafe, pk=pk)
-        status_leitura = cafe.status_leitura
-        return render(request, 'mainapp/cafe_update.html', {'cafe': cafe, 'categorias': Categoria.objects.all(), 'status_leitura': status_leitura})
+        status_cafeteria = cafe.status_cafeteria
+        return render(request, 'mainapp/cafe_update.html', {'cafe': cafe, 'categorias': Categoria.objects.all(), 'status_cafeteria': status_cafeteria})
 
     def post(self, request, pk):
         cafe = get_object_or_404(Cafe, pk=pk)
@@ -138,14 +138,14 @@ class CafeUpdateView(LoginRequiredMixin, View):
         cafe.autor = request.POST.get('autor')
         cafe.anopublicado = request.POST.get('anopublicado')
         cafe.genero = get_object_or_404(Categoria, pk=request.POST.get('genero'))
-        novo_status_leitura = request.POST.get('status_leitura')
+        novo_status_cafeteria = request.POST.get('status_cafeteria')
 
-        if cafe.status_leitura != 'NL' and novo_status_leitura == 'NL':
+        if cafe.status_cafeteria != 'NL' and novo_status_cafeteria == 'NL':
             if CoffeeHistory.objects.filter(user=request.user, coffee_title=cafe.titulo, author=cafe.autor).exists():
                 CoffeeHistory.objects.filter(user=request.user, coffee_title=cafe.titulo, author=cafe.autor).delete()
                 messages.success(request, 'cafeteria editada com sucesso!')
 
-        elif novo_status_leitura in ['L', 'EL']:
+        elif novo_status_cafeteria in ['L', 'EL']:
             if not CoffeeHistory.objects.filter(user=request.user, coffee_title=cafe.titulo, author=cafe.autor).exists():
                 CoffeeHistory.objects.create(
                     user=request.user,
@@ -154,7 +154,7 @@ class CafeUpdateView(LoginRequiredMixin, View):
                 )
                 messages.success(request, 'cafeteria editada com sucesso!')
 
-        cafe.status_leitura = novo_status_leitura
+        cafe.status_cafeteria = novo_status_cafeteria
         cafe.save()
         return redirect('biblioteca')
 

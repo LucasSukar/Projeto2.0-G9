@@ -10,7 +10,7 @@ class Categoria(models.Model):
         return self.genero
 
 class Cafe(models.Model):
-    STATUS_LEITURA_CHOICES = [
+    STATUS_CAFETERIA_CHOICES = [
         ('NL', 'Fui'),
         ('EL', 'Quero ir'),
     ]
@@ -26,7 +26,7 @@ class Cafe(models.Model):
     autor = models.CharField(max_length=100)
     anopublicado = models.IntegerField()
     genero=models.ForeignKey(Categoria, on_delete=models.SET_NULL, null=True)
-    status_leitura=models.CharField(max_length=2, choices=STATUS_LEITURA_CHOICES, default='NL')
+    status_cafeteria=models.CharField(max_length=2, choices=STATUS_CAFETERIA_CHOICES, default='NL')
     avaliacao=models.IntegerField(choices=AVALIACAO_CHOICES, default=0)
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='cafes')
     isbn = models.CharField(max_length=13, null=True)

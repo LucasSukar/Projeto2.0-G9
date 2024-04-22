@@ -36,10 +36,10 @@
             </select>
         </div>
         <div class="form-group">
-            <label for="status_leitura">Status da cafeteria:</label>
-            <select class="form-control" id="status_leitura" name="status_leitura">
-                {% for status in cafe.STATUS_LEITURA_CHOICES %}
-                    <option value="{{ status.0 }}" {% if status.0 == cafe.status_leitura %}selected{% endif %}>{{ status.1 }}</option>
+            <label for="status_cafeteria">Status da cafeteria:</label>
+            <select class="form-control" id="status_cafeteria" name="status_cafeteria">
+                {% for status in cafe.STATUS_CAFETERIA_CHOICES %}
+                    <option value="{{ status.0 }}" {% if status.0 == cafe.status_cafeteria %}selected{% endif %}>{{ status.1 }}</option>
                 {% endfor %}
             </select>
         </div>
