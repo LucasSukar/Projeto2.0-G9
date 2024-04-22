@@ -14,7 +14,7 @@
     <h2>Cafeterias</h2>
     <div class="list-group mt-3">
         {% for cafe in cafes %}
-        <a href="{% url 'livro_detail' livro.id %}" class="list-group-item list-group-item-action d-flex align-items-start">
+        <a href="{% url 'cafe_detail' cafe.id %}" class="list-group-item list-group-item-action d-flex align-items-start">
             
             <div>
                 <div>{{ cafe.titulo }} por {{ cafe.autor }} ({{ cafe.anopublicado }})</div>
