@@ -13,7 +13,7 @@ from django.contrib import messages
 from .models import Cafe, Categoria, ListaDesejos
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.hashers import make_password
-from .models import Cafe,BookHistory
+from .models import Cafe,CoffeeHistory
 from django.utils import timezone
 
 class HomeView(View):
@@ -82,27 +82,22 @@ class Biblioteca(View):
             return redirect('home')
         else:
             cafes = Cafe.objects.filter(usuario=request.user, in_collection=True)
-            #for cafe in cafes:
-                #book_info = fetch_book_info_by_title(cafe.titulo)
-                #if book_info:
-                    #cafe.cover_url = book_info.get('cover_url')
             return render(request, 'mainapp/biblioteca.html', {'cafes': cafes})
 
 
 class CafesEmDetalhe(LoginRequiredMixin,View):
     def get(self, request, pk):
         cafe = get_object_or_404(Cafe, pk=pk)
-        book_info = None
+        coffee_info = None
        
         if not cafe.isbn:
-            #book_info = fetch_book_info_by_title(cafe.titulo)
-            if book_info:
-                cafe.isbn = book_info.get('isbn')
-                cafe.cover_url = book_info.get('cover_url')
+            if coffee_info:
+                cafe.isbn = coffee_info.get('isbn')
+                cafe.cover_url = coffee_info.get('cover_url')
                 cafe.save()
             else:
             
-                cafe.cover_url = book_info.get('cover_url') if cafe.isbn else None
+                cafe.cover_url = coffee_info.get('cover_url') if cafe.isbn else None
         return render(request, 'mainapp/cafe_detail.html', {'cafe': cafe})
 
 
@@ -146,15 +141,15 @@ class CafeUpdateView(LoginRequiredMixin, View):
         novo_status_leitura = request.POST.get('status_leitura')
 
         if cafe.status_leitura != 'NL' and novo_status_leitura == 'NL':
-            if BookHistory.objects.filter(user=request.user, book_title=cafe.titulo, author=cafe.autor).exists():
-                BookHistory.objects.filter(user=request.user, book_title=cafe.titulo, author=cafe.autor).delete()
+            if CoffeeHistory.objects.filter(user=request.user, coffee_title=cafe.titulo, author=cafe.autor).exists():
+                CoffeeHistory.objects.filter(user=request.user, coffee_title=cafe.titulo, author=cafe.autor).delete()
                 messages.success(request, 'cafeteria editada com sucesso!')
 
         elif novo_status_leitura in ['L', 'EL']:
-            if not BookHistory.objects.filter(user=request.user, book_title=cafe.titulo, author=cafe.autor).exists():
-                BookHistory.objects.create(
+            if not CoffeeHistory.objects.filter(user=request.user, coffee_title=cafe.titulo, author=cafe.autor).exists():
+                CoffeeHistory.objects.create(
                     user=request.user,
-                    book_title=cafe.titulo,
+                    coffee_title=cafe.titulo,
                     author=cafe.autor,
                 )
                 messages.success(request, 'cafeteria editada com sucesso!')
@@ -268,26 +263,27 @@ class AddParaColecaoView(LoginRequiredMixin, View):
         return redirect('lista_desejos')  
     
 
-class BookHistoryView(LoginRequiredMixin, View):
+class CoffeeHistoryView(LoginRequiredMixin, View):
     def get(self, request):
-        book_history = BookHistory.objects.filter(user=request.user)
-        return render(request, 'mainapp/book_history.html', {'book_history': book_history})
+        coffee_history = CoffeeHistory.objects.filter(user=request.user)
+        return render(request, 'mainapp/coffee_history.html', {'coffee_history': coffee_history})
 
     def post(self, request, cafe_id):
         cafe = get_object_or_404(Cafe, id=cafe_id, usuario=request.user)
-        BookHistory.objects.create(
+        CoffeeHistory.objects.create(
             user=request.user,
-            book_title=cafe.titulo,
+            coffee_title=cafe.titulo,
             author=cafe.autor,
             date_started=cafe.date_added,
             date_finished=timezone.now()
         )
         cafe.delete()      
-        return redirect('book_history')
+        return redirect('coffee_history')
     
 class RemoveFromHistoryView(View):
     def post(self, request, cafe_id):
-        book = get_object_or_404(BookHistory, pk=cafe_id, user=request.user)
-        book.delete()
+        coffee = get_object_or_404(CoffeeHistory, pk=cafe_id, user=request.user)
+        coffee.delete()
         messages.success(request, "cafeteria removida do histórico.")
-        return redirect('book_history')
+        return redirect('coffee_history')
+    

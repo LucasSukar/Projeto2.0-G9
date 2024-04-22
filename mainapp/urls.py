@@ -19,7 +19,7 @@ urlpatterns = [
     path('lista_desejos/add/', views.AddListaDesejosView.as_view(), name='add_lista_desejos'),
     path('lista_desejos/', views.ListaDesejosView.as_view(), name='lista_desejos'),
     path('lista_desejos/deletar/<int:cafe_id>/', views.RemoverDaListaView.as_view(), name='remove_lista_desejos'),
-    path('lista_desejos/add_para_colecao/<int:cafe_id>/', views.AddParaColecaoView.as_view(), name='add_book_colecao'),
-    path('book_history/', views.BookHistoryView.as_view(), name='book_history'),
+    path('lista_desejos/add_para_colecao/<int:cafe_id>/', views.AddParaColecaoView.as_view(), name='add_coffee_colecao'),
+    path('coffee_history/', views.CoffeeHistoryView.as_view(), name='coffee_history'),
     path('remove_history/<int:cafe_id>/', views.RemoveFromHistoryView.as_view(), name='remove_history'),
 ]
