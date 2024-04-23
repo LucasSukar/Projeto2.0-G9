@@ -5,7 +5,7 @@ Jira: https://g9cafe.atlassian.net/jira/software/projects/PJT/boards/1
 -> No Jira, contêm as informações sobre as sprints e histórias criadas, todas bem detalhadas e definidas  
 Miro: http://miro.com/app/board/uXjVNmDfEYc=/  
 -> No Miro, estão as ideias acerca do problema debatido pelo grupo, sendo essa a plataforma onde foi realizada a ideação  
-Marvel: https://marvelapp.com/1ag26674  
+Marvel: https://marvelapp.com/1ahc809e 
 -> No Marvel, estão presentes os protótipos de baixa para conclusão do SR1  
 Docs: https://docs.google.com/document/d/1Robh6CMUVrEIiazl-qQwZ7la3a8FL5xI4hRU-CUos2Q/edit  
 -> No Docs, está presente o relatório informando o que foi feito semana a semana  
