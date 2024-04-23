@@ -10,6 +10,8 @@ Marvel: https://marvelapp.com/1ag26674
 Docs: https://docs.google.com/document/d/1Robh6CMUVrEIiazl-qQwZ7la3a8FL5xI4hRU-CUos2Q/edit  
 -> No Docs, está presente o relatório informando o que foi feito semana a semana  
 Google Sites: https://sites.google.com/cesar.school/projetos-2-grupo-nove/in%C3%ADcio; -> No Google Sites está um repositório de nossas ideias e uma explicação da nossa solução  
+Relatório de Programação em Par : https://docs.google.com/document/d/1tT1aOI1bNuQX62PqV5vBoj1Zjg1ET494rFGXAGmbASU/edit?amp;usp=embed_facebook
+-> No relatório de programação em par, relata como foi a experiência do grupo durante a primeira sprint.  
 
 *Integrantes:  
 André Castro;  
