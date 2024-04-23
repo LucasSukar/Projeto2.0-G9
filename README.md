@@ -2,7 +2,7 @@
 
 *Links:  
 
-Deploy:
+Deploy: inovecoffee.azurewebsites.net
 
 Jira: https://g9cafe.atlassian.net/jira/software/projects/PJT/boards/1  
 
