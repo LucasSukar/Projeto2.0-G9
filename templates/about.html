@@ -10788,6 +10788,20 @@ header.masthead .post-heading .meta a {
 }
 .i9logo{
   border-radius: 10px;
+  
+}
+.sombraleve{
+  text-shadow: 
+  1px 1px 2px rgba(0, 0, 0, 0.3),
+  2px 2px 5px rgba(0, 0, 0, 0.5);
+}
+body{
+  padding: 0;
+  margin: 0;
+}
+.configtexto{
+  display: block;
+  width: 100%;
 }
 .post-preview > .post-meta > a {
   text-decoration: none;
@@ -10811,7 +10825,7 @@ header.masthead .post-heading .meta a {
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-light" id="mainNav">
             <div class="container px-4 px-lg-5">
-                <a class="navbar-brand"><img class="i9logo" src="{% static 'interface/images/i9-logo.jpg' %}" alt="vpag_logo.jpg" style="width: 200px; height: 200px;"></a>
+                <a class="navbar-brand"><img class="i9logo" src="{% static 'interface/images/i9-logo.jpg' %}" alt="i9-logo.jpg" style="width: 240px; height: 240px;"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                     Menu
                     <i class="fas fa-bars"></i>
@@ -10819,7 +10833,8 @@ header.masthead .post-heading .meta a {
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ms-auto py-4 py-lg-0">
                         
-                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="mainapp/">Conheça a Plataforma</a></li>
+                        <li class="nav-item">
+                          <a class="nav-link px-lg-3 py-3 py-lg-4" href="mainapp/">Conheça a Plataforma</a></li>
                     </ul>
                 </div>
             </div>
@@ -10830,8 +10845,13 @@ header.masthead .post-heading .meta a {
                 <div class="row gx-4 gx-lg-5 justify-content-center">
                     <div class="col-md-10 col-lg-8 col-xl-7">
                         <div class="page-heading">
+                          <span class="sombraleve">
                             <h1>iNove Coffee</h1>
-                            <span class="subheading">"Descubra o aroma e a atmosfera única de cafeterias pelo Recife em um clique."</span>
+                            <span class="subheading">
+                                "Descubra o aroma e a atmosfera única de cafeterias pelo Recife em um clique."
+                              </span>
+                              </span>
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -10842,7 +10862,7 @@ header.masthead .post-heading .meta a {
             <div class="container px-4 px-lg-5">
                 <div class="row gx-4 gx-lg-5 justify-content-center">
                     <div class="col-md-10 col-lg-8 col-xl-7">
-                        <p>Descubra o charme e a diversidade das cafeterias de Recife em nosso site exclusivo. De encantadores cafés de rua a espaços modernos à beira-mar, nossa plataforma oferece uma visão completa da vibrante cena cafeinada da cidade. Explore os melhores lugares para saborear um espresso perfeito, mergulhar em deliciosas iguarias locais e mergulhar na atmosfera acolhedora que torna cada café uma experiência inesquecível. Embarque nesta jornada sensorial por Recife e descubra o melhor que a cidade tem a oferecer aos amantes do café.</p>
+                        <p class="configtexto">Descubra o charme e a diversidade das cafeterias de Recife em nosso site exclusivo. De encantadores cafés de rua a espaços modernos à beira-mar, nossa plataforma oferece uma visão completa da vibrante cena cafeinada da cidade. Explore os melhores lugares para saborear um espresso perfeito, mergulhar em deliciosas iguarias locais e mergulhar na atmosfera acolhedora que torna cada café uma experiência inesquecível. Embarque nesta jornada sensorial por Recife e descubra o melhor que a cidade tem a oferecer aos amantes do café.</p>
                         <p>Nosso site oferece funcionalidades avançadas para tornar sua busca por cafeterias ainda mais emocionante e relevante. Com base nas suas preferências de sabor, ambiente e localização, nossa plataforma utiliza algoritmos inteligentes para recomendar as cafeterias mais adequadas para você. Quer você esteja procurando por um café aconchegante para trabalhar, um local tranquilo para uma conversa íntima ou um espaço moderno para relaxar com amigos, estamos aqui para ajudar a encontrar o lugar perfeito.</p>
                         <p>Descubra novos sabores, mergulhe em atmosferas envolventes e transforme cada visita a uma cafeteria em uma experiência memorável, tudo isso com apenas alguns cliques.</p>
                     </div>
