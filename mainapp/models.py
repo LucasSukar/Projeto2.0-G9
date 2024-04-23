@@ -24,7 +24,7 @@ class Cafe(models.Model):
     ]
     nome = models.CharField(max_length=100)
     autor = models.CharField(max_length=100)
-    anopublicado = models.IntegerField()
+    anopublicado = models.CharField(max_length=15)
     genero=models.ForeignKey(Categoria, on_delete=models.SET_NULL, null=True)
     status_cafeteria=models.CharField(max_length=2, choices=STATUS_CAFETERIA_CHOICES, default='NL')
     avaliacao=models.IntegerField(choices=AVALIACAO_CHOICES, default=0)

@@ -16,8 +16,8 @@
             <div class="col-md-8">
                 <h5 class="card-title">{{ cafe.nome }}</h5>
                 <p class="card-text"><strong>Nome da Cafeteria:</strong> {{ cafe.autor }}</p>
-                <p class="card-text"><strong>Avaliação 1-10:</strong> {{ cafe.anopublicado }}</p>
-                <p class="card-text"><strong>Tipo de cafeteria:</strong> {{ cafe.genero.genero }}</p>
+                <p class="card-text"><strong>Número de Contato:</strong> {{ cafe.anopublicado }}</p>
+                <p class="card-text"><strong>Tipo de Café:</strong> {{ cafe.genero.genero }}</p>
                 <p class="card-text"><strong>Status da cafeteria:</strong> {{ cafe.get_status_cafeteria_display }}</p>
                 <a href="{% url 'biblioteca' %}" class="btn btn-primary">Voltar</a>
                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteConfirmationModal">
