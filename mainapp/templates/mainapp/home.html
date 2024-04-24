@@ -5,6 +5,7 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'mainapp/css/mainapp.css' %}">
     
+    
 {% endblock %}
 
 {% block 'dashboard' %}
@@ -12,16 +13,14 @@
     <div aria-live="polite" aria-atomic="true" style="position: relative; min-height: 200px;">
         <div id="toastContainer" style="position: absolute; top: 0;">
         </div>
+        <h1 class="display-4" style="color: #387B5B; border: none;text-shadow: 
+        2px 2px 5px rgba(126, 126, 126, 0.3);">Bem-vindo, {{ user.username }}!</h1>
     </div>
 </div>
 <div class="container mt-5">
     {% if user.is_authenticated %}
         <div class="row">
-            <div class="col-12">
-                <h1 class="display-4">Bem-vindo, {{ user.username }}!</h1>
-            </div>
-            
-            <div class="col-lg-6">
+            <div class="col-lg-12">
                 <div class="card text-white bg-info mb-3 p-4">
                     <div class="card-header"> cafeterias frequentadas </div>
                     <div class="card-body">
@@ -31,7 +30,7 @@
                 </div>
             </div>
             <div class="col-lg-6">
-                <div class="card text-white bg-info mb-3 p-4">
+                <div class="card text-white bg-info mb-3 p-2">
                     <div class="card-header">cafeteria mais visitada</div>
                     <div class="card-body">
                         <h5 class="card-title">{{ genero_mais_comum }}</h5>
@@ -41,7 +40,7 @@
             </div>
             
             <div class="col-lg-6">
-                <div class="card text-white bg-info mb-3 p-4">
+                <div class="card text-white bg-info mb-3 p-2">
                     <div class="card-header">cafeteria menos visitada</div>
                     <div class="card-body">
                         <h5 class="card-title">{{ genero_menos_comum }}</h5>

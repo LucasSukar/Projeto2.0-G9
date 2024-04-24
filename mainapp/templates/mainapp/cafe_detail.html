@@ -9,12 +9,15 @@
 {% block 'dashboard' %}
 <div class="container mt-4">
     <div class="card">
-        <div class="card-header">
+        <div class="card-header" style="text-shadow: 
+        1px 1px 2px rgba(122, 122, 122, 0.3)">
             Detalhes da cafeteria
         </div>
         <div class="card-body row"> 
             <div class="col-md-8">
-                <h5 class="card-title">{{ cafe.nome }}</h5>
+                <h5 class="card-title" style="color: #387B5B; border: none;text-shadow: 
+                1px 1px 2px rgba(190, 182, 182, 0.3),
+                2px 2px 5px rgba(126, 126, 126, 0.3);">{{ cafe.nome }}</h5>
                 <p class="card-text"><strong>Nome da Cafeteria:</strong> {{ cafe.autor }}</p>
                 <p class="card-text"><strong>Número de Contato:</strong> {{ cafe.anopublicado }}</p>
                 <p class="card-text"><strong>Tipo de Café:</strong> {{ cafe.genero.genero }}</p>
@@ -34,16 +37,17 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="deleteConfirmationModalLabel">Confirmar Deleção</h5>
+          <h5 class="modal-title" id="deleteConfirmationModalLabel" style="color: #323232; border: none;" data-dismiss="modal">Confirmar Deleção</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body" style="color: #4f4f4f; border: none;">
           Tem certeza que deseja deletar esta cafeteria?
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <div class="mdcr">
+          <button type="button" class="btn btn-secondary" style="background-color: #6f6f6f; color: white; border: none;" data-dismiss="modal">Cancelar</button></div>
           <form action="{% url 'cafe_delete' cafe.id %}" method="post">
             {% csrf_token %}
             <button type="submit" class="btn btn-danger">Deletar</button>
