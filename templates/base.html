@@ -114,25 +114,26 @@
         <li>
           <a href="/mainapp/biblioteca/">
             <i class='bx bx-coffee' ></i>
-            <span class="links_name">Biblioteca</span>
+            <span class="links_name">Cafeterias</span>
           </a>
-          <span class="tooltip">Biblioteca</span>
+          <span class="tooltip">Cafeterias</span>
         </li>
-        <li>
+        <!--<li>
           <a href="/mainapp/lista_desejos/">
             <i class='bx bx-list-check' ></i>
             <span class="links_name">Lista de desejos</span>
           </a>
           <span class="tooltip">Lista de desejos</span>
         </li>
-        <li>
+      -->
+        <!--<li>
           <a href="{% url 'coffee_history' %}">
             <i class='bx bx-heart' ></i>
             <span class="links_name">Favoritos</span>
           </a>
           <span class="tooltip">Favoritos</span>
         </li>
-      
+      -->
       
         <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
           {% csrf_token %}
@@ -142,6 +143,7 @@
               <i class='bx bx-log-out'></i>
               <span class="links_name">Logout</span>
             </a>
+            <span class="tooltip">Logout</span>
           </li>
         
         </ul>
