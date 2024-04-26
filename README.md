@@ -2,7 +2,7 @@
 
 *Links:  
 
-Deploy: inovecoffee.azurewebsites.net
+Deploy: [inovecoffee.azurewebsites.net](https://inovecoffee.azurewebsites.net/)
 
 Jira: https://g9cafe.atlassian.net/jira/software/projects/PJT/boards/1  
 
@@ -14,7 +14,10 @@ Relatório de Programação em Par : https://docs.google.com/document/d/1tT1aOI1
 
 *Diagrama de Atividades:
 
+
+
 Link Screencast prototipo lo-fi: https://youtu.be/SuXOQSHHxKM?si=R35TclnKRMp-wZq1
+
 Link Screencast Aplicação Web: https://youtu.be/R5HmjUs3CyE?si=oUZa4673nMmMVvT1
 
 *Issues:
