@@ -99,48 +99,46 @@
         <ul class="nav-list">
           <li>
             <a href="/mainapp/">
-              <i class='bx bx-grid-alt'></i>
+              <i class='bx bx-grid-alt' style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);"></i>
               <span class="links_name">Página inicial</span>
             </a>
             <span class="tooltip">Página inicial</span>
           </li>
           <li>
           <a href="/mainapp/perfil/">
-            <i class='bx bx-user' ></i>
+            <i class='bx bx-user' style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);"></i>
             <span class="links_name">Perfil</span>
           </a>
           <span class="tooltip">Perfil</span>
         </li>
         <li>
           <a href="/mainapp/biblioteca/">
-            <i class='bx bx-coffee' ></i>
+            <i class='bx bx-coffee' style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);"></i>
             <span class="links_name">Cafeterias</span>
           </a>
           <span class="tooltip">Cafeterias</span>
         </li>
-        <!--<li>
+        <li>
           <a href="/mainapp/lista_desejos/">
-            <i class='bx bx-list-check' ></i>
+            <i class='bx bx-list-check' style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);"></i>
             <span class="links_name">Lista de desejos</span>
           </a>
           <span class="tooltip">Lista de desejos</span>
         </li>
-      -->
-        <!--<li>
+        <li>
           <a href="{% url 'coffee_history' %}">
-            <i class='bx bx-heart' ></i>
+            <i class='bx bx-heart' style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);"></i>
             <span class="links_name">Favoritos</span>
           </a>
           <span class="tooltip">Favoritos</span>
         </li>
-      -->
       
         <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
           {% csrf_token %}
         </form>
           <li class="logout">
             <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-              <i class='bx bx-log-out'></i>
+              <i class='bx bx-log-out' style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);"></i>
               <span class="links_name">Logout</span>
             </a>
             <span class="tooltip">Logout</span>
