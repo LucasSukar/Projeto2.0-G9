@@ -14,7 +14,7 @@ Relatório de Programação em Par : https://docs.google.com/document/d/1tT1aOI1
 
 *Diagrama de Atividades:
 
-![Imagem do WhatsApp de 2024-04-25 à(s) 21 12 01_4846de64](https://github.com/LucasSukar/Projeto2.0-G9/assets/142420463/c2b21202-3ff1-4293-861b-fa8af33e806d)
+![Imagem do WhatsApp de 2024-05-04 à(s) 15 27 14_56ffa174](https://github.com/LucasSukar/Projeto2.0-G9/assets/142420463/9342f340-6cb5-438b-abab-2b1f6e28ce94)
 
 
 Link Screencast prototipo lo-fi: https://youtu.be/SuXOQSHHxKM?si=R35TclnKRMp-wZq1
