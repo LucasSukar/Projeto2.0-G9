@@ -127,3 +127,147 @@ class AdicionarCafeteria(LiveServerTestCase):
         botaologout = driver.find_element(by=By.XPATH, value="/html/body/div/ul/li[6]/a")
         botaologout.send_keys(Keys.ENTER)
         time.sleep(3)
+
+class RemoverCafeteria(LiveServerTestCase):
+
+    def test_1(self):
+        #Fazendo registro do usuário
+
+        driver.get("http://127.0.0.1:8000/mainapp/cadastro/")
+        usuario = driver.find_element(by=By.NAME, value="username")
+        email = driver.find_element(by=By.NAME, value="email")
+        senha = driver.find_element(by=By.NAME, value="password")
+        botao = driver.find_element(by=By.XPATH, value="/html/body/section/div/div/div/div/div/form/button")
+
+        usuario.send_keys(f"user2")
+        email.send_keys(f"user2@gmail.com")
+        senha.send_keys("Senha1234")
+        time.sleep(2)
+        botao.send_keys(Keys.ENTER)
+        time.sleep(2)
+
+        usuariologin = driver.find_element(by=By.NAME, value="username")
+        senhalogin = driver.find_element(by=By.NAME, value="password")
+        botaologin = driver.find_element(by=By.XPATH, value="/html/body/section/div/div/div/div/div[2]/form/div[3]/button")
+
+        usuariologin.send_keys(f"user2")
+        senhalogin.send_keys("Senha1234")
+        time.sleep(2)
+        botaologin.send_keys(Keys.ENTER)
+        time.sleep(2)
+
+        #Direcionando para a página de adicionar cafeterias
+
+        botaocafeterias = driver.find_element(by=By.XPATH, value="/html/body/div/ul/li[3]/a")
+        botaocafeterias.send_keys(Keys.ENTER)
+        time.sleep(2)
+        botaoadd = driver.find_element(by=By.XPATH, value="/html/body/section/div[2]/a")
+        botaoadd.send_keys(Keys.ENTER)
+        time.sleep(2)
+
+        #Adicionando uma cafeteria
+
+        nome = driver.find_element(by=By.NAME, value="nome")
+        autor = driver.find_element(by=By.NAME, value="autor")
+        anopublicado = driver.find_element(by=By.NAME, value="anopublicado")
+        genero = driver.find_element(by=By.NAME, value="genero")
+        botaosave = driver.find_element(by=By.XPATH, value="/html/body/section/div/form/button")
+
+        nome.send_keys(f"São Braz")
+        autor.send_keys(f"Rua José Braz, 333")
+        anopublicado.send_keys("81999999993")
+        chooser = Select(genero)
+        chooser.select_by_visible_text("macchiato")
+        time.sleep(2)
+        botaosave.send_keys(Keys.ENTER)
+        time.sleep(2)
+
+        #Removendo a cafeteria
+
+        botaoacesso = driver.find_element(by=By.XPATH, value="/html/body/section/div[2]/div/a")
+        botaoacesso.send_keys(Keys.ENTER)
+        time.sleep(2)
+        botaodel = driver.find_element(by=By.XPATH, value="/html/body/section/div[1]/div/div[2]/div/button")
+        botaodel.send_keys(Keys.ENTER)
+        time.sleep(2)
+        botaodel2 = driver.find_element(by=By.XPATH, value="/html/body/section/div[2]/div/div/div[3]/form/button")
+        botaodel2.send_keys(Keys.ENTER)
+        time.sleep(3)
+        self.assertEqual(driver.find_element(by=By.XPATH, value="/html/body/section/div[2]/div/p").text, ("Nenhuma cafeterias adicionada ainda."))
+        botaologout = driver.find_element(by=By.XPATH, value="/html/body/div/ul/li[6]/a")
+        botaologout.send_keys(Keys.ENTER)
+        time.sleep(2)
+
+class FavoritarCafeteria(LiveServerTestCase):
+
+    def test_1(self):
+        #Fazendo registro do usuário
+
+        driver.get("http://127.0.0.1:8000/mainapp/cadastro/")
+        usuario = driver.find_element(by=By.NAME, value="username")
+        email = driver.find_element(by=By.NAME, value="email")
+        senha = driver.find_element(by=By.NAME, value="password")
+        botao = driver.find_element(by=By.XPATH, value="/html/body/section/div/div/div/div/div/form/button")
+
+        usuario.send_keys(f"user3")
+        email.send_keys(f"user3@gmail.com")
+        senha.send_keys("Senha1234")
+        time.sleep(2)
+        botao.send_keys(Keys.ENTER)
+        time.sleep(2)
+
+        usuariologin = driver.find_element(by=By.NAME, value="username")
+        senhalogin = driver.find_element(by=By.NAME, value="password")
+        botaologin = driver.find_element(by=By.XPATH, value="/html/body/section/div/div/div/div/div[2]/form/div[3]/button")
+
+        usuariologin.send_keys(f"user3")
+        senhalogin.send_keys("Senha1234")
+        time.sleep(2)
+        botaologin.send_keys(Keys.ENTER)
+        time.sleep(2)
+
+        #Direcionando para a página de adicionar cafeterias
+
+        botaocafeterias = driver.find_element(by=By.XPATH, value="/html/body/div/ul/li[3]/a")
+        botaocafeterias.send_keys(Keys.ENTER)
+        time.sleep(2)
+        botaoadd = driver.find_element(by=By.XPATH, value="/html/body/section/div[2]/a")
+        botaoadd.send_keys(Keys.ENTER)
+        time.sleep(2)
+
+        #Adicionando uma cafeteria
+
+        nome = driver.find_element(by=By.NAME, value="nome")
+        autor = driver.find_element(by=By.NAME, value="autor")
+        anopublicado = driver.find_element(by=By.NAME, value="anopublicado")
+        genero = driver.find_element(by=By.NAME, value="genero")
+        botaosave = driver.find_element(by=By.XPATH, value="/html/body/section/div/form/button")
+
+        nome.send_keys(f"Santa Clara")
+        autor.send_keys(f"Rua Café Preto, 101")
+        anopublicado.send_keys("81999999101")
+        chooser = Select(genero)
+        chooser.select_by_visible_text("Grão específico")
+        time.sleep(2)
+        botaosave.send_keys(Keys.ENTER)
+        time.sleep(2)
+
+        #Adicionando a cafeteria aos favoritos
+
+        botaoacesso = driver.find_element(by=By.XPATH, value="/html/body/section/div[2]/div/a")
+        botaoacesso.send_keys(Keys.ENTER)
+        time.sleep(2)
+        botaoeditar = driver.find_element(by=By.XPATH, value="/html/body/section/div[1]/div/div[2]/div/a[2]")
+        botaoeditar.send_keys(Keys.ENTER)
+        time.sleep(1)
+        status = driver.find_element(by=By.NAME, value="status_cafeteria")
+        chooser = Select(status)
+        chooser.select_by_visible_text("Favorita")
+        time.sleep(2)
+        botaosubmit = driver.find_element(by=By.XPATH, value="/html/body/section/div/form/button")
+        botaosubmit.send_keys(Keys.ENTER)
+        time.sleep(3)
+        self.assertEqual(driver.find_element(by=By.XPATH, value="/html/body/section/div[2]/div/a/div/div[2]").text, ("Status da cafeteria: Favorita"))
+        botaologout = driver.find_element(by=By.XPATH, value="/html/body/div/ul/li[6]/a")
+        botaologout.send_keys(Keys.ENTER)
+        time.sleep(2)
