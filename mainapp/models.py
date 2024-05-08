@@ -2,7 +2,17 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.db import models
 
+class Franquia(models.Model):
+    nome1 = models.CharField(max_length=100)
+    endereco = models.CharField(max_length=100)
+    email = models.EmailField()
+    cpf = models.CharField(max_length=14)
+
+    def __str__(self):
+        return self.nome1
+    
 class Categoria(models.Model):
     genero = models.CharField(max_length=100, unique=True)
 
