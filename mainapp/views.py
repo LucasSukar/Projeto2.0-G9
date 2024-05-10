@@ -3,19 +3,27 @@ from django.views import View
 from .models import Cafe, Categoria
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy,  reverse
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
 from django.db.models import Count
 from django.views.decorators.csrf import csrf_protect
 from django.utils.decorators import method_decorator
 from django.contrib import messages
-from .models import Cafe, Categoria, ListaDesejos
+from .models import Cafe, Categoria, ListaDesejos, Franquia
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.hashers import make_password
 from .models import Cafe,CoffeeHistory
 from django.utils import timezone
+from django.http import HttpResponseRedirect
 
+
+class CriarFranquiaView(View):
+    def get(self, request):
+        # Aqui estamos criando um novo contexto com os dados que queremos passar para o template.
+        contexto = {'categorias': Categoria.objects.all()}  # Adicionando todas as categorias para o contexto
+        return render(request, 'mainapp/cadastro_franquia.html', contexto)
+    
 class HomeView(View):
     def get(self, request):
         contexto = {'user': request.user if request.user.is_authenticated else None}
