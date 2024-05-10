@@ -1,16 +1,16 @@
 <hr>
 <p align="center">
   <img
-    src="https://img.shields.io/github/repo-size/viniciusdandrade/ViraPag?style=flat"
+    src="https://img.shields.io/github/repo-size/LucasSukar/Projeto2.0-G9?style=flat"
     alt="Repository Size"
   />
   <img
-    src="https://img.shields.io/github/commit-activity/t/viniciusdandrade/ViraPag?style=flat&logo=github"
+    src="https://img.shields.io/github/commit-activity/t/LucasSukar/Projeto2.0-G9?style=flat&logo=github"
     alt="Commit Activity"
   />
   <a href="LICENSE.md"
     ><img
-      src="https://img.shields.io/github/license/viniciusdandrade/ViraPag"
+      src="https://img.shields.io/github/license/LucasSukar/Projeto2.0-G9"
       alt="License"
   /></a>
 </p>
