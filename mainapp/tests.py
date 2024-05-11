@@ -474,3 +474,119 @@ class AdicionarDesejo(LiveServerTestCase):
         botaologout = driver.find_element(by=By.XPATH, value="/html/body/div/ul/li[6]/a")
         botaologout.send_keys(Keys.ENTER)
         time.sleep(2)
+
+class GerenciarDesejos(LiveServerTestCase):
+
+    def test_1(self):
+        #Fazendo registro do usuário
+
+        driver.get("http://127.0.0.1:8000/mainapp/cadastro/")
+        usuario = driver.find_element(by=By.NAME, value="username")
+        email = driver.find_element(by=By.NAME, value="email")
+        senha = driver.find_element(by=By.NAME, value="password")
+        botao = driver.find_element(by=By.XPATH, value="/html/body/section/div/div/div/div/div/form/button")
+
+        usuario.send_keys(f"user6")
+        email.send_keys(f"user6@gmail.com")
+        senha.send_keys("Senha1234")
+        time.sleep(2)
+        botao.send_keys(Keys.ENTER)
+        time.sleep(2)
+
+        usuariologin = driver.find_element(by=By.NAME, value="username")
+        senhalogin = driver.find_element(by=By.NAME, value="password")
+        botaologin = driver.find_element(by=By.XPATH, value="/html/body/section/div/div/div/div/div[2]/form/div[3]/button")
+
+        usuariologin.send_keys(f"user6")
+        senhalogin.send_keys("Senha1234")
+        time.sleep(2)
+        botaologin.send_keys(Keys.ENTER)
+        time.sleep(2)
+
+        #Direcionando para a página de adicionar à lista de desejos
+
+        botaolista = driver.find_element(by=By.XPATH, value="/html/body/div/ul/li[4]/a")
+        botaolista.send_keys(Keys.ENTER)
+        time.sleep(2)
+        botaoadd = driver.find_element(by=By.XPATH, value="/html/body/section/div/div/a")
+        botaoadd.send_keys(Keys.ENTER)
+        time.sleep(2)
+
+        #Adicionando uma cafeteria à lista de desejos
+
+        nome = driver.find_element(by=By.NAME, value="nome")
+        autor = driver.find_element(by=By.NAME, value="autor")
+        anopublicado = driver.find_element(by=By.NAME, value="anopublicado")
+        genero = driver.find_element(by=By.NAME, value="genero")
+        botaosave = driver.find_element(by=By.XPATH, value="/html/body/section/div[2]/form/button")
+
+        nome.send_keys(f"Harina")
+        autor.send_keys(f"Avenida Grão Forte, 208")
+        anopublicado.send_keys("8199999208")
+        chooser = Select(genero)
+        chooser.select_by_visible_text("duplo")
+        botaosave.send_keys(Keys.ENTER)
+        time.sleep(3)
+
+        #Movendo a cafeteria na lista de desejos para a lista de cafeterias frequentadas
+        
+        botaomover = driver.find_element(by=By.XPATH, value="/html/body/section/div/div[2]/div/div/form[1]/button")
+        botaomover.send_keys(Keys.ENTER)
+        time.sleep(2)
+        botaocafeterias = driver.find_element(by=By.XPATH, value="/html/body/div/ul/li[3]/a")
+        botaocafeterias.send_keys(Keys.ENTER)
+        time.sleep(4)
+        self.assertEqual(driver.find_element(by=By.XPATH, value="/html/body/section/div[2]/div/a/div/div[1]").text, ("Harina por Avenida Grão Forte, 208 (8199999208)"))
+        botaologout = driver.find_element(by=By.XPATH, value="/html/body/div/ul/li[6]/a")
+        botaologout.send_keys(Keys.ENTER)
+        time.sleep(2)
+
+    def test_2(self):
+        #Fazendo login do usuário
+
+        driver.get("http://127.0.0.1:8000/mainapp/login/")
+        usuariologin = driver.find_element(by=By.NAME, value="username")
+        senhalogin = driver.find_element(by=By.NAME, value="password")
+        botaologin = driver.find_element(by=By.XPATH, value="/html/body/section/div/div/div/div/div[2]/form/div[3]/button")
+
+        usuariologin.send_keys(f"user6")
+        senhalogin.send_keys("Senha1234")
+        time.sleep(2)
+        botaologin.send_keys(Keys.ENTER)
+        time.sleep(2)
+
+        #Direcionando para a página de adicionar à lista de desejos
+
+        botaolista = driver.find_element(by=By.XPATH, value="/html/body/div/ul/li[4]/a")
+        botaolista.send_keys(Keys.ENTER)
+        time.sleep(2)
+        botaoadd = driver.find_element(by=By.XPATH, value="/html/body/section/div/div/a")
+        botaoadd.send_keys(Keys.ENTER)
+        time.sleep(2)
+
+        #Adicionando uma cafeteria à lista de desejos
+
+        nome = driver.find_element(by=By.NAME, value="nome")
+        autor = driver.find_element(by=By.NAME, value="autor")
+        anopublicado = driver.find_element(by=By.NAME, value="anopublicado")
+        genero = driver.find_element(by=By.NAME, value="genero")
+        botaosave = driver.find_element(by=By.XPATH, value="/html/body/section/div[2]/form/button")
+
+        nome.send_keys(f"Go Coffee")
+        autor.send_keys(f"Avenida Grão Forte, 207")
+        anopublicado.send_keys("8199999207")
+        chooser = Select(genero)
+        chooser.select_by_visible_text("duplo")
+        botaosave.send_keys(Keys.ENTER)
+        time.sleep(3)
+
+        #Removendo cafeteria da lista de desejos
+
+        botaodel = driver.find_element(by=By.XPATH, value="/html/body/section/div/div[2]/div/div/form[2]/button")
+        botaodel.send_keys(Keys.ENTER)
+        time.sleep(3)
+        time.sleep(4)
+        self.assertEqual(driver.find_element(by=By.XPATH, value="/html/body/section/div/div[1]/p").text, ("cafeteria removida da lista de desejos com sucesso."))
+        botaologout = driver.find_element(by=By.XPATH, value="/html/body/div/ul/li[6]/a")
+        botaologout.send_keys(Keys.ENTER)
+        time.sleep(2)
