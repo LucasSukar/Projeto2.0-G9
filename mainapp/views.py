@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
-from .models import Cafe, Categoria
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy,  reverse
@@ -10,19 +9,11 @@ from django.db.models import Count
 from django.views.decorators.csrf import csrf_protect
 from django.utils.decorators import method_decorator
 from django.contrib import messages
-from .models import Cafe, Categoria, ListaDesejos, Franquia
+from .models import Cafe, Categoria, ListaDesejos, Franquia, CoffeeHistory
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.hashers import make_password
-from .models import Cafe,CoffeeHistory
 from django.utils import timezone
 from django.http import HttpResponseRedirect
-
-
-class CriarFranquiaView(View):
-    def get(self, request):
-        # Aqui estamos criando um novo contexto com os dados que queremos passar para o template.
-        contexto = {'categorias': Categoria.objects.all()}  # Adicionando todas as categorias para o contexto
-        return render(request, 'mainapp/cadastro_franquia.html', contexto)
     
 class HomeView(View):
     def get(self, request):
@@ -295,3 +286,7 @@ class RemoveFromHistoryView(View):
         messages.success(request, "cafeteria removida do histórico.")
         return redirect('coffee_history')
     
+class CriarFranquiaView(View):
+    def get(self, request):
+        contexto = {'categorias': Categoria.objects.all()}
+        return render(request, 'mainapp/cadastro_franquia.html', contexto)
