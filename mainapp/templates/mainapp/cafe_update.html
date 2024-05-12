@@ -28,6 +28,10 @@
             <input type="number" class="form-control" id="anopublicado" name="anopublicado" value="{{ cafe.anopublicado }}" required>
         </div>
         <div class="form-group">
+            <label for="autor">Quantas vezes você já foi nessa cafeteria? </label>
+            <input type="number" class="form-control" id="autor" name="autor" min="0" max="999" maxlength="3" required>
+        </div>
+        <div class="form-group">
             <label for="genero">Tipo de Café:</label>
             <select class="form-control" id="genero" name="genero">
                 {% for categoria in categorias %}
