@@ -112,7 +112,7 @@ class CafeCreateView(LoginRequiredMixin, View):
         genero_id = request.POST.get('genero').strip()
         vezes_visitado = request.POST.get('vezes_visitado')
 
-        if not nome or not autor or not anopublicado or vezes_visitado:
+        if not nome or not autor or not anopublicado or not vezes_visitado:
             messages.error(request, 'Todos os campos são obrigatórios.')
             return redirect('cafe_create')
 
