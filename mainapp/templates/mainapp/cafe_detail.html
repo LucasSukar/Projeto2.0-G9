@@ -18,9 +18,10 @@
                 <h5 class="card-title" style="color: #387B5B; border: none;text-shadow: 
                 1px 1px 2px rgba(190, 182, 182, 0.3),
                 2px 2px 5px rgba(126, 126, 126, 0.3);">{{ cafe.nome }}</h5>
-                <p class="card-text"><strong>Nome da Cafeteria:</strong> {{ cafe.autor }}</p>
+                <p class="card-text"><strong>Nome da Cafeteria:</strong> {{ cafe.nome }}</p>
                 <p class="card-text"><strong>Número de Contato:</strong> {{ cafe.anopublicado }}</p>
                 <p class="card-text"><strong>Tipo de Café:</strong> {{ cafe.genero.genero }}</p>
+                <p clas ="card-text"><strong>Vezes que você frequentou a cafeteria: </strong>{{ cafe.vezes_visitado }}
                 <p class="card-text"><strong>Status da cafeteria:</strong> {{ cafe.get_status_cafeteria_display }}</p>
                 <a href="{% url 'biblioteca' %}" class="btn btn-primary">Voltar</a>
                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteConfirmationModal">

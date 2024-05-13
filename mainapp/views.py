@@ -110,8 +110,9 @@ class CafeCreateView(LoginRequiredMixin, View):
         autor = request.POST.get('autor').strip()
         anopublicado = request.POST.get('anopublicado').strip()
         genero_id = request.POST.get('genero').strip()
-        
-        if not nome or not autor or not anopublicado:
+        vezes_visitado = request.POST.get('vezes_visitado')
+
+        if not nome or not autor or not anopublicado or vezes_visitado:
             messages.error(request, 'Todos os campos são obrigatórios.')
             return redirect('cafe_create')
 
@@ -120,10 +121,9 @@ class CafeCreateView(LoginRequiredMixin, View):
             return redirect('cafe_create')
 
         genero = get_object_or_404(Categoria, id=genero_id)
-        Cafe.objects.create(nome=nome, autor=autor, anopublicado=anopublicado, genero=genero, usuario=request.user)
-        messages.success(request, 'cafeteria adicionada com sucesso!')
+        Cafe.objects.create(nome=nome, autor=autor, anopublicado=anopublicado, vezes_visitado=vezes_visitado, genero=genero, usuario=request.user)
+        messages.success(request, 'Cafeteria adicionada com sucesso!')
         return redirect('biblioteca')
-
 
 class CafeUpdateView(LoginRequiredMixin, View):
     def get(self, request, pk):
@@ -136,6 +136,7 @@ class CafeUpdateView(LoginRequiredMixin, View):
         cafe.nome = request.POST.get('nome')
         cafe.autor = request.POST.get('autor')
         cafe.anopublicado = request.POST.get('anopublicado')
+        cafe.vezes_visitado = request.POST.get('vezes_visitado')
         cafe.genero = get_object_or_404(Categoria, pk=request.POST.get('genero'))
         novo_status_cafeteria = request.POST.get('status_cafeteria')
 

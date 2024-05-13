@@ -36,6 +36,7 @@ class Cafe(models.Model):
     autor = models.CharField(max_length=100)
     anopublicado = models.CharField(max_length=15)
     genero=models.ForeignKey(Categoria, on_delete=models.SET_NULL, null=True)
+    vezes_visitado =models.IntegerField(default=0)
     status_cafeteria=models.CharField(max_length=2, choices=STATUS_CAFETERIA_CHOICES, default='NL')
     avaliacao=models.IntegerField(choices=AVALIACAO_CHOICES, default=0)
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='cafes')
