@@ -29,6 +29,7 @@
                 </button>
                 <a href="{% url 'cafe_update' pk=cafe.pk %}" class="btn btn-primary">Editar</a>
                 <a href="{% url 'cadastro_franquia' %}" class="btn btn-primary">Criar Franquia</a>
+                <a href="{% url 'adicionar_comentario' cafe.id %}" class="btn btn-success">Adicionar Comentário</a>
 
             </div>
         
@@ -56,6 +57,51 @@
           </form>
         </div>
       </div>
+    </div>
+  </div>
+  <div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            Comentários
+        </div>
+        <div class="card-body">
+            {% if cafe.comentarios.all %}
+                {% for comentario in cafe.comentarios.all %}
+                <div class="card">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <p>{{ comentario.texto }}</p>
+                        <form action="{% url 'deletar_comentario' comentario.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteConfirmationModal{{ comentario.id }}">
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAKRJREFUSEvtlcERgCAMBNdOtBMtxUosxVK0FDvRYUZ4xImHIj/5SSR7SQauofJqKudHAXpgBlpHyAaMwOoJVYAFCJC7FSDdW8B+HvSEqLhskUqg4hdAPFA6+1SxLb06ICqXpZsS3f9fD+9rgFWovhM/twKVsLhFP+Byr5625J+BfJqKW6QIjwE5RmOhwdUGu+nd5OBiU4abxXyudSrLVK2R8eqAA04lOBnZrFOdAAAAAElFTkSuQmCC" alt="Excluir" width="20" height="20">
+                            </button>
+                            <div class="modal fade" id="deleteConfirmationModal{{ comentario.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationModalLabel{{ comentario.id }}" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="deleteConfirmationModalLabel{{ comentario.id }}">Confirmar Deleção</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Tem certeza que deseja deletar este comentário?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                            <button type="submit" class="btn btn-danger">Deletar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>  
+                {% endfor %}
+            {% else %}
+                <p>Nenhum comentário feito sobre o livro.</p>
+            {% endif %}
+        </div>
     </div>
   </div>
   

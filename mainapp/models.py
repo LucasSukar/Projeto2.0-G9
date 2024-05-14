@@ -52,6 +52,9 @@ class ListaDesejos(models.Model):
 
     def __str__(self):
         return f" Lista de desejos de {self.usuario}"
+    
+    def comentarios(self):
+        return Comentario.objects.filter(cafe=self)
 
 
 class CoffeeHistory(models.Model):
@@ -63,3 +66,12 @@ class CoffeeHistory(models.Model):
 
     def __str__(self):
         return f"{self.coffee_title} ({self.author})"
+
+class Comentario(models.Model):
+    autor = models.ForeignKey(User, on_delete=models.CASCADE)
+    texto = models.TextField()
+    data_publicacao = models.DateTimeField(default=timezone.now)
+    cafe = models.ForeignKey(Cafe, on_delete=models.CASCADE, related_name='comentarios') 
+
+    def _str_(self):
+        return f"Comentário de {self.autor} em {self.cafe}: {self.texto}"

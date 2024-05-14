@@ -9,7 +9,7 @@ from django.db.models import Count
 from django.views.decorators.csrf import csrf_protect
 from django.utils.decorators import method_decorator
 from django.contrib import messages
-from .models import Cafe, Categoria, ListaDesejos, Franquia, CoffeeHistory
+from .models import Cafe, Categoria, ListaDesejos, Franquia, CoffeeHistory, Comentario
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.hashers import make_password
 from django.utils import timezone
@@ -291,3 +291,27 @@ class CriarFranquiaView(View):
     def get(self, request):
         contexto = {'categorias': Categoria.objects.all()}
         return render(request, 'mainapp/cadastro_franquia.html', contexto)
+
+class AdicionarComentarioView(LoginRequiredMixin, View):
+    def get(self, request, cafe_id):
+        cafe = get_object_or_404(Cafe, id=cafe_id)
+        return render(request, 'mainapp/adicionar_comentario.html', {'cafe': cafe})
+
+    def post(self, request, cafe_id):
+        texto = request.POST.get('texto').strip()
+        cafe = get_object_or_404(Cafe, id=cafe_id)
+
+        if not texto:
+            messages.error(request, 'Por favor, adicione um texto ao comentário.')
+            return redirect('adicionar_comentario', cafe_id=cafe_id)
+
+        Comentario.objects.create(autor=request.user, texto=texto, cafe=cafe)
+        messages.success(request, 'Comentário adicionado com sucesso.')
+        return redirect('cafe_detail', pk=cafe_id)
+
+class DeletarComentarioView(LoginRequiredMixin, View):
+    def post(self, request, comentario_id):
+        comentario = get_object_or_404(Comentario, id=comentario_id)
+        comentario.delete()
+        messages.success(request, 'Comentário removido com sucesso.')
+        return redirect('cafe_detail', pk=comentario.cafe.id)
