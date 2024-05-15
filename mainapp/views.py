@@ -14,6 +14,7 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.hashers import make_password
 from django.utils import timezone
 from django.http import HttpResponseRedirect
+from django.shortcuts import reverse
     
 class HomeView(View):
     def get(self, request):
@@ -335,3 +336,22 @@ class AllCoffes(View):
         else:
             cafes = Cafe.objects.all()
             return render(request, 'mainapp/all.html', {'cafes': cafes})
+        
+
+class AvaliacaoCafeteriaView(LoginRequiredMixin, View):
+    def get(self, request, cafe_id):
+        cafe = Cafe.objects.get(pk=cafe_id)
+        return render(request, 'mainapp/avaliacao.html', {'cafe': cafe})
+    
+    def post(self, request, cafe_id):
+        cafeteria = Cafe.objects.get(pk=cafe_id)
+        avaliacao = int(request.POST.get('avaliacao'))
+        
+        if cafeteria.avaliacao:
+            cafeteria.avaliacao = avaliacao
+
+        else:
+            cafeteria.avaliacao = avaliacao
+        
+        cafeteria.save()
+        return redirect('cafe_detail', pk=cafe_id)

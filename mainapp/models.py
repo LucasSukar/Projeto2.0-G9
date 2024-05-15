@@ -32,6 +32,7 @@ class Cafe(models.Model):
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='cafes')
     isbn = models.CharField(max_length=13, null=True)
     in_wishlist = models.BooleanField(default=False)
+    avaliacao = models.IntegerField(choices=AVALIACAO_CHOICES, null=True, blank=True)
     in_collection = models.BooleanField(default=True)
     def __str__(self):
         return self.nome
