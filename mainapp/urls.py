@@ -22,7 +22,7 @@ urlpatterns = [
     path('lista_desejos/add_para_colecao/<int:cafe_id>/', views.AddParaColecaoView.as_view(), name='add_coffee_colecao'),
     path('coffee_history/', views.CoffeeHistoryView.as_view(), name='coffee_history'),
     path('remove_history/<int:cafe_id>/', views.RemoveFromHistoryView.as_view(), name='remove_history'),
-    path('cadastro_franquia/', views.CriarFranquiaView.as_view(), name='cadastro_franquia'),
     path('adicionar_comentario/<int:cafe_id>/', views.AdicionarComentarioView.as_view(), name='adicionar_comentario'),
     path('deletar_comentario/<int:comentario_id>/', views.DeletarComentarioView.as_view(), name='deletar_comentario'),
+    path('all/',views.AllCoffes.as_view(),name='all'),
 ]

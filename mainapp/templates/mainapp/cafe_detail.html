@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 
-
 {% block 'head' %}
     {% load static %}
     <link rel="stylesheet" href="{% static 'mainapp/css/mainapp.css' %}">
@@ -21,14 +20,14 @@
                 <p class="card-text"><strong>Nome da Cafeteria:</strong> {{ cafe.nome }}</p>
                 <p class="card-text"><strong>Número de Contato:</strong> {{ cafe.anopublicado }}</p>
                 <p class="card-text"><strong>Tipo de Café:</strong> {{ cafe.genero.genero }}</p>
-                <p clas ="card-text"><strong>Vezes que você frequentou a cafeteria: </strong>{{ cafe.vezes_visitado }}
                 <p class="card-text"><strong>Status da cafeteria:</strong> {{ cafe.get_status_cafeteria_display }}</p>
-                <a href="{% url 'biblioteca' %}" class="btn btn-primary">Voltar</a>
+                <a href="{% url 'home' %}" class="btn btn-primary">Voltar</a>
+                {% if is_owner %}
                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteConfirmationModal">
                     <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAKRJREFUSEvtlcERgCAMBNdOtBMtxUosxVK0FDvRYUZ4xImHIj/5SSR7SQauofJqKudHAXpgBlpHyAaMwOoJVYAFCJC7FSDdW8B+HvSEqLhskUqg4hdAPFA6+1SxLb06ICqXpZsS3f9fD+9rgFWovhM/twKVsLhFP+Byr5625J+BfJqKW6QIjwE5RmOhwdUGu+nd5OBiU4abxXyudSrLVK2R8eqAA04lOBnZrFOdAAAAAElFTkSuQmCC"/>
                 </button>
                 <a href="{% url 'cafe_update' pk=cafe.pk %}" class="btn btn-primary">Editar</a>
-                <a href="{% url 'cadastro_franquia' %}" class="btn btn-primary">Criar Franquia</a>
+                {% endif %}
                 <a href="{% url 'adicionar_comentario' cafe.id %}" class="btn btn-success">Adicionar Comentário</a>
 
             </div>
@@ -51,10 +50,12 @@
         <div class="modal-footer">
           <div class="mdcr">
           <button type="button" class="btn btn-secondary" style="background-color: #6f6f6f; color: white; border: none;" data-dismiss="modal">Cancelar</button></div>
-          <form action="{% url 'cafe_delete' cafe.id %}" method="post">
+          {% if is_owner %}
+          <form action="{% url 'cafe_delete' pk=cafe.pk %}" method="post">
             {% csrf_token %}
             <button type="submit" class="btn btn-danger">Deletar</button>
           </form>
+          {% endif %}
         </div>
       </div>
     </div>
@@ -70,6 +71,7 @@
                 <div class="card">
                     <div class="card-body d-flex justify-content-between align-items-center">
                         <p>{{ comentario.texto }}</p>
+                        {% if comentario.autor == user %}
                         <form action="{% url 'deletar_comentario' comentario.id %}" method="post">
                             {% csrf_token %}
                             <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteConfirmationModal{{ comentario.id }}">
@@ -95,11 +97,12 @@
                                 </div>
                             </div>
                         </form>
+                        {% endif %}
                     </div>
                 </div>  
                 {% endfor %}
             {% else %}
-                <p>Nenhum comentário feito sobre o livro.</p>
+                <p>Nenhum comentário feito sobre a cafeteria.</p>
             {% endif %}
         </div>
     </div>
@@ -107,4 +110,3 @@
   
  
   {% endblock %}
-

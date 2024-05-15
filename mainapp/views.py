@@ -9,7 +9,7 @@ from django.db.models import Count
 from django.views.decorators.csrf import csrf_protect
 from django.utils.decorators import method_decorator
 from django.contrib import messages
-from .models import Cafe, Categoria, ListaDesejos, Franquia, CoffeeHistory, Comentario
+from .models import Cafe, Categoria, ListaDesejos, CoffeeHistory, Comentario
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.hashers import make_password
 from django.utils import timezone
@@ -77,16 +77,22 @@ class LogoutView(View):
 class Biblioteca(View):
     def get(self, request):
         if not request.user.is_authenticated:
-            
             return redirect('home')
         else:
             cafes = Cafe.objects.filter(usuario=request.user, in_collection=True)
             return render(request, 'mainapp/biblioteca.html', {'cafes': cafes})
 
 
-class CafesEmDetalhe(LoginRequiredMixin,View):
+class CafesEmDetalhe(LoginRequiredMixin, View):
     def get(self, request, pk):
         cafe = get_object_or_404(Cafe, pk=pk)
+
+        # Verifica se o usuário autenticado é o proprietário do café
+        if cafe.usuario == request.user:
+            is_owner = True
+        else:
+            is_owner = False
+
         coffee_info = None
        
         if not cafe.isbn:
@@ -95,9 +101,9 @@ class CafesEmDetalhe(LoginRequiredMixin,View):
                 cafe.cover_url = coffee_info.get('cover_url')
                 cafe.save()
             else:
-            
                 cafe.cover_url = coffee_info.get('cover_url') if cafe.isbn else None
-        return render(request, 'mainapp/cafe_detail.html', {'cafe': cafe})
+
+        return render(request, 'mainapp/cafe_detail.html', {'cafe': cafe, 'is_owner': is_owner})
 
 
 class CafeCreateView(LoginRequiredMixin, View):
@@ -110,9 +116,9 @@ class CafeCreateView(LoginRequiredMixin, View):
         autor = request.POST.get('autor').strip()
         anopublicado = request.POST.get('anopublicado').strip()
         genero_id = request.POST.get('genero').strip()
-        vezes_visitado = request.POST.get('vezes_visitado')
+      
 
-        if not nome or not autor or not anopublicado or not vezes_visitado:
+        if not nome or not autor or not anopublicado:
             messages.error(request, 'Todos os campos são obrigatórios.')
             return redirect('cafe_create')
 
@@ -121,7 +127,7 @@ class CafeCreateView(LoginRequiredMixin, View):
             return redirect('cafe_create')
 
         genero = get_object_or_404(Categoria, id=genero_id)
-        Cafe.objects.create(nome=nome, autor=autor, anopublicado=anopublicado, vezes_visitado=vezes_visitado, genero=genero, usuario=request.user)
+        Cafe.objects.create(nome=nome, autor=autor, anopublicado=anopublicado, genero=genero, usuario=request.user)
         messages.success(request, 'Cafeteria adicionada com sucesso!')
         return redirect('biblioteca')
 
@@ -136,7 +142,6 @@ class CafeUpdateView(LoginRequiredMixin, View):
         cafe.nome = request.POST.get('nome')
         cafe.autor = request.POST.get('autor')
         cafe.anopublicado = request.POST.get('anopublicado')
-        cafe.vezes_visitado = request.POST.get('vezes_visitado')
         cafe.genero = get_object_or_404(Categoria, pk=request.POST.get('genero'))
         novo_status_cafeteria = request.POST.get('status_cafeteria')
 
@@ -286,11 +291,6 @@ class RemoveFromHistoryView(View):
         coffee.delete()
         messages.success(request, "cafeteria removida do histórico.")
         return redirect('coffee_history')
-    
-class CriarFranquiaView(View):
-    def get(self, request):
-        contexto = {'categorias': Categoria.objects.all()}
-        return render(request, 'mainapp/cadastro_franquia.html', contexto)
 
 class AdicionarComentarioView(LoginRequiredMixin, View):
     def get(self, request, cafe_id):
@@ -312,6 +312,26 @@ class AdicionarComentarioView(LoginRequiredMixin, View):
 class DeletarComentarioView(LoginRequiredMixin, View):
     def post(self, request, comentario_id):
         comentario = get_object_or_404(Comentario, id=comentario_id)
-        comentario.delete()
-        messages.success(request, 'Comentário removido com sucesso.')
+
+        # Verifica se o usuário autenticado é o autor do comentário
+        if comentario.autor == request.user:
+            is_author = True
+        else:
+            is_author = False
+
+        if is_author:
+            comentario.delete()
+            messages.success(request, 'Comentário removido com sucesso.')
+        else:
+            messages.error(request, 'Você não tem permissão para excluir este comentário.')
+
         return redirect('cafe_detail', pk=comentario.cafe.id)
+
+    
+class AllCoffes(View):
+    def get(self, request):
+        if not request.user.is_authenticated:
+            return redirect('home')
+        else:
+            cafes = Cafe.objects.all()
+            return render(request, 'mainapp/all.html', {'cafes': cafes})
