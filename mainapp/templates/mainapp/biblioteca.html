@@ -20,6 +20,9 @@
                 <div>{{ cafe.nome }} por {{ cafe.autor }} ({{ cafe.anopublicado }})</div>
                 <div>Status da cafeteria: {{ cafe.get_status_cafeteria_display }}</div>
             </div>
+            {% if cafe.is_frequente %}
+            <span class="badge badge-primary badge-pill ml-auto" style="background-color: #F4C430;  color: black;" >Visitado frequentemente</span>
+            {% endif %}
         </a>
         {% empty %}
         <p>Nenhuma cafeterias adicionada ainda.</p>

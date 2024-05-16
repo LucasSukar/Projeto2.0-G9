@@ -5,7 +5,7 @@ from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy,  reverse
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
-from django.db.models import Count
+from django.db.models import Count, F
 from django.views.decorators.csrf import csrf_protect
 from django.utils.decorators import method_decorator
 from django.contrib import messages
@@ -80,7 +80,8 @@ class Biblioteca(View):
         if not request.user.is_authenticated:
             return redirect('home')
         else:
-            cafes = Cafe.objects.filter(usuario=request.user, in_collection=True)
+            cafes = Cafe.objects.filter(usuario=request.user, in_collection=True).order_by(F('is_frequente').desc(nulls_last=True))
+
             return render(request, 'mainapp/biblioteca.html', {'cafes': cafes})
 
 
@@ -314,7 +315,6 @@ class DeletarComentarioView(LoginRequiredMixin, View):
     def post(self, request, comentario_id):
         comentario = get_object_or_404(Comentario, id=comentario_id)
 
-        # Verifica se o usuário autenticado é o autor do comentário
         if comentario.autor == request.user:
             is_author = True
         else:
@@ -355,3 +355,15 @@ class AvaliacaoCafeteriaView(LoginRequiredMixin, View):
         
         cafeteria.save()
         return redirect('cafe_detail', pk=cafe_id)
+
+class AdicionarFrequenteView(LoginRequiredMixin, View):
+    def post(self, request, cafe_id):
+        cafe = get_object_or_404(Cafe, id=cafe_id, usuario=request.user)
+        
+        if cafe.is_frequente:
+            cafe.is_frequente = False
+        else:
+            cafe.is_frequente = True
+        
+        cafe.save()
+        return HttpResponseRedirect(reverse('cafe_detail', kwargs={'pk': cafe_id}))
