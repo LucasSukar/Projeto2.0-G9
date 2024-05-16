@@ -355,5 +355,3 @@ class AvaliacaoCafeteriaView(LoginRequiredMixin, View):
         
         cafeteria.save()
         return redirect('cafe_detail', pk=cafe_id)
-
-#testando
