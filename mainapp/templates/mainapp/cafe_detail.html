@@ -22,12 +22,13 @@
                 <p class="card-text"><strong>Tipo de Café:</strong> {{ cafe.genero.genero }}</p>
                 {% if is_owner %}
                 <p class="card-text"><strong>Status da cafeteria:</strong> {{ cafe.get_status_cafeteria_display }}</p>
-                {% if cafe.status_cafeteria != 'L' %}
-                    <p class="card-text"><strong>Avaliacão:</strong> Ainda não há avaliação.</p>
-                {% elif cafeteria.avaliacao %}
-                    <p class="card-text"><strong>Avaliacão:</strong> {{ cafeteria.avaliacao }} Estrelas</p>
+                
+                {% if cafe.avaliacao %}
+                    <p class="card-text"><strong>Avaliacão:</strong> {{ cafe.avaliacao }} Estrelas</p>
                 {% else %}
                     <p class="card-text"><strong>Avaliacão:</strong> Ainda não há avaliacão.</p>
+                {% endif %}
+
                 {% endif %}
 
                 {% if cafe.is_frequente %}
@@ -49,18 +50,14 @@
                 <br>
 
                 <a href="{% url 'home' %}" class="btn btn-primary">Voltar</a>
+                <a href="{% url 'cafe_update' pk=cafe.pk %}" class="btn btn-primary">Editar</a>
+                <a href="{% url 'adicionar_comentario' cafe.id %}" class="btn btn-success">Adicionar Comentário</a>
+                <a id="avaliarBtn" href="{% url 'avaliacao' cafe.id %}" class="btn btn-primary">Avaliar</a>
                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteConfirmationModal">
                     <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAKRJREFUSEvtlcERgCAMBNdOtBMtxUosxVK0FDvRYUZ4xImHIj/5SSR7SQauofJqKudHAXpgBlpHyAaMwOoJVYAFCJC7FSDdW8B+HvSEqLhskUqg4hdAPFA6+1SxLb06ICqXpZsS3f9fD+9rgFWovhM/twKVsLhFP+Byr5625J+BfJqKW6QIjwE5RmOhwdUGu+nd5OBiU4abxXyudSrLVK2R8eqAA04lOBnZrFOdAAAAAElFTkSuQmCC"/>
                 </button>
-                <a href="{% url 'cafe_update' pk=cafe.pk %}" class="btn btn-primary">Editar</a>
-                {% endif %}
-                <a href="{% url 'adicionar_comentario' cafe.id %}" class="btn btn-success">Adicionar Comentário</a>
-                <a id="avaliarBtn" href="{% url 'avaliacao' cafe.id %}" class="btn btn-primary">Avaliar</a>
-                <div id="avaliarAlert" class="alert alert-warning mt-3" style="display: none;">
-                    O cafe precisa ser visitado para ser avaliado.
-                </div>
             </div>
-        
+            
         </div>
     </div>
 </div>

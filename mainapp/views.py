@@ -344,16 +344,16 @@ class AvaliacaoCafeteriaView(LoginRequiredMixin, View):
         return render(request, 'mainapp/avaliacao.html', {'cafe': cafe})
     
     def post(self, request, cafe_id):
-        cafeteria = Cafe.objects.get(pk=cafe_id)
+        cafe = Cafe.objects.get(pk=cafe_id)
         avaliacao = int(request.POST.get('avaliacao'))
         
-        if cafeteria.avaliacao:
-            cafeteria.avaliacao = avaliacao
+        if cafe.avaliacao:
+            cafe.avaliacao = avaliacao
 
         else:
-            cafeteria.avaliacao = avaliacao
+            cafe.avaliacao = avaliacao
         
-        cafeteria.save()
+        cafe.save()
         return redirect('cafe_detail', pk=cafe_id)
 
 class AdicionarFrequenteView(LoginRequiredMixin, View):

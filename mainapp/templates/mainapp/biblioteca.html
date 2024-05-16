@@ -17,7 +17,7 @@
         <a href="{% url 'cafe_detail' cafe.id %}" class="list-group-item list-group-item-action d-flex align-items-start">
             
             <div>
-                <div>{{ cafe.nome }} por {{ cafe.autor }} ({{ cafe.anopublicado }})</div>
+                <div>{{ cafe.nome }} na {{ cafe.autor }} ({{ cafe.anopublicado }})</div>
                 <div>Status da cafeteria: {{ cafe.get_status_cafeteria_display }}</div>
             </div>
             {% if cafe.is_frequente %}
