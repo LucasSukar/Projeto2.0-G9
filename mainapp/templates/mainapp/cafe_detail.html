@@ -20,47 +20,51 @@
                 <p class="card-text"><strong>Nome da Cafeteria:</strong> {{ cafe.nome }}</p>
                 <p class="card-text"><strong>Número de Contato:</strong> {{ cafe.anopublicado }}</p>
                 <p class="card-text"><strong>Tipo de Café:</strong> {{ cafe.genero.genero }}</p>
-                {% if is_owner %}
-                <p class="card-text"><strong>Status da cafeteria:</strong> {{ cafe.get_status_cafeteria_display }}</p>
                 
-                {% if cafe.avaliacao %}
-                    <p class="card-text"><strong>Avaliacão:</strong> {{ cafe.avaliacao }} Estrelas</p>
-                {% else %}
-                    <p class="card-text"><strong>Avaliacão:</strong> Ainda não há avaliacão.</p>
-                {% endif %}
-
+                {% if is_owner %}
+                    <p class="card-text"><strong>Status da cafeteria:</strong> {{ cafe.get_status_cafeteria_display }}</p>
+                    {% if cafe.avaliacao %}
+                        <p class="card-text"><strong>Avaliacão:</strong> {{ cafe.avaliacao }} Estrelas</p>
+                    {% else %}
+                        <p class="card-text"><strong>Avaliacão:</strong> Ainda não há avaliacão.</p>
+                    {% endif %}
                 {% endif %}
 
                 {% if cafe.is_frequente %}
-                    <p class="card-text"><strong>Você visita esta cafeteria frequentemente.</strong></p>
-                {% else %}
-                    <p class="card-text"><strong>Você não visita esta cafeteria frequentemente.</strong></p>
-                {% endif %}
-
-                <form id="favoritoForm" method="POST" action="{% url 'adicionar_frequente' cafe.pk %}">
-                    {% csrf_token %}
-                    <button type="submit" id="favoritoBtn" class="btn btn-primary" style="background-color: #387B5B;  color: #FFF;">
-                        {% if cafe.is_frequente %}
-                            Não visitada frequentemente
-                        {% else %}
-                            Visitada frequentemente
-                        {% endif %}
-                    </button>
+                <p class="card-text"><strong>Você visita esta cafeteria frequentemente.</strong></p>
+            {% else %}
+                <p class="card-text"><strong>Você não visita esta cafeteria frequentemente.</strong></p>
+            {% endif %}
+            
+            <form id="favoritoForm" method="POST" action="{% url 'adicionar_frequente' cafe.pk %}">
+                {% csrf_token %}
+                <button type="submit" id="favoritoBtn" class="btn btn-primary" style="background-color: #387B5B; color: #FFF;">
+                    {% if cafe.is_frequente %}
+                        Não visitada frequentemente
+                    {% else %}
+                        Visitada frequentemente
+                    {% endif %}
+                </button>
+            </form>
                 </form>
                 <br>
 
                 <a href="{% url 'home' %}" class="btn btn-primary">Voltar</a>
-                <a href="{% url 'cafe_update' pk=cafe.pk %}" class="btn btn-primary">Editar</a>
-                <a href="{% url 'adicionar_comentario' cafe.id %}" class="btn btn-success">Adicionar Comentário</a>
-                <a id="avaliarBtn" href="{% url 'avaliacao' cafe.id %}" class="btn btn-primary">Avaliar</a>
-                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteConfirmationModal">
-                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAKRJREFUSEvtlcERgCAMBNdOtBMtxUosxVK0FDvRYUZ4xImHIj/5SSR7SQauofJqKudHAXpgBlpHyAaMwOoJVYAFCJC7FSDdW8B+HvSEqLhskUqg4hdAPFA6+1SxLb06ICqXpZsS3f9fD+9rgFWovhM/twKVsLhFP+Byr5625J+BfJqKW6QIjwE5RmOhwdUGu+nd5OBiU4abxXyudSrLVK2R8eqAA04lOBnZrFOdAAAAAElFTkSuQmCC"/>
-                </button>
+                
+                {% if is_owner %}
+                    <a href="{% url 'cafe_update' pk=cafe.pk %}" class="btn btn-primary">Editar</a>
+                {% endif %}
+                    <a href="{% url 'adicionar_comentario' cafe.id %}" class="btn btn-success">Adicionar Comentário</a>
+                    <a id="avaliarBtn" href="{% url 'avaliacao' cafe.id %}" class="btn btn-primary">Avaliar</a>
+                {% if is_owner %}
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteConfirmationModal">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAKRJREFUSEvtlcERgCAMBNdOtBMtxUosxVK0FDvRYUZ4xImHIj/5SSR7SQauofJqKudHAXpgBlpHyAaMwOoJVYAFCJC7FSDdW8B+HvSEqLhskUqg4hdAPFA6+1SxLb06ICqXpZsS3f9fD+9rgFWovhM/twKVsLhFP+Byr5625J+BfJqKW6QIjwE5RmOhwdUGu+nd5OBiU4abxXyudSrLVK2R8eqAA04lOBnZrFOdAAAAAElFTkSuQmCC"/>
+                    </button>
             </div>
-            
         </div>
     </div>
 </div>
+
 <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -76,7 +80,6 @@
         <div class="modal-footer">
           <div class="mdcr">
           <button type="button" class="btn btn-secondary" style="background-color: #6f6f6f; color: white; border: none;" data-dismiss="modal">Cancelar</button></div>
-          {% if is_owner %}
           <form action="{% url 'cafe_delete' pk=cafe.pk %}" method="post">
             {% csrf_token %}
             <button type="submit" class="btn btn-danger">Deletar</button>
@@ -86,7 +89,8 @@
       </div>
     </div>
   </div>
-  <div class="container mt-4">
+  
+<div class="container mt-4">
     <div class="card">
         <div class="card-header">
             Comentários
@@ -132,9 +136,9 @@
             {% endif %}
         </div>
     </div>
-  </div>
+</div>
   
-  <script>
+<script>
     document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('avaliarBtn').addEventListener('click', function(event) {
             if ("{{ cafe.status_leitura }}" !== "L") {
@@ -146,7 +150,7 @@
 </script>
 
 <script>
-    document.getElementById('frequenteForm').addEventListener('submit', function(event) {
+    document.getElementById('favoritoForm').addEventListener('submit', function(event) {
         event.preventDefault();
         var form = this;
         var formData = new FormData(form);
@@ -166,4 +170,4 @@
     });
 </script>
 
-  {% endblock %}
+{% endblock %}

@@ -360,10 +360,19 @@ class AdicionarFrequenteView(LoginRequiredMixin, View):
     def post(self, request, cafe_id):
         cafe = get_object_or_404(Cafe, id=cafe_id, usuario=request.user)
         
-        if cafe.is_frequente:
-            cafe.is_frequente = False
-        else:
-            cafe.is_frequente = True
-        
+        cafe.is_frequente = not cafe.is_frequente
         cafe.save()
+        
         return HttpResponseRedirect(reverse('cafe_detail', kwargs={'pk': cafe_id}))
+
+class AllCoffeesView(View):
+    def get(self, request):
+        cafes = Cafe.objects.all()
+        categorias = Categoria.objects.all()
+        return render(request, 'mainapp/all_coffees.html', {'cafes': cafes, 'categorias': categorias})
+    
+class CafesPorCategoriaView(View):
+    def get(self, request, categoria_id):
+        categoria = get_object_or_404(Categoria, pk=categoria_id)
+        cafes = Cafe.objects.filter(genero=categoria)
+        return render(request, 'mainapp/cafes_por_categoria.html', {'categoria': categoria, 'cafes': cafes})
