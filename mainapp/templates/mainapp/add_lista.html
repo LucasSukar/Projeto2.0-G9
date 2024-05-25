@@ -23,18 +23,18 @@
             <input type="text" class="form-control" id="nome" name="nome" placeholder="Digite o nome da Cafeteria" required>
         </div>
         <div class="form-group">
-            <label for="autor">Endereço:</label>
-            <input type="text" class="form-control" id="autor" name="autor" placeholder="Endereço" required>
+            <label for="endereco">Endereço:</label>
+            <input type="text" class="form-control" id="endereco" name="endereco" placeholder="Endereço" required>
         </div>
         <div class="form-group">
-            <label for="anopublicado">Número de Contato:</label>
-            <input type="number" class="form-control" id="anopublicado" name="anopublicado" placeholder="Número" required>
+            <label for="cntt">Número de Contato:</label>
+            <input type="number" class="form-control" id="cntt" name="cntt" placeholder="Número" required>
         </div>
         <div class="form-group">
-            <label for="genero">Tipo do Café:</label>
-            <select class="form-control" id="genero" name="genero">
+            <label for="tipo">Tipo do Café:</label>
+            <select class="form-control" id="tipo" name="tipo">
                 {% for categoria in categorias %}
-                <option value="{{ categoria.id }}">{{ categoria.genero }}</option>
+                <option value="{{ categoria.id }}">{{ categoria.tipo }}</option>
                 {% endfor %}
             </select>
         </div>

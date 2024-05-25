@@ -21,18 +21,18 @@
             <input type="text" class="form-control" id="nome" name="nome" required>
         </div>
         <div class="form-group">
-            <label for="autor">Endereço:</label>
-            <input type="text" class="form-control" id="autor" name="autor" required>
+            <label for="endereco">Endereço:</label>
+            <input type="text" class="form-control" id="endereco" name="endereco" required>
         </div>
         <div class="form-group">
-            <label for="anopublicado">Número de Contato:</label>
-            <input type="number" class="form-control" id="anopublicado" name="anopublicado" required>
+            <label for="cntt">Número de Contato:</label>
+            <input type="number" class="form-control" id="cntt" name="cntt" required>
         </div>
         <div class="form-group">
-            <label for="genero">Tipo de Café:</label>
-            <select class="form-control" id="genero" name="genero">
+            <label for="tipo">Tipo de Café:</label>
+            <select class="form-control" id="tipo" name="tipo">
                 {% for categoria in categorias %}
-                <option value="{{ categoria.id }}">{{ categoria.genero }}</option>
+                <option value="{{ categoria.id }}">{{ categoria.tipo }}</option>
                 {% endfor %}
             </select>
         </div>

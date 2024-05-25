@@ -14,7 +14,7 @@
         <ul>
             {% if categorias %}
                 {% for categoria in categorias %}
-                    <li><a href="{% url 'cafes_por_categoria' categoria.id %}">{{ categoria.genero }}</a></li>
+                    <li><a href="{% url 'cafes_por_categoria' categoria.id %}">{{ categoria.tipo }}</a></li>
                 {% endfor %}
             {% else %}
                 <li>Nenhuma categoria encontrada</li>

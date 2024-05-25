@@ -5,10 +5,10 @@ from django.utils import timezone
 from django.db import models
     
 class Categoria(models.Model):
-    genero = models.CharField(max_length=100, unique=True)
+    tipo = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
-        return self.genero
+        return self.tipo
 
 class Cafe(models.Model):
     STATUS_CAFETERIA_CHOICES = [
@@ -24,9 +24,9 @@ class Cafe(models.Model):
         (5, '5 Estrelas'),
     ]
     nome = models.CharField(max_length=100)
-    autor = models.CharField(max_length=100)
-    anopublicado = models.CharField(max_length=15)
-    genero=models.ForeignKey(Categoria, on_delete=models.SET_NULL, null=True)
+    endereco = models.CharField(max_length=100)
+    cntt = models.CharField(max_length=15)
+    tipo=models.ForeignKey(Categoria, on_delete=models.SET_NULL, null=True)
     status_cafeteria=models.CharField(max_length=2, choices=STATUS_CAFETERIA_CHOICES, default='NL')
     avaliacao=models.IntegerField(choices=AVALIACAO_CHOICES, default=0)
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='cafes')
@@ -61,10 +61,10 @@ class CoffeeHistory(models.Model):
         return f"{self.coffee_title} ({self.author})"
 
 class Comentario(models.Model):
-    autor = models.ForeignKey(User, on_delete=models.CASCADE)
+    endereco = models.ForeignKey(User, on_delete=models.CASCADE)
     texto = models.TextField()
     data_publicacao = models.DateTimeField(default=timezone.now)
     cafe = models.ForeignKey(Cafe, on_delete=models.CASCADE, related_name='comentarios') 
 
     def _str_(self):
-        return f"Comentário de {self.autor} em {self.cafe}: {self.texto}"
+        return f"Comentário de {self.endereco} em {self.cafe}: {self.texto}"
