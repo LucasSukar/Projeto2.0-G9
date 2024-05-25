@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html style="height: 100%; overflow: hidden;">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name = "viewport" content="width=device-width,initial-scale=1.0"/>
+    <title>Sobre</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'mainapp/css/stylesobre.css' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'mainapp/images/inove favicon - Copia.png' %}">
+</head>
+
+<body style="overflow: hidden;">
+  <nav>
+      <div class = "logo">INOVE Coffee</div>
+      <div class = "nav-items">
+          <a href = "/">Home</a>
+          <a href = "mainapp/sobre">Sobre</a>
+          <a href="mainapp/login/">
+              <button class="button button2">Login </button>   
+          </a>
+      </div>
+  </nav>
+  <section class = "hero">
+      <div class = "hero-container">
+        <div class = "column-left">
+          <h1>Sobre Nós</h1>
+            <p>
+                Nosso site oferece funcionalidades avançadas para tornar sua busca por cafeterias ainda mais emocionante
+                e relevante. Com base nas suas preferências de ambiente e localização, nossa plataforma utiliza
+                algoritmos inteligentes para recomendar as cafeterias mais adequadas para você. Quer você esteja
+                procurando por um café aconchegante para trabalhar, um local tranquilo para uma conversa íntima ou um
+                espaço moderno para relaxar com amigos, estamos aqui para ajudar a encontrar o lugar perfeito.
+            </p>
+        </div>
+        <div class="column-right">
+            <img src="{% static 'mainapp/images/Café 3 - Copia.svg' %}" alt="illustration" class="hero-image"/>
+        </div>
+      </div>
+
+  </section>
+
+</body>
+</html>

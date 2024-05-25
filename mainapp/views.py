@@ -376,3 +376,7 @@ class CafesPorCategoriaView(View):
         categoria = get_object_or_404(Categoria, pk=categoria_id)
         cafes = Cafe.objects.filter(genero=categoria)
         return render(request, 'mainapp/cafes_por_categoria.html', {'categoria': categoria, 'cafes': cafes})
+
+class SobreView(View):
+    def get(self, request):
+        return render(request, 'mainapp/sobre.html')

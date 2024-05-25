@@ -1,7 +1,7 @@
 {% load static %}
 <!doctype html>
 <html lang="pt-BR">
-  <head>
+<head>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -11,170 +11,184 @@
     <link rel="stylesheet" href="{% static '/css/general.css' %}">
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
     <style>
-    .btn-warning {
-    color: #ffffff;
-    background-color: #864601;
-    border-color: #864601;
-}
-    .bg-info {
-    background-color: #5c3000 !important;
-    }
-    .text-primary{
-      color: #387B5B !important;
-    }
-    .home-section {
-      color: #387B5B;
-    }
-    .btn-primary.focus,.btn-primary:focus {
-    color: #fff;
-    background-color: #387B5B;
-    border-color: #387B5B;
-    box-shadow:#387B5B;
-    }
-    .btn-primary {
-    color: #fff;
-    background-color: #387B5B;
-    border-color: #387B5B;
-  }
+        .btn-warning {
+            color: #ffffff;
+            background-color: #864601;
+            border-color: #864601;
+        }
 
-  .btn-primary:hover {
-    color: #fff;
-    background-color: #387B5B;
-    border-color: #387B5B;
-  }
-  .btn-primary.disabled,.btn-primary:disabled {
-    color: #fff;
-    background-color: #387B5B;
-    border-color: #387B5B
-  }
+        .bg-info {
+            background-color: #5c3000 !important;
+        }
 
-  .btn-primary:not(:disabled):not(.disabled).active,.btn-primary:not(:disabled):not(.disabled):active,.show>.btn-primary.dropdown-toggle {
-    color: #fff;
-    background-color: #387B5B;
-    border-color: #387B5B;
-  }
-  .btn-secondary {
-    color: #fff;
-    background-color: #5c3000;
-    border-color: #5c3000
-}
+        .text-primary {
+            color: #387B5B !important;
+        }
 
-.btn-secondary:hover {
-    color: #fff;
-    background-color: #5c3000;
-    border-color: #5c3000
-}
+        .home-section {
+            color: #387B5B;
+        }
 
-.btn-secondary.focus,.btn-secondary:focus {
-    color: #fff;
-    background-color: #5c3000;
-    border-color: #5c3000;
-    box-shadow:#5c3000
-}
+        .btn-primary.focus, .btn-primary:focus {
+            color: #fff;
+            background-color: #387B5B;
+            border-color: #387B5B;
+            box-shadow: #387B5B;
+        }
 
-.btn-secondary.disabled,.btn-secondary:disabled {
-    color: #fff;
-    background-color: #5c3000;
-    border-color: #5c3000
-}
+        .btn-primary {
+            color: #fff;
+            background-color: #387B5B;
+            border-color: #387B5B;
+        }
 
-.btn-secondary:not(:disabled):not(.disabled).active,.btn-secondary:not(:disabled):not(.disabled):active,.show>.btn-secondary.dropdown-toggle {
-    color: #fff;
-    background-color: #5c3000;
-    border-color: #5c3000
-}
+        .btn-primary:hover {
+            color: #fff;
+            background-color: #387B5B;
+            border-color: #387B5B;
+        }
+
+        .btn-primary.disabled, .btn-primary:disabled {
+            color: #fff;
+            background-color: #387B5B;
+            border-color: #387B5B
+        }
+
+        .btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show > .btn-primary.dropdown-toggle {
+            color: #fff;
+            background-color: #387B5B;
+            border-color: #387B5B;
+        }
+
+        .btn-secondary {
+            color: #fff;
+            background-color: #5c3000;
+            border-color: #5c3000
+        }
+
+        .btn-secondary:hover {
+            color: #fff;
+            background-color: #5c3000;
+            border-color: #5c3000
+        }
+
+        .btn-secondary.focus, .btn-secondary:focus {
+            color: #fff;
+            background-color: #5c3000;
+            border-color: #5c3000;
+            box-shadow: #5c3000
+        }
+
+        .btn-secondary.disabled, .btn-secondary:disabled {
+            color: #fff;
+            background-color: #5c3000;
+            border-color: #5c3000
+        }
+
+        .btn-secondary:not(:disabled):not(.disabled).active, .btn-secondary:not(:disabled):not(.disabled):active, .show > .btn-secondary.dropdown-toggle {
+            color: #fff;
+            background-color: #5c3000;
+            border-color: #5c3000
+        }
     </style>
-    
+
     {% block 'head' %}{% endblock %}
 
     <title>{% block 'title' %}{% endblock %}</title>
-  </head>
-  <body>
-    
+</head>
+<body>
+
+{% if not request.path == '/mainapp/login/' and not request.path == '/mainapp/cadastro/' and not user is None %}
     <div class="sidebar">
         <div class="logo-details">
-            <div class="logo_name"><img src="{% static 'interface/images/vpag_logo.jpg' %}" alt="vpag_logo.jpg" style="width: 50px; height: 50px;"></a></div>
-            <i class='bx bx-menu' id="btn" ></i>
+            <div class="logo_name"><img src="{% static 'interface/images/vpag_logo.jpg' %}" alt="vpag_logo.jpg"
+                                        style="width: 50px; height: 50px;"></a></div>
+
         </div>
         <ul class="nav-list">
-          <li>
-            <a href="/mainapp/">
-              <i class='bx bx-grid-alt' style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);"></i>
-              <span class="links_name">Página inicial</span>
-            </a>
-            <span class="tooltip">Página inicial</span>
-          </li>
-          <li>
-          <a href="/mainapp/perfil/">
-            <i class='bx bx-user' style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);"></i>
-            <span class="links_name">Perfil</span>
-          </a>
-          <span class="tooltip">Perfil</span>
-        </li>
-        <li>
-          <a href="{% url 'all' %}">
-            <i class='bx bx-world' style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);"></i>
-            <span class="links_name">Descubra mais cafeterias</span>
-          </a>
-          <span class="tooltip">Descubra mais cafeterias</span>
-        </li>
-        <li>
-          <a href="/mainapp/biblioteca/">
-            <i class='bx bx-coffee' style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);"></i>
-            <span class="links_name">Cafeterias visitadas</span>
-          </a>
-          <span class="tooltip">Cafeterias visitadas</span>
-        </li>
-        <li>
-          <a href="/mainapp/lista_desejos/">
-            <i class='bx bx-list-check' style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);"></i>
-            <span class="links_name">Lista de desejos</span>
-          </a>
-          <span class="tooltip">Lista de desejos</span>
-        </li>
-        <li>
-          <a href="{% url 'all_coffees' %}">
-              <i class='bx bx-filter' style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);"></i>
-              <span class="links_name">Categorias</span>
-          </a>
-          <span class="tooltip">Categorias</span>
-      </li>
-      
-        <li>
-          <a href="{% url 'coffee_history' %}">
-            <i class='bx bx-heart' style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);"></i>
-            <span class="links_name">Favoritos</span>
-          </a>
-          <span class="tooltip">Favoritos</span>
-        </li>
-      
-        <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
-          {% csrf_token %}
-        </form>
-          <li class="logout">
-            <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-              <i class='bx bx-log-out' style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);"></i>
-              <span class="links_name">Logout</span>
-            </a>
-            <span class="tooltip">Logout</span>
-          </li>
-        
+            <li>
+                <a href="/mainapp/">
+                    <i class='bx bx-grid-alt' style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);"></i>
+                    <span class="links_name">Página inicial</span>
+                </a>
+                <span class="tooltip">Página inicial</span>
+            </li>
+            <li>
+                <a href="/mainapp/perfil/">
+                    <i class='bx bx-user' style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);"></i>
+                    <span class="links_name">Perfil</span>
+                </a>
+                <span class="tooltip">Perfil</span>
+            </li>
+            <li>
+                <a href="{% url 'all' %}">
+                    <i class='bx bx-world' style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);"></i>
+                    <span class="links_name">Descubra mais cafeterias</span>
+                </a>
+                <span class="tooltip">Descubra mais cafeterias</span>
+            </li>
+            {% if not 'auth.cafe' in perms %}
+                <li>
+                    <a href="/mainapp/biblioteca/">
+                        <i class='bx bx-coffee' style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);"></i>
+                        <span class="links_name">Cafeterias visitadas</span>
+                    </a>
+                    <span class="tooltip">Cafeterias visitadas</span>
+                </li>
+                <li>
+                    <a href="/mainapp/lista_desejos/">
+                        <i class='bx bx-list-check' style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);"></i>
+                        <span class="links_name">Lista de desejos</span>
+                    </a>
+                    <span class="tooltip">Lista de desejos</span>
+                </li>
+                <li>
+                    <a href="{% url 'coffee_history' %}">
+                        <i class='bx bx-heart' style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);"></i>
+                        <span class="links_name">Favoritos</span>
+                    </a>
+                    <span class="tooltip">Favoritos</span>
+                </li>
+            {% endif %}
+
+            {% if 'auth.cafe' in perms %}
+                <li>
+                    <a href="/mainapp/criarcafe/">
+                        <i class='bx bx-plus-circle' style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);"></i>
+                        <span class="links_name">Cadastrar café</span>
+                    </a>
+                    <span class="tooltip">Cadastrar café</span>
+                </li>
+            {% endif %}
+
+
+            <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
+                {% csrf_token %}
+            </form>
+            <li class="logout">
+                <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    <i class='bx bx-log-out' style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);"></i>
+                    <span class="links_name">Logout</span>
+                </a>
+                <span class="tooltip">Logout</span>
+            </li>
+
         </ul>
-      </div>
-      
-      <section class="home-section">
-          {% block 'dashboard'%}
-          {% endblock %}
-
-      </section>
-
-    {% block 'body' %}
+    </div>
+{% endif %}
+<section class="home-section">
+    {% block 'dashboard' %}
     {% endblock %}
-    <script src="{% static 'general/js/base.js' %}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
-  
-  </body>
+
+</section>
+
+{% block 'body' %}
+{% endblock %}
+<script src="{% static 'general/js/base.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
 
 </html>
