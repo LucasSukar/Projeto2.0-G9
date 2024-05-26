@@ -26,5 +26,5 @@ urlpatterns = [
     path('frequente/adicionar/<int:cafe_id>/', views.AdicionarFrequenteView.as_view(), name='adicionar_frequente'),
     path('all_coffees/', views.AllCoffeesView.as_view(), name='all_coffees'),
     path('cafes_por_categoria/<int:categoria_id>/', views.CafesPorCategoriaView.as_view(), name='cafes_por_categoria'),
-    path('sobre', views.SobreView.as_view(), name='sobre'),
+    path('sobre/', views.SobreView.as_view(), name='sobre'),
 ]

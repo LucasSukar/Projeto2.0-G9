@@ -127,14 +127,8 @@
                 </a>
                 <span class="tooltip">Descubra mais cafeterias</span>
             </li>
+            
             {% if not 'auth.cafe' in perms %}
-                <li>
-                    <a href="/mainapp/biblioteca/">
-                        <i class='bx bx-coffee' style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);"></i>
-                        <span class="links_name">Cafeterias visitadas</span>
-                    </a>
-                    <span class="tooltip">Cafeterias visitadas</span>
-                </li>
                 <li>
                     <a href="/mainapp/lista_desejos/">
                         <i class='bx bx-list-check' style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);"></i>
@@ -161,6 +155,13 @@
                 </li>
             {% endif %}
 
+            <li>
+                <a href="/mainapp/biblioteca/">
+                    <i class='bx bx-coffee' style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);"></i>
+                    <span class="links_name">Cafeterias visitadas</span>
+                </a>
+                <span class="tooltip">Cafeterias visitadas</span>
+            </li>
 
             <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
                 {% csrf_token %}
