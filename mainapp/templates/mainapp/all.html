@@ -16,12 +16,10 @@
         <div class="form-group">
             <label for="caracteristicas">Filtrar por características:</label>
             <div>
-
                 {% for caracteristica in todas_caracteristicas %}
                     <button type="submit" class="btn btn-primary" name="caracteristicas"
                             value="{{ caracteristica }}">{{ caracteristica }}</button>
                 {% endfor %}
-
                 <button type="submit" class="btn btn-primary" name="caracteristicas" value="">Todas as
                     características
                 </button>
@@ -30,17 +28,19 @@
     </form>
     <div class="list-group mt-3">
         {% for cafe in cafes %}
-        <a href="{% url 'cafe_detail' cafe.id %}" class="list-group-item list-group-item-action d-flex align-items-start">
-            <div>
-                <div>{{ cafe.nome }} na {{ cafe.endereco }} ({{ cafe.cntt }})</div>
-            </div>
-        </a>
-        <br>
+            <a href="{% url 'cafe_detail' cafe.id %}" class="list-group-item list-group-item-action d-flex align-items-start">
+                <div>
+                    <div>{{ cafe.nome }} na {{ cafe.endereco }} ({{ cafe.cntt }})</div>
+                    {% if cafe.usuario == user %}
+                        <small style = "color: green">⭐Você é o dono desta cafeteria.⭐</small>
+                    {% endif %}
+                </div>
+            </a>
+            <br>
         {% empty %}
-        <p>Nenhuma cafeterias adicionada ainda.</p>
+            <p>Nenhuma cafeteria adicionada ainda.</p>
         {% endfor %}
     </div>
-       
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -78,5 +78,5 @@
             $('.toast').toast('show');
         {% endif %}
     });
-    </script>
+</script>
 {% endblock %}

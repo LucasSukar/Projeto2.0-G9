@@ -140,10 +140,10 @@ class CafeCreateView(LoginRequiredMixin, View):
         nome = request.POST.get('nome').strip()
         endereco = request.POST.get('endereco').strip()
         cntt = request.POST.get('cntt').strip()
-        caracteristicas = request.POST.get('caracteristicas').strip()
-      
+        # Capitalizar as características antes de salvar
+        caracteristicas = request.POST.get('caracteristicas').strip().capitalize()
 
-        if not nome or not endereco or not cntt:
+        if not nome or not endereco or not cntt or not caracteristicas:
             messages.error(request, 'Todos os campos são obrigatórios.')
             return redirect('cafe_create')
 
@@ -151,7 +151,7 @@ class CafeCreateView(LoginRequiredMixin, View):
             messages.error(request, 'Uma cafeteria com este nome já existe na sua biblioteca.')
             return redirect('cafe_create')
 
-        Cafe.objects.create(nome=nome, endereco=endereco, cntt=cntt,usuario=request.user,caracteristicas=request.POST.get('caracteristicas').strip())
+        Cafe.objects.create(nome=nome, endereco=endereco, cntt=cntt, usuario=request.user, caracteristicas=caracteristicas)
         messages.success(request, 'Cafeteria adicionada com sucesso!')
         return redirect('biblioteca')
 
@@ -171,7 +171,10 @@ class CafeUpdateView(LoginRequiredMixin, View):
         cafe.endereco = request.POST.get('endereco')
         cafe.cntt = request.POST.get('cntt')
         cafe.tipo_id = request.POST.get('categoria')  # Atualizar a categoria selecionada
-        cafe.caracteristicas = request.POST.get('caracteristicas')  # Atualizar as características
+        
+        # Capitalizar as características antes de salvar
+        caracteristicas = request.POST.get('caracteristicas').strip().capitalize()
+        cafe.caracteristicas = caracteristicas
 
         # Verificar se status_cafeteria está presente no request.POST
         if 'status_cafeteria' in request.POST:
