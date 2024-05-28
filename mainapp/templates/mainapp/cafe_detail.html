@@ -15,11 +15,7 @@
         <div class="card-body row">
             <div class="col-md-8">
                 <h5 class="card-title" style="color: #387B5B; border: none; text-shadow: 1px 1px 2px rgba(190, 182, 182, 0.3), 2px 2px 5px rgba(126, 126, 126, 0.3);">{{ cafe.nome }}</h5>
-                <p class="card-text"><strong>Nome da Cafeteria:</strong> {{ cafe.nome }}</p>
                 <p class="card-text"><strong>Número de Contato:</strong> {{ cafe.cntt }}</p>
-                {% if not is_owner %}
-                <p class="card-text"><strong>Status da cafeteria:</strong> {{ cafe.get_status_cafeteria_display }}</p>
-                {% endif %}
                 {% if cafe.avaliacao %}
                 <p class="card-text"><strong>Avaliação:</strong> {{ cafe.avaliacao }} Estrelas</p>
                 {% else %}
@@ -33,17 +29,17 @@
                         <p class="card-text"><strong>Você não favoritou esta cafeteria.</strong></p>
                     {% endif %}
                     {% if cafe.is_frequente %}
-                        <p class="card-text"><strong>Você visita esta cafeteria frequentemente.</strong></p>
+                        <p class="card-text"><strong>Você ja visitou essa cafeteria.</strong></p>
                         {% else %}
-                        <p class="card-text"><strong>Você não visita esta cafeteria frequentemente.</strong></p>
+                        <p class="card-text"><strong>Você não visitou esta cafeteria.</strong></p>
                         {% endif %}
                     <form id="favoritoForm" method="POST" action="{% url 'adicionar_frequente' cafe.pk %}">
                         {% csrf_token %}
                         <button type="submit" id="favoritoBtn" class="btn btn-primary" style="background-color: #387B5B; color: #FFF;">
                             {% if cafe.is_frequente %}
-                                Não visitada frequentemente
+                                Não visitada 
                             {% else %}
-                                Visitada frequentemente
+                                Visitada 
                             {% endif %}
                         </button>
                     </form>
