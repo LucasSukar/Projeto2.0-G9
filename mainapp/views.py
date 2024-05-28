@@ -410,10 +410,10 @@ class SobreView(View):
     def get(self, request):
         return render(request, 'mainapp/sobre.html')
     
-class MarcarCafeteriaFavoritaView(View):
+class MarcarCafeteriaFavoritaView(LoginRequiredMixin, View):
     def post(self, request, pk):
-        cafeteria = get_object_or_404(Cafe, pk=pk)
-        if not cafeteria.is_favorita:
-            cafeteria.is_favorita = True
-            cafeteria.save()
-        return redirect('home')  
+        cafe = get_object_or_404(Cafe, pk=pk)
+        cafe.is_favorita = not cafe.is_favorita
+        cafe.save()
+        return HttpResponseRedirect(reverse('cafe_detail', kwargs={'pk': pk}))
+    

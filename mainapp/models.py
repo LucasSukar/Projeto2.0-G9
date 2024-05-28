@@ -35,6 +35,7 @@ class Cafe(models.Model):
     in_collection = models.BooleanField(default=True)
     avaliacao = models.IntegerField(choices=AVALIACAO_CHOICES, null=True, blank=True)
     is_frequente = models.BooleanField(default=False)
+    is_favorita = models.BooleanField(default=False)
     caracteristicas = models.TextField(blank=True)
 
     #adicionando o adicionar caracteristicas da cafeteria feito por lunna e seu amigo
