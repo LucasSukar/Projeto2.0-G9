@@ -128,6 +128,8 @@ class CafesEmDetalhe(LoginRequiredMixin, View):
             else:
                 cafe.cover_url = coffee_info.get('cover_url') if cafe.isbn else None
 
+        
+
         return render(request, 'mainapp/cafe_detail.html', {'cafe': cafe, 'is_owner': is_owner})
 
 
