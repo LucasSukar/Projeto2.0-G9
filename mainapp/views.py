@@ -8,7 +8,7 @@ from django.db.models import Count, F
 from django.views.decorators.csrf import csrf_protect
 from django.utils.decorators import method_decorator
 from django.contrib import messages
-from .models import Cafe, Categoria, ListaDesejos, CoffeeHistory, Comentario
+from .models import Cafe, Categoria, Comentario
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.hashers import make_password
 from django.utils import timezone
@@ -26,7 +26,7 @@ class HomeView(View):
             total_cafes = cafes_usuario.count()
             tipos_ordenados = cafes_usuario.values('tipo__tipo').annotate(total=Count('tipo')).order_by('-total')
 
-            if tipos_ordenados.exists():  # Verifica se há tipos de cafeterias ordenados
+            if tipos_ordenados.exists(): 
                 tipo_mais_comum = tipos_ordenados.first()
                 tipo_menos_comum = tipos_ordenados.last()
 
@@ -142,7 +142,6 @@ class CafeCreateView(LoginRequiredMixin, View):
         nome = request.POST.get('nome').strip()
         endereco = request.POST.get('endereco').strip()
         cntt = request.POST.get('cntt').strip()
-        # Capitalizar as características antes de salvar
         caracteristicas = request.POST.get('caracteristicas').strip().capitalize()
 
         if not nome or not endereco or not cntt or not caracteristicas:
@@ -172,22 +171,22 @@ class CafeUpdateView(LoginRequiredMixin, View):
         cafe.nome = request.POST.get('nome')
         cafe.endereco = request.POST.get('endereco')
         cafe.cntt = request.POST.get('cntt')
-        cafe.tipo_id = request.POST.get('categoria')  # Atualizar a categoria selecionada
+        cafe.tipo_id = request.POST.get('categoria')
         
-        # Capitalizar as características antes de salvar
+        
         caracteristicas = request.POST.get('caracteristicas').strip().capitalize()
         cafe.caracteristicas = caracteristicas
 
-        # Verificar se status_cafeteria está presente no request.POST
+        
         if 'status_cafeteria' in request.POST:
             cafe.status_cafeteria = request.POST.get('status_cafeteria')
 
-        # Salvar as mudanças
+        
         cafe.save()
 
-        # Adicionar mensagem de sucesso
+        
         messages.success(request, 'Cafeteria atualizada com sucesso!')
-        return redirect('home')  # ou outra URL de redirecionamento
+        return redirect('home')  
 
 class CafeDeleteView(LoginRequiredMixin,View):
     def get(self, request, pk):
@@ -233,90 +232,6 @@ class MudarSenhaView(LoginRequiredMixin, View):
 
         return render(request, 'mainapp/mudar_senha.html')
     
-class AddListaDesejosView(LoginRequiredMixin, View):
-    def get(self, request):
-        categorias = Categoria.objects.all()
-        return render(request, 'mainapp/add_lista.html', {'categorias': categorias})
-
-    def post(self, request):
-        nome = request.POST.get('nome').strip()
-        endereco = request.POST.get('endereco').strip()
-        cntt = request.POST.get('cntt').strip()
-        tipo_id = request.POST.get('tipo').strip()
-        
-        if not nome or not endereco or not cntt:
-            messages.error(request, 'Todos os campos são obrigatórios.')
-            return redirect('cafe_create')
-
-        tipo = get_object_or_404(Categoria, id=tipo_id)
-        
-        
-        cafe = Cafe(nome=nome, endereco=endereco, cntt=cntt, tipo=tipo, in_wishlist=True, in_collection=False,usuario=request.user)
-        cafe.save()
-        
-       
-        wishlist, created = ListaDesejos.objects.get_or_create(usuario=request.user)
-        wishlist.cafes.add(cafe)  
-        
-        messages.success(request, "cafeteria adicionada à lista de desejos com sucesso.")
-        return redirect('lista_desejos')
-        
-        
-
-class ListaDesejosView(LoginRequiredMixin, View):
-    def get(self, request):
-        wishlist, created = ListaDesejos.objects.get_or_create(usuario=request.user)
-        cafes_desejados = wishlist.cafes.all()
-        return render(request, 'mainapp/lista_desejos.html', {'cafes_desejados': cafes_desejados})    
-
-class RemoverDaListaView(LoginRequiredMixin, View):
-    def post(self, request,**kwargs):
-        cafe_id = kwargs.get('cafe_id')
-        cafe = get_object_or_404(Cafe, id=cafe_id)
-        wishlist = ListaDesejos.objects.get(usuario=request.user)
-        wishlist.cafes.remove(cafe)
-        cafe.delete()
-        messages.success(request, "cafeteria removida da lista de desejos com sucesso.")
-        return redirect('lista_desejos')
-    
-class AddParaColecaoView(LoginRequiredMixin, View):
-    def post(self, request, cafe_id):
-        cafe = get_object_or_404(Cafe, id=cafe_id, usuario=request.user)
-        cafe.in_wishlist = False
-        cafe.in_collection = True
-        cafe.save()
-        
-        wishlist = ListaDesejos.objects.filter(usuario=request.user).first()
-        if wishlist:
-            wishlist.cafes.remove(cafe)
-
-        messages.success(request, "cafeteria adicionada com sucesso.")
-        return redirect('lista_desejos')  
-    
-
-class CoffeeHistoryView(LoginRequiredMixin, View):
-    def get(self, request):
-        coffee_history = CoffeeHistory.objects.filter(user=request.user)
-        return render(request, 'mainapp/coffee_history.html', {'coffee_history': coffee_history})
-
-    def post(self, request, cafe_id):
-        cafe = get_object_or_404(Cafe, id=cafe_id, usuario=request.user)
-        CoffeeHistory.objects.create(
-            user=request.user,
-            coffee_title=cafe.nome,
-            author=cafe.endereco,
-            date_started=cafe.date_added,
-            date_finished=timezone.now()
-        )
-        cafe.delete()      
-        return redirect('coffee_history')
-    
-class RemoveFromHistoryView(View):
-    def post(self, request, cafe_id):
-        coffee = get_object_or_404(CoffeeHistory, pk=cafe_id, user=request.user)
-        coffee.delete()
-        messages.success(request, "cafeteria removida do histórico.")
-        return redirect('coffee_history')
 
 class AdicionarComentarioView(LoginRequiredMixin, View):
     def get(self, request, cafe_id):
