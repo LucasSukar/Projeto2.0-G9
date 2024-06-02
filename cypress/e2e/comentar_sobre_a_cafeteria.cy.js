@@ -42,5 +42,26 @@ describe('test suite Comentario Sobre A Cafeteria', () => {
         cy.get('.btn').click();
         cy.get(':nth-child(3) > a > .bx').click();
         cy.get('.list-group-item > :nth-child(1) > div').click();
+
+
+
+
+        //Deletar Alterções
+        cy.get('.logout > a > .bx').click();
+        cy.visit("/admin");
+        cy.get('#id_username').type('admin');
+        cy.get('#id_password').type('123');
+        cy.get('.submit-row > input').click();
+        cy.get('.model-user > th > a').click();
+        cy.get(':nth-child(1) > .field-username > a').click();
+        cy.get('.deletelink').click();
+        cy.get('div > [type="submit"]').click();
+        cy.get(':nth-child(1) > .field-username > a').click();
+        cy.get('.deletelink').click();
+        cy.get('div > [type="submit"]').click();
+        cy.get(':nth-child(2) > .field-username > a').click();
+        cy.get('.deletelink').click();
+        cy.get('div > [type="submit"]').click();
+        cy.visit("/");
     })
 })
