@@ -111,15 +111,11 @@ class Biblioteca(View):
 class CafesEmDetalhe(LoginRequiredMixin, View):
     def get(self, request, pk):
         cafe = get_object_or_404(Cafe, pk=pk)
-
-        # Verifica se o usuário autenticado é o proprietário do café
         if cafe.usuario == request.user:
             is_owner = True
         else:
             is_owner = False
-
         coffee_info = None
-       
         if not cafe.isbn:
             if coffee_info:
                 cafe.isbn = coffee_info.get('isbn')
@@ -127,11 +123,7 @@ class CafesEmDetalhe(LoginRequiredMixin, View):
                 cafe.save()
             else:
                 cafe.cover_url = coffee_info.get('cover_url') if cafe.isbn else None
-
-        
-
         return render(request, 'mainapp/cafe_detail.html', {'cafe': cafe, 'is_owner': is_owner})
-
 
 class CafeCreateView(LoginRequiredMixin, View):
     def get(self, request):
@@ -172,19 +164,11 @@ class CafeUpdateView(LoginRequiredMixin, View):
         cafe.endereco = request.POST.get('endereco')
         cafe.cntt = request.POST.get('cntt')
         cafe.tipo_id = request.POST.get('categoria')
-        
-        
         caracteristicas = request.POST.get('caracteristicas').strip()
         cafe.caracteristicas = caracteristicas
-
-        
         if 'status_cafeteria' in request.POST:
             cafe.status_cafeteria = request.POST.get('status_cafeteria')
-
-        
         cafe.save()
-
-        
         messages.success(request, 'Cafeteria atualizada com sucesso!')
         return redirect('home')  
 
@@ -192,7 +176,6 @@ class CafeDeleteView(LoginRequiredMixin,View):
     def get(self, request, pk):
         cafe = get_object_or_404(Cafe, pk=pk)
         return render(request, 'mainapp/cafe_confirm_delete.html', {'cafe': cafe})
-
     def post(self, request, pk):
         cafe = get_object_or_404(Cafe, pk=pk)
         cafe.delete()
@@ -201,7 +184,6 @@ class CafeDeleteView(LoginRequiredMixin,View):
 class PerfilView(LoginRequiredMixin,View):
     def get(self, request):
         if not request.user.is_authenticated:
-            
             return redirect('home')
         else:
             usuario=request.user.username
@@ -210,15 +192,12 @@ class PerfilView(LoginRequiredMixin,View):
             return render(request, 'mainapp/perfil.html', context)
 
 class MudarSenhaView(LoginRequiredMixin, View):
-
     def get(self, request):
         return render(request, 'mainapp/mudar_senha.html')
-
     def post(self, request):
         senha_antiga = request.POST.get('senha_antiga')
         nova_senha = request.POST.get('nova_senha')
         confirmar = request.POST.get('confirmar')
-
         if not request.user.check_password(senha_antiga):
             messages.error(request, 'Sua senha antiga foi digitada errado. Tente novamente.')
         elif nova_senha != confirmar:
@@ -229,7 +208,6 @@ class MudarSenhaView(LoginRequiredMixin, View):
             update_session_auth_hash(request, request.user)  
             messages.success(request, 'Sua senha foi atualizada com sucesso!')
             return redirect('home')
-
         return render(request, 'mainapp/mudar_senha.html')
     
 
@@ -237,15 +215,12 @@ class AdicionarComentarioView(LoginRequiredMixin, View):
     def get(self, request, cafe_id):
         cafe = get_object_or_404(Cafe, id=cafe_id)
         return render(request, 'mainapp/adicionar_comentario.html', {'cafe': cafe})
-
     def post(self, request, cafe_id):
         texto = request.POST.get('texto').strip()
         cafe = get_object_or_404(Cafe, id=cafe_id)
-
         if not texto:
             messages.error(request, 'Por favor, adicione um texto ao comentário.')
             return redirect('adicionar_comentario', cafe_id=cafe_id)
-
         Comentario.objects.create(endereco=request.user, texto=texto, cafe=cafe)
         messages.success(request, 'Comentário adicionado com sucesso.')
         return redirect('cafe_detail', pk=cafe_id)
@@ -253,18 +228,15 @@ class AdicionarComentarioView(LoginRequiredMixin, View):
 class DeletarComentarioView(LoginRequiredMixin, View):
     def post(self, request, comentario_id):
         comentario = get_object_or_404(Comentario, id=comentario_id)
-
         if comentario.endereco == request.user:
             is_author = True
         else:
             is_author = False
-
         if is_author:
             comentario.delete()
             messages.success(request, 'Comentário removido com sucesso.')
         else:
             messages.error(request, 'Você não tem permissão para excluir este comentário.')
-
         return redirect('cafe_detail', pk=comentario.cafe.id)
 
 class AllCoffes(View):
@@ -274,45 +246,35 @@ class AllCoffes(View):
         else:
             cafes = Cafe.objects.all()
             caracteristica_selecionada = request.GET.get('caracteristicas')
-
             todas_caracteristicas = []
-
             for cafe in cafes:
                 for caracteristica in cafe.caracteristicas.split(","):
                     if caracteristica.strip() not in todas_caracteristicas:
                         todas_caracteristicas.append(caracteristica.strip())
-
             if caracteristica_selecionada:
                 cafes = cafes.filter(caracteristicas__icontains=caracteristica_selecionada)
-
             return render(request, 'mainapp/all.html', {'cafes': cafes, 'todas_caracteristicas': todas_caracteristicas})
         
-        
-
 class AvaliacaoCafeteriaView(LoginRequiredMixin, View):
     def get(self, request, cafe_id):
         cafe = Cafe.objects.get(pk=cafe_id)
         return render(request, 'mainapp/avaliacao.html', {'cafe': cafe})
-    
     def post(self, request, cafe_id):
         cafe = Cafe.objects.get(pk=cafe_id)
         avaliacao = int(request.POST.get('avaliacao'))
-        
         if cafe.avaliacao:
             cafe.avaliacao = avaliacao
-
         else:
             cafe.avaliacao = avaliacao
-        
         cafe.save()
         return redirect('cafe_detail', pk=cafe_id)
     
 class AdicionarFrequenteView(LoginRequiredMixin, View):
-    def post(self, request, cafe_id):
-        cafe = get_object_or_404(Cafe, id=cafe_id)
+    def post(self, request, pk):
+        cafe = get_object_or_404(Cafe, pk=pk)
         cafe.is_frequente = not cafe.is_frequente
         cafe.save()
-        return HttpResponseRedirect(reverse('cafe_detail', kwargs={'pk': cafe_id}))
+        return HttpResponseRedirect(reverse('cafe_detail', kwargs={'pk': pk}))
     
 class CafesPorCategoriaView(View):
     def get(self, request, categoria_id):
