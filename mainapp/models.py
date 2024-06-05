@@ -31,6 +31,7 @@ class Cafe(models.Model):
     avaliacao = models.IntegerField(choices=AVALIACAO_CHOICES, null=True, blank=True)
     is_frequente = models.BooleanField(default=False)
     is_favorita = models.BooleanField(default=False)
+    is_wish = models.BooleanField(default=False)
     caracteristicas = models.TextField(blank=True)
 
 
@@ -44,7 +45,6 @@ class Cafe(models.Model):
 
     def __str__(self):
         return self.nome
-    
 
 class Comentario(models.Model):
     endereco = models.ForeignKey(User, on_delete=models.CASCADE)

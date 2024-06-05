@@ -33,11 +33,14 @@
                 <div>
                     <div>
                         {{ cafe.nome }} na {{ cafe.endereco }} ({{ cafe.cntt }})
+                        {% if cafe.is_frequente %}
+                            <span style="color: blue;">📌 Visitado</span>
+                        {% endif %}
                         {% if cafe.is_favorita %}
                             <span style="color: red;">❤️ Favorito</span>
                         {% endif %}
-                        {% if cafe.is_frequente %}
-                            <span style="color: blue;">📌 Visitado</span>
+                        {% if cafe.is_wish %}
+                            <span style="color: green;">⏱ Lista de desejo</span>
                         {% endif %}
                     </div>
                     {% if cafe.usuario == user %}

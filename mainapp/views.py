@@ -142,7 +142,7 @@ class CafeCreateView(LoginRequiredMixin, View):
         nome = request.POST.get('nome').strip()
         endereco = request.POST.get('endereco').strip()
         cntt = request.POST.get('cntt').strip()
-        caracteristicas = request.POST.get('caracteristicas').strip().capitalize()
+        caracteristicas = request.POST.get('caracteristicas').strip()
 
         if not nome or not endereco or not cntt or not caracteristicas:
             messages.error(request, 'Todos os campos são obrigatórios.')
@@ -174,7 +174,7 @@ class CafeUpdateView(LoginRequiredMixin, View):
         cafe.tipo_id = request.POST.get('categoria')
         
         
-        caracteristicas = request.POST.get('caracteristicas').strip().capitalize()
+        caracteristicas = request.POST.get('caracteristicas').strip()
         cafe.caracteristicas = caracteristicas
 
         
@@ -310,12 +310,9 @@ class AvaliacaoCafeteriaView(LoginRequiredMixin, View):
 class AdicionarFrequenteView(LoginRequiredMixin, View):
     def post(self, request, cafe_id):
         cafe = get_object_or_404(Cafe, id=cafe_id)
-        
         cafe.is_frequente = not cafe.is_frequente
         cafe.save()
-        
         return HttpResponseRedirect(reverse('cafe_detail', kwargs={'pk': cafe_id}))
-
     
 class CafesPorCategoriaView(View):
     def get(self, request, categoria_id):
@@ -331,6 +328,13 @@ class MarcarCafeteriaFavoritaView(LoginRequiredMixin, View):
     def post(self, request, pk):
         cafe = get_object_or_404(Cafe, pk=pk)
         cafe.is_favorita = not cafe.is_favorita
+        cafe.save()
+        return HttpResponseRedirect(reverse('cafe_detail', kwargs={'pk': pk}))
+
+class ListaDesejoView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        cafe = get_object_or_404(Cafe, pk=pk)
+        cafe.is_wish = not cafe.is_wish
         cafe.save()
         return HttpResponseRedirect(reverse('cafe_detail', kwargs={'pk': pk}))
     

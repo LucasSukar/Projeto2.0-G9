@@ -23,23 +23,28 @@
                 {% endif %}
                 <p class="card-text"><strong>Características:</strong> {{ cafe.caracteristicas }}</p>
                 {% if not is_owner %}
+                    {% if cafe.is_frequente %}
+                        <p class="card-text"><strong>Você já visitou essa cafeteria.</strong></p>
+                    {% else %}
+                        <p class="card-text"><strong>Você não visitou esta cafeteria.</strong></p>
+                    {% endif %}
                     {% if cafe.is_favorita %}
                         <p class="card-text"><strong>Você favoritou esta cafeteria.</strong></p>
                     {% else %}
                         <p class="card-text"><strong>Você não favoritou esta cafeteria.</strong></p>
                     {% endif %}
-                    {% if cafe.is_frequente %}
-                        <p class="card-text"><strong>Você ja visitou essa cafeteria.</strong></p>
-                        {% else %}
-                        <p class="card-text"><strong>Você não visitou esta cafeteria.</strong></p>
-                        {% endif %}
+                    {% if cafe.is_wish %}
+                        <p class="card-text"><strong>Você deseja ir futuramente a esta cafeteria.</strong></p>
+                    {% else %}
+                        <p class="card-text"><strong>Você não deseja ir futuramente a esta cafeteria.</strong></p>
+                    {% endif %}                    
                     <form id="favoritoForm" method="POST" action="{% url 'adicionar_frequente' cafe.pk %}">
                         {% csrf_token %}
                         <button type="submit" id="favoritoBtn" class="btn btn-primary" style="background-color: #387B5B; color: #FFF;">
                             {% if cafe.is_frequente %}
-                                Não visitada 
+                                Marcar como não visitada
                             {% else %}
-                                Visitada 
+                                Marcar como visitada 
                             {% endif %}
                         </button>
                     </form>
@@ -51,6 +56,17 @@
                                 Desfavoritar
                             {% else %}
                                 Favoritar
+                            {% endif %}
+                        </button>
+                    </form>
+                    <br>
+                    <form id="favForm" method="POST" action="{% url 'lista_desejo' cafe.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" id="favBtn" class="btn btn-primary" style="background-color: #387B5B; color: #FFF;">
+                            {% if cafe.is_wish %}
+                                Tirar da lista de desejo
+                            {% else %}
+                                Colocar na lista de desejo
                             {% endif %}
                         </button>
                     </form>

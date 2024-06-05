@@ -17,8 +17,9 @@ urlpatterns = [
     path('deletar_comentario/<int:comentario_id>/', views.DeletarComentarioView.as_view(), name='deletar_comentario'),
     path('all/', views.AllCoffes.as_view(), name='all'),
     path('avaliacao/<int:cafe_id>/', views.AvaliacaoCafeteriaView.as_view(), name='avaliacao'),
-    path('frequente/adicionar/<int:cafe_id>/', views.AdicionarFrequenteView.as_view(), name='adicionar_frequente'),
+    path('adicionar_frequente/<int:pk>/', views.AdicionarFrequenteView.as_view(), name='adicionar_frequente'),
     path('cafes_por_categoria/<int:categoria_id>/', views.CafesPorCategoriaView.as_view(), name='cafes_por_categoria'),
     path('sobre/', views.SobreView.as_view(), name='sobre'),
     path('favoritos/<int:pk>/', views.MarcarCafeteriaFavoritaView.as_view(), name='favoritos'),
+    path('lista_desejo/<int:pk>/', views.ListaDesejoView.as_view(), name='lista_desejo'),
 ]
