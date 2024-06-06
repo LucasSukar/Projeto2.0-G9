@@ -1,52 +1,51 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
-from .models import Cafe, Categoria
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy,  reverse
-from django.contrib.auth.models import User
 from django.contrib.auth import logout
-from django.db.models import Count
+from django.db.models import Count, F
 from django.views.decorators.csrf import csrf_protect
 from django.utils.decorators import method_decorator
 from django.contrib import messages
-from .models import Cafe, Categoria, ListaDesejos, Franquia
+from .models import Cafe, Categoria, Comentario, Novidade
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.hashers import make_password
-from .models import Cafe,CoffeeHistory
 from django.utils import timezone
 from django.http import HttpResponseRedirect
-
-
-class CriarFranquiaView(View):
-    def get(self, request):
-        # Aqui estamos criando um novo contexto com os dados que queremos passar para o template.
-        contexto = {'categorias': Categoria.objects.all()}  # Adicionando todas as categorias para o contexto
-        return render(request, 'mainapp/cadastro_franquia.html', contexto)
+from django.shortcuts import reverse
+from django.contrib.contenttypes.models import ContentType    
+from django.contrib.auth.models import User, Permission
     
 class HomeView(View):
     def get(self, request):
         contexto = {'user': request.user if request.user.is_authenticated else None}
+
         if request.user.is_authenticated:
             cafes_usuario = Cafe.objects.filter(usuario=request.user)
             total_cafes = cafes_usuario.count()
-            generos_ordenados = cafes_usuario.values('genero__genero').annotate(total=Count('genero')).order_by('-total')
+            tipos_ordenados = cafes_usuario.values('tipo__tipo').annotate(total=Count('tipo')).order_by('-total')
 
-            if generos_ordenados:
-                generos_mais_comuns = generos_ordenados.filter(total=generos_ordenados.first()['total'])
-                generos_menos_comuns = generos_ordenados.filter(total=generos_ordenados.last()['total'])
+            if tipos_ordenados.exists(): 
+                tipo_mais_comum = tipos_ordenados.first()
+                tipo_menos_comum = tipos_ordenados.last()
 
-                contexto['genero_mais_comum'] = ', '.join([g['genero__genero'] for g in generos_mais_comuns])
-                contexto['genero_menos_comum'] = ', '.join([g['genero__genero'] for g in generos_menos_comuns])
+                if tipo_mais_comum['total'] > 0:
+                    contexto['tipo_mais_comum'] = tipo_mais_comum['tipo__tipo']
+                else:
+                    contexto['tipo_mais_comum'] = 'Indisponível'
+
+                if tipo_menos_comum['total'] > 0:
+                    contexto['tipo_menos_comum'] = tipo_menos_comum['tipo__tipo']
+                else:
+                    contexto['tipo_menos_comum'] = 'Indisponível'
             else:
-                contexto['genero_mais_comum'] = 'Indisponível'
-                contexto['genero_menos_comum'] = 'Indisponível'
+                contexto['tipo_mais_comum'] = 'Indisponível'
+                contexto['tipo_menos_comum'] = 'Indisponível'
 
             contexto['total_cafes'] = total_cafes
 
         return render(request, 'mainapp/home.html', contexto)
-
-    
 class CadastroView(View):
     def get(self, request):
         return render(request, 'mainapp/cadastro.html')
@@ -54,6 +53,20 @@ class CadastroView(View):
         username = request.POST.get('username')
         email = request.POST.get('email')  
         password = request.POST.get('password')
+        is_admin = True if request.POST.get('is_admin') == 'cafe' else False
+
+        if is_admin:
+            try:
+                permission1 = Permission.objects.get(codename='cafe')
+            except:
+                content_type = ContentType.objects.get_for_model(User)
+                permission1 = Permission.objects.create(
+                    codename='cafe',
+                    name='cafe',
+                    content_type=content_type,
+                )
+        else:
+            permission1 = ''
 
         if not username or not password:
             return render(request, 'mainapp/cadastro.html', {
@@ -68,7 +81,9 @@ class CadastroView(View):
         user = User(username=username, email=email)
         user.set_password(password)
         user.save()
-        return redirect('login')  
+        if permission1 != '':
+            user.user_permissions.add(permission1)
+        return redirect('login') 
 
 class LoginView(LoginView):
     template_name = 'mainapp/login.html'  
@@ -86,28 +101,29 @@ class LogoutView(View):
 class Biblioteca(View):
     def get(self, request):
         if not request.user.is_authenticated:
-            
             return redirect('home')
         else:
-            cafes = Cafe.objects.filter(usuario=request.user, in_collection=True)
+            cafes = Cafe.objects.filter(usuario=request.user, in_collection=True).order_by(F('is_frequente').desc(nulls_last=True))
+
             return render(request, 'mainapp/biblioteca.html', {'cafes': cafes})
 
 
-class CafesEmDetalhe(LoginRequiredMixin,View):
+class CafesEmDetalhe(LoginRequiredMixin, View):
     def get(self, request, pk):
         cafe = get_object_or_404(Cafe, pk=pk)
+        if cafe.usuario == request.user:
+            is_owner = True
+        else:
+            is_owner = False
         coffee_info = None
-       
         if not cafe.isbn:
             if coffee_info:
                 cafe.isbn = coffee_info.get('isbn')
                 cafe.cover_url = coffee_info.get('cover_url')
                 cafe.save()
             else:
-            
                 cafe.cover_url = coffee_info.get('cover_url') if cafe.isbn else None
-        return render(request, 'mainapp/cafe_detail.html', {'cafe': cafe})
-
+        return render(request, 'mainapp/cafe_detail.html', {'cafe': cafe, 'is_owner': is_owner})
 
 class CafeCreateView(LoginRequiredMixin, View):
     def get(self, request):
@@ -116,11 +132,11 @@ class CafeCreateView(LoginRequiredMixin, View):
 
     def post(self, request):
         nome = request.POST.get('nome').strip()
-        autor = request.POST.get('autor').strip()
-        anopublicado = request.POST.get('anopublicado').strip()
-        genero_id = request.POST.get('genero').strip()
-        
-        if not nome or not autor or not anopublicado:
+        endereco = request.POST.get('endereco').strip()
+        cntt = request.POST.get('cntt').strip()
+        caracteristicas = request.POST.get('caracteristicas').strip()
+
+        if not nome or not endereco or not cntt or not caracteristicas:
             messages.error(request, 'Todos os campos são obrigatórios.')
             return redirect('cafe_create')
 
@@ -128,49 +144,38 @@ class CafeCreateView(LoginRequiredMixin, View):
             messages.error(request, 'Uma cafeteria com este nome já existe na sua biblioteca.')
             return redirect('cafe_create')
 
-        genero = get_object_or_404(Categoria, id=genero_id)
-        Cafe.objects.create(nome=nome, autor=autor, anopublicado=anopublicado, genero=genero, usuario=request.user)
-        messages.success(request, 'cafeteria adicionada com sucesso!')
+        Cafe.objects.create(nome=nome, endereco=endereco, cntt=cntt, usuario=request.user, caracteristicas=caracteristicas)
+        messages.success(request, 'Cafeteria adicionada com sucesso!')
         return redirect('biblioteca')
-
 
 class CafeUpdateView(LoginRequiredMixin, View):
     def get(self, request, pk):
         cafe = get_object_or_404(Cafe, pk=pk)
         status_cafeteria = cafe.status_cafeteria
-        return render(request, 'mainapp/cafe_update.html', {'cafe': cafe, 'categorias': Categoria.objects.all(), 'status_cafeteria': status_cafeteria})
+        return render(request, 'mainapp/cafe_update.html', {
+            'cafe': cafe,
+            'categorias': Categoria.objects.all(),
+            'status_cafeteria': status_cafeteria
+        })
 
     def post(self, request, pk):
         cafe = get_object_or_404(Cafe, pk=pk)
         cafe.nome = request.POST.get('nome')
-        cafe.autor = request.POST.get('autor')
-        cafe.anopublicado = request.POST.get('anopublicado')
-        cafe.genero = get_object_or_404(Categoria, pk=request.POST.get('genero'))
-        novo_status_cafeteria = request.POST.get('status_cafeteria')
-
-        if cafe.status_cafeteria != 'NL' and novo_status_cafeteria == 'NL':
-            if CoffeeHistory.objects.filter(user=request.user, coffee_title=cafe.nome, author=cafe.autor).exists():
-                CoffeeHistory.objects.filter(user=request.user, coffee_title=cafe.nome, author=cafe.autor).delete()
-                messages.success(request, 'cafeteria editada com sucesso!')
-
-        elif novo_status_cafeteria in ['EL']:
-            if not CoffeeHistory.objects.filter(user=request.user, coffee_title=cafe.nome, author=cafe.autor).exists():
-                CoffeeHistory.objects.create(
-                    user=request.user,
-                    coffee_title=cafe.nome,
-                    author=cafe.autor,
-                )
-                messages.success(request, 'cafeteria editada com sucesso!')
-
-        cafe.status_cafeteria = novo_status_cafeteria
+        cafe.endereco = request.POST.get('endereco')
+        cafe.cntt = request.POST.get('cntt')
+        cafe.tipo_id = request.POST.get('categoria')
+        caracteristicas = request.POST.get('caracteristicas').strip()
+        cafe.caracteristicas = caracteristicas
+        if 'status_cafeteria' in request.POST:
+            cafe.status_cafeteria = request.POST.get('status_cafeteria')
         cafe.save()
-        return redirect('biblioteca')
+        messages.success(request, 'Cafeteria atualizada com sucesso!')
+        return redirect('home')  
 
 class CafeDeleteView(LoginRequiredMixin,View):
     def get(self, request, pk):
         cafe = get_object_or_404(Cafe, pk=pk)
         return render(request, 'mainapp/cafe_confirm_delete.html', {'cafe': cafe})
-
     def post(self, request, pk):
         cafe = get_object_or_404(Cafe, pk=pk)
         cafe.delete()
@@ -179,7 +184,6 @@ class CafeDeleteView(LoginRequiredMixin,View):
 class PerfilView(LoginRequiredMixin,View):
     def get(self, request):
         if not request.user.is_authenticated:
-            
             return redirect('home')
         else:
             usuario=request.user.username
@@ -188,15 +192,12 @@ class PerfilView(LoginRequiredMixin,View):
             return render(request, 'mainapp/perfil.html', context)
 
 class MudarSenhaView(LoginRequiredMixin, View):
-
     def get(self, request):
         return render(request, 'mainapp/mudar_senha.html')
-
     def post(self, request):
         senha_antiga = request.POST.get('senha_antiga')
         nova_senha = request.POST.get('nova_senha')
         confirmar = request.POST.get('confirmar')
-
         if not request.user.check_password(senha_antiga):
             messages.error(request, 'Sua senha antiga foi digitada errado. Tente novamente.')
         elif nova_senha != confirmar:
@@ -207,91 +208,122 @@ class MudarSenhaView(LoginRequiredMixin, View):
             update_session_auth_hash(request, request.user)  
             messages.success(request, 'Sua senha foi atualizada com sucesso!')
             return redirect('home')
-
         return render(request, 'mainapp/mudar_senha.html')
     
-class AddListaDesejosView(LoginRequiredMixin, View):
-    def get(self, request):
-        categorias = Categoria.objects.all()
-        return render(request, 'mainapp/add_lista.html', {'categorias': categorias})
 
-    def post(self, request):
-        nome = request.POST.get('nome').strip()
-        autor = request.POST.get('autor').strip()
-        anopublicado = request.POST.get('anopublicado').strip()
-        genero_id = request.POST.get('genero').strip()
-        
-        if not nome or not autor or not anopublicado:
-            messages.error(request, 'Todos os campos são obrigatórios.')
-            return redirect('cafe_create')
-
-        genero = get_object_or_404(Categoria, id=genero_id)
-        
-        
-        cafe = Cafe(nome=nome, autor=autor, anopublicado=anopublicado, genero=genero, in_wishlist=True, in_collection=False,usuario=request.user)
-        cafe.save()
-        
-       
-        wishlist, created = ListaDesejos.objects.get_or_create(usuario=request.user)
-        wishlist.cafes.add(cafe)  
-        
-        messages.success(request, "cafeteria adicionada à lista de desejos com sucesso.")
-        return redirect('lista_desejos')
-        
-        
-
-class ListaDesejosView(LoginRequiredMixin, View):
-    def get(self, request):
-        wishlist, created = ListaDesejos.objects.get_or_create(usuario=request.user)
-        cafes_desejados = wishlist.cafes.all()
-        return render(request, 'mainapp/lista_desejos.html', {'cafes_desejados': cafes_desejados})    
-
-class RemoverDaListaView(LoginRequiredMixin, View):
-    def post(self, request,**kwargs):
-        cafe_id = kwargs.get('cafe_id')
+class AdicionarComentarioView(LoginRequiredMixin, View):
+    def get(self, request, cafe_id):
         cafe = get_object_or_404(Cafe, id=cafe_id)
-        wishlist = ListaDesejos.objects.get(usuario=request.user)
-        wishlist.cafes.remove(cafe)
-        cafe.delete()
-        messages.success(request, "cafeteria removida da lista de desejos com sucesso.")
-        return redirect('lista_desejos')
-    
-class AddParaColecaoView(LoginRequiredMixin, View):
+        return render(request, 'mainapp/adicionar_comentario.html', {'cafe': cafe})
     def post(self, request, cafe_id):
-        cafe = get_object_or_404(Cafe, id=cafe_id, usuario=request.user)
-        cafe.in_wishlist = False
-        cafe.in_collection = True
-        cafe.save()
-        
-        wishlist = ListaDesejos.objects.filter(usuario=request.user).first()
-        if wishlist:
-            wishlist.cafes.remove(cafe)
+        texto = request.POST.get('texto').strip()
+        cafe = get_object_or_404(Cafe, id=cafe_id)
+        if not texto:
+            messages.error(request, 'Por favor, adicione um texto ao comentário.')
+            return redirect('adicionar_comentario', cafe_id=cafe_id)
+        Comentario.objects.create(endereco=request.user, texto=texto, cafe=cafe)
+        messages.success(request, 'Comentário adicionado com sucesso.')
+        return redirect('cafe_detail', pk=cafe_id)
 
-        messages.success(request, "cafeteria adicionada com sucesso.")
-        return redirect('lista_desejos')  
-    
+class DeletarComentarioView(LoginRequiredMixin, View):
+    def post(self, request, comentario_id):
+        comentario = get_object_or_404(Comentario, id=comentario_id)
+        if comentario.endereco == request.user:
+            is_author = True
+        else:
+            is_author = False
+        if is_author:
+            comentario.delete()
+            messages.success(request, 'Comentário removido com sucesso.')
+        else:
+            messages.error(request, 'Você não tem permissão para excluir este comentário.')
+        return redirect('cafe_detail', pk=comentario.cafe.id)
 
-class CoffeeHistoryView(LoginRequiredMixin, View):
+class AllCoffes(View):
     def get(self, request):
-        coffee_history = CoffeeHistory.objects.filter(user=request.user)
-        return render(request, 'mainapp/coffee_history.html', {'coffee_history': coffee_history})
+        if not request.user.is_authenticated:
+            return redirect('home')
+        else:
+            cafes = Cafe.objects.all()
+            caracteristica_selecionada = request.GET.get('caracteristicas')
+            todas_caracteristicas = []
+            for cafe in cafes:
+                for caracteristica in cafe.caracteristicas.split(","):
+                    if caracteristica.strip() not in todas_caracteristicas:
+                        todas_caracteristicas.append(caracteristica.strip())
+            if caracteristica_selecionada:
+                cafes = cafes.filter(caracteristicas__icontains=caracteristica_selecionada)
+            return render(request, 'mainapp/all.html', {'cafes': cafes, 'todas_caracteristicas': todas_caracteristicas})
+        
+class AvaliacaoCafeteriaView(LoginRequiredMixin, View):
+    def get(self, request, cafe_id):
+        cafe = Cafe.objects.get(pk=cafe_id)
+        return render(request, 'mainapp/avaliacao.html', {'cafe': cafe})
+    def post(self, request, cafe_id):
+        cafe = Cafe.objects.get(pk=cafe_id)
+        avaliacao = int(request.POST.get('avaliacao'))
+        if cafe.avaliacao:
+            cafe.avaliacao = avaliacao
+        else:
+            cafe.avaliacao = avaliacao
+        cafe.save()
+        return redirect('cafe_detail', pk=cafe_id)
+    
+class AdicionarFrequenteView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        cafe = get_object_or_404(Cafe, pk=pk)
+        cafe.is_frequente = not cafe.is_frequente
+        cafe.save()
+        return HttpResponseRedirect(reverse('cafe_detail', kwargs={'pk': pk}))
+    
+class CafesPorCategoriaView(View):
+    def get(self, request, categoria_id):
+        categoria = get_object_or_404(Categoria, pk=categoria_id)
+        cafes = Cafe.objects.filter(tipo=categoria)
+        return render(request, 'mainapp/cafes_por_categoria.html', {'categoria': categoria, 'cafes': cafes})
 
-    def post(self, request, cafe_id):
-        cafe = get_object_or_404(Cafe, id=cafe_id, usuario=request.user)
-        CoffeeHistory.objects.create(
-            user=request.user,
-            coffee_title=cafe.nome,
-            author=cafe.autor,
-            date_started=cafe.date_added,
-            date_finished=timezone.now()
-        )
-        cafe.delete()      
-        return redirect('coffee_history')
+class SobreView(View):
+    def get(self, request):
+        return render(request, 'mainapp/sobre.html')
     
-class RemoveFromHistoryView(View):
+class MarcarCafeteriaFavoritaView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        cafe = get_object_or_404(Cafe, pk=pk)
+        cafe.is_favorita = not cafe.is_favorita
+        cafe.save()
+        return HttpResponseRedirect(reverse('cafe_detail', kwargs={'pk': pk}))
+
+class ListaDesejoView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        cafe = get_object_or_404(Cafe, pk=pk)
+        cafe.is_wish = not cafe.is_wish
+        cafe.save()
+        return HttpResponseRedirect(reverse('cafe_detail', kwargs={'pk': pk}))
+
+class AdicionarNovidadeView(LoginRequiredMixin, View):
+    def get(self, request, cafe_id):
+        cafe = get_object_or_404(Cafe, id=cafe_id)
+        return render(request, 'mainapp/adicionar_novidade.html', {'cafe': cafe})
     def post(self, request, cafe_id):
-        coffee = get_object_or_404(CoffeeHistory, pk=cafe_id, user=request.user)
-        coffee.delete()
-        messages.success(request, "cafeteria removida do histórico.")
-        return redirect('coffee_history')
-    
+        texto = request.POST.get('texto').strip()
+        cafe = get_object_or_404(Cafe, id=cafe_id)
+        if not texto:
+            messages.error(request, 'Por favor, adicione um texto à novidade.')
+            return redirect('adicionar_novidade', cafe_id=cafe_id)
+        Novidade.objects.create(endereco=request.user, texto=texto, cafe=cafe)
+        messages.success(request, 'Novidade adicionada com sucesso.')
+        return redirect('cafe_detail', pk=cafe_id)
+
+class DeletarNovidadeView(LoginRequiredMixin, View):
+    def post(self, request, novidade_id):
+        novidade = get_object_or_404(Novidade, id=novidade_id)
+        if novidade.endereco == request.user:
+            is_author = True
+        else:
+            is_author = False
+        if is_author:
+            novidade.delete()
+            messages.success(request, 'Novidade removida com sucesso.')
+        else:
+            messages.error(request, 'Você não tem permissão para excluir esta novidade.')
+        return redirect('cafe_detail', pk=novidade.cafe.id)

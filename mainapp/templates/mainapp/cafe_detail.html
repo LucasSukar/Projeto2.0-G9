@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 
-
 {% block 'head' %}
     {% load static %}
     <link rel="stylesheet" href="{% static 'mainapp/css/mainapp.css' %}">
@@ -13,51 +12,231 @@
         1px 1px 2px rgba(122, 122, 122, 0.3)">
             Detalhes da cafeteria
         </div>
-        <div class="card-body row"> 
+        <div class="card-body row">
             <div class="col-md-8">
-                <h5 class="card-title" style="color: #387B5B; border: none;text-shadow: 
-                1px 1px 2px rgba(190, 182, 182, 0.3),
-                2px 2px 5px rgba(126, 126, 126, 0.3);">{{ cafe.nome }}</h5>
-                <p class="card-text"><strong>Nome da Cafeteria:</strong> {{ cafe.autor }}</p>
-                <p class="card-text"><strong>Número de Contato:</strong> {{ cafe.anopublicado }}</p>
-                <p class="card-text"><strong>Tipo de Café:</strong> {{ cafe.genero.genero }}</p>
-                <p class="card-text"><strong>Status da cafeteria:</strong> {{ cafe.get_status_cafeteria_display }}</p>
-                <a href="{% url 'biblioteca' %}" class="btn btn-primary">Voltar</a>
-                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteConfirmationModal">
-                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAKRJREFUSEvtlcERgCAMBNdOtBMtxUosxVK0FDvRYUZ4xImHIj/5SSR7SQauofJqKudHAXpgBlpHyAaMwOoJVYAFCJC7FSDdW8B+HvSEqLhskUqg4hdAPFA6+1SxLb06ICqXpZsS3f9fD+9rgFWovhM/twKVsLhFP+Byr5625J+BfJqKW6QIjwE5RmOhwdUGu+nd5OBiU4abxXyudSrLVK2R8eqAA04lOBnZrFOdAAAAAElFTkSuQmCC"/>
-                </button>
-                <a href="{% url 'cafe_update' pk=cafe.pk %}" class="btn btn-primary">Editar</a>
-                <a href="{% url 'cadastro_franquia' %}" class="btn btn-primary">Criar Franquia</a>
-
+                <h5 class="card-title" style="color: #387B5B; border: none; text-shadow: 1px 1px 2px rgba(190, 182, 182, 0.3), 2px 2px 5px rgba(126, 126, 126, 0.3);">{{ cafe.nome }}</h5>
+                <p class="card-text"><strong>Número de Contato:</strong> {{ cafe.cntt }}</p>
+                {% if cafe.avaliacao %}
+                <p class="card-text"><strong>Avaliação:</strong> {{ cafe.avaliacao }} Estrelas</p>
+                {% else %}
+                <p class="card-text"><strong>Avaliação:</strong> Ainda não há avaliação.</p>
+                {% endif %}
+                <p class="card-text"><strong>Características:</strong> {{ cafe.caracteristicas }}</p>
+                {% if not is_owner %}
+                    {% if cafe.is_frequente %}
+                        <p class="card-text"><strong>Você já visitou essa cafeteria.</strong></p>
+                    {% else %}
+                        <p class="card-text"><strong>Você não visitou esta cafeteria.</strong></p>
+                    {% endif %}
+                    {% if cafe.is_favorita %}
+                        <p class="card-text"><strong>Você favoritou esta cafeteria.</strong></p>
+                    {% else %}
+                        <p class="card-text"><strong>Você não favoritou esta cafeteria.</strong></p>
+                    {% endif %}
+                    {% if cafe.is_wish %}
+                        <p class="card-text"><strong>Você deseja ir futuramente a esta cafeteria.</strong></p>
+                    {% else %}
+                        <p class="card-text"><strong>Você não deseja ir futuramente a esta cafeteria.</strong></p>
+                    {% endif %}                    
+                    <form id="favoritoForm" method="POST" action="{% url 'adicionar_frequente' cafe.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" id="favoritoBtn" class="btn btn-primary" style="background-color: #387B5B; color: #FFF;">
+                            {% if cafe.is_frequente %}
+                                Marcar como não visitada
+                            {% else %}
+                                Marcar como visitada 
+                            {% endif %}
+                        </button>
+                    </form>
+                    <br>
+                    <form id="favForm" method="POST" action="{% url 'favoritos' cafe.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" id="favBtn" class="btn btn-primary" style="background-color: #387B5B; color: #FFF;">
+                            {% if cafe.is_favorita %}
+                                Desfavoritar
+                            {% else %}
+                                Favoritar
+                            {% endif %}
+                        </button>
+                    </form>
+                    <br>
+                    <form id="favForm" method="POST" action="{% url 'lista_desejo' cafe.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" id="favBtn" class="btn btn-primary" style="background-color: #387B5B; color: #FFF;">
+                            {% if cafe.is_wish %}
+                                Tirar da lista de desejo
+                            {% else %}
+                                Colocar na lista de desejo
+                            {% endif %}
+                        </button>
+                    </form>
+                {% endif %}
+                <br>
+                <a href="{% url 'home' %}" class="btn btn-primary">Voltar</a>
+                {% if is_owner %}
+                    <a href="{% url 'cafe_update' pk=cafe.pk %}" class="btn btn-primary">Editar</a>
+                    <a href = "{% url 'adicionar_novidade' cafe.id %}" class = "btn btn-success">Adicionar Novidade</a>
+                {% endif %}
+                {% if not is_owner %}
+                    <a href="{% url 'adicionar_comentario' cafe.id %}" class="btn btn-success">Adicionar Comentário</a>
+                    <a id="avaliarBtn" href="{% url 'avaliacao' cafe.id %}" class="btn btn-primary">Avaliar</a>
+                {% endif %}
+                {% if is_owner %}
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteConfirmationModal">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAKRJREFUSEvtlcERgCAMBNdOtBMtxUosxVK0FDvRYUZ4xImHIj/5SSR7SQauofJqKudHAXpgBlpHyAaMwOoJVYAFCJC7FSDdW8B+HvSEqLhskUqg4hdAPFA6+1SxLb06ICqXpZsS3f9fD+9rgFWovhM/twKVsLhFP+Byr5625J+BfJqKW6QIjwE5RmOhwdUGu+nd5OBiU4abxXyudSrLVK2R8eqAA04lOBnZrFOdAAAAAElFTkSuQmCC"/>
+                    </button>
+                {% endif %}
             </div>
-        
         </div>
     </div>
 </div>
+
 <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="deleteConfirmationModalLabel" style="color: #323232; border: none;" data-dismiss="modal">Confirmar Deleção</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteConfirmationModalLabel" style="color: #323232; border: none;" data-dismiss="modal">Confirmar Deleção</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="color: #4f4f4f; border: none;">
+                Tem certeza que deseja deletar esta cafeteria?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" style="background-color: #6f6f6f; color: white; border: none;" data-dismiss="modal">Cancelar</button>
+                <form action="{% url 'cafe_delete' pk=cafe.pk %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Deletar</button>
+                </form>
+            </div>
         </div>
-        <div class="modal-body" style="color: #4f4f4f; border: none;">
-          Tem certeza que deseja deletar esta cafeteria?
-        </div>
-        <div class="modal-footer">
-          <div class="mdcr">
-          <button type="button" class="btn btn-secondary" style="background-color: #6f6f6f; color: white; border: none;" data-dismiss="modal">Cancelar</button></div>
-          <form action="{% url 'cafe_delete' cafe.id %}" method="post">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-danger">Deletar</button>
-          </form>
-        </div>
-      </div>
     </div>
-  </div>
-  
- 
-  {% endblock %}
+</div>
 
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            Novidades
+        </div>
+        <div class="card-body">
+            {% if cafe.novidade.all %}
+                {% for novidade in cafe.novidade.all %}
+                <div class="card">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <p>{{ novidade.texto }}</p>
+                        {% if novidade.endereco == user %}
+                        <form action="{% url 'deletar_novidade' novidade.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteConfirmationModal{{ novidade.id }}">
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAKRJREFUSEvtlcERgCAMBNdOtBMtxUosxVK0FDvRYUZ4xImHIj/5SSR7SQauofJqKudHAXpgBlpHyAaMwOoJVYAFCJC7FSDdW8B+HvSEqLhskUqg4hdAPFA6+1SxLb06ICqXpZsS3f9fD+9rgFWovhM/twKVsLhFP+Byr5625J+BfJqKW6QIjwE5RmOhwdUGu+nd5OBiU4abxXyudSrLVK2R8eqAA04lOBnZrFOdAAAAAElFTkSuQmCC" alt="Excluir" width="20" height="20">
+                            </button>
+                            <div class="modal fade" id="deleteConfirmationModal{{ novidade.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationModalLabel{{ novidade.id }}" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="deleteConfirmationModalLabel{{ novidade.id }}">Confirmar Deleção</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Tem certeza que deseja deletar esta novidade?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                            <button type="submit" class="btn btn-danger">Deletar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p>Ainda não há novidades.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            Comentários
+        </div>
+        <div class="card-body">
+            {% if cafe.comentarios.all %}
+                {% for comentario in cafe.comentarios.all %}
+                <div class="card">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <p>{{ comentario.texto }}</p>
+                        {% if comentario.endereco == user %}
+                        <form action="{% url 'deletar_comentario' comentario.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteConfirmationModal{{ comentario.id }}">
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAKRJREFUSEvtlcERgCAMBNdOtBMtxUosxVK0FDvRYUZ4xImHIj/5SSR7SQauofJqKudHAXpgBlpHyAaMwOoJVYAFCJC7FSDdW8B+HvSEqLhskUqg4hdAPFA6+1SxLb06ICqXpZsS3f9fD+9rgFWovhM/twKVsLhFP+Byr5625J+BfJqKW6QIjwE5RmOhwdUGu+nd5OBiU4abxXyudSrLVK2R8eqAA04lOBnZrFOdAAAAAElFTkSuQmCC" alt="Excluir" width="20" height="20">
+                            </button>
+                            <div class="modal fade" id="deleteConfirmationModal{{ comentario.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationModalLabel{{ comentario.id }}" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="deleteConfirmationModalLabel{{ comentario.id }}">Confirmar Deleção</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Tem certeza que deseja deletar este comentário?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                            <button type="submit" class="btn btn-danger">Deletar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p>Ainda não há comentários.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEve\ntListener("DOMContentLoaded", function() {
+        document.getElementById('avaliarBtn').addEventListener('click', function(event) {
+            if ("{{ cafe.status_leitura }}" !== "L") {
+                document.getElementById('avaliarAlert').style.display = 'block';
+                event.preventDefault();
+            }
+        });
+    });
+
+    document.getElementById('favoritoForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        var form = this;
+        var formData = new FormData(form);
+
+        fetch(form.action, {
+            method: form.method,
+            body: formData
+        })
+        .then(response => {
+            if (response.ok) {
+                window.location.reload();
+            }
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+        });
+    });
+</script>
+{% endblock %}

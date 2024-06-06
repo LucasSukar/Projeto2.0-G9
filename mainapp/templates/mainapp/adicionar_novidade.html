@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block 'head' %}
+    <link rel="stylesheet" href="{% static 'mainapp/css/mainapp.css' %}">
+{% endblock %}
+
+{% block 'dashboard' %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Adicionar Novidade para a Cafeteria {{ cafe.titulo }}</h2>
+    </div>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="novidade_texto">Novidade:</label>
+            <textarea class="form-control" id="novidade_texto" name="texto" rows="3"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Salvar Novidade</button>
+        <a href="{% url 'cafe_detail' cafe.id %}" class="btn btn-secondary" style="margin-left: 10px;">Voltar</a>
+    </form>
+</div>
+{% endblock %}

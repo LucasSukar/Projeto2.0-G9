@@ -3,27 +3,15 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.db import models
-
-class Franquia(models.Model):
-    nome1 = models.CharField(max_length=100)
-    endereco = models.CharField(max_length=100)
-    email = models.EmailField()
-    cpf = models.CharField(max_length=14)
-
-    def __str__(self):
-        return self.nome1
     
 class Categoria(models.Model):
-    genero = models.CharField(max_length=100, unique=True)
+    tipo = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
-        return self.genero
+        return self.tipo
 
 class Cafe(models.Model):
-    STATUS_CAFETERIA_CHOICES = [
-        ('NL', 'Não Favorita'),
-        ('EL', 'Favorita'),
-    ]
+    
     AVALIACAO_CHOICES = [
         (0, '0 Estrelas'),
         (1, '1 Estrela'),
@@ -33,32 +21,46 @@ class Cafe(models.Model):
         (5, '5 Estrelas'),
     ]
     nome = models.CharField(max_length=100)
-    autor = models.CharField(max_length=100)
-    anopublicado = models.CharField(max_length=15)
-    genero=models.ForeignKey(Categoria, on_delete=models.SET_NULL, null=True)
-    status_cafeteria=models.CharField(max_length=2, choices=STATUS_CAFETERIA_CHOICES, default='NL')
+    endereco = models.CharField(max_length=100)
+    cntt = models.CharField(max_length=15)
+    tipo=models.ForeignKey(Categoria, on_delete=models.SET_NULL, null=True)
     avaliacao=models.IntegerField(choices=AVALIACAO_CHOICES, default=0)
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='cafes')
     isbn = models.CharField(max_length=13, null=True)
-    in_wishlist = models.BooleanField(default=False)
     in_collection = models.BooleanField(default=True)
+    avaliacao = models.IntegerField(choices=AVALIACAO_CHOICES, null=True, blank=True)
+    is_frequente = models.BooleanField(default=False)
+    is_favorita = models.BooleanField(default=False)
+    is_wish = models.BooleanField(default=False)
+    caracteristicas = models.TextField(blank=True)
+
+
+    def get_caracteristicas_list(self):
+        return self.caracteristicas.split(",")
+
+    def set_caracteristicas_list(self, caracteristicas_list):
+        self.caracteristicas = ",".join(caracteristicas_list)
+
+    caracteristicas_list = property(get_caracteristicas_list, set_caracteristicas_list)
+
     def __str__(self):
         return self.nome
+
+class Comentario(models.Model):
+    endereco = models.ForeignKey(User, on_delete=models.CASCADE)
+    texto = models.TextField()
+    data_publicacao = models.DateTimeField(default=timezone.now)
+    cafe = models.ForeignKey(Cafe, on_delete=models.CASCADE, related_name='comentarios') 
+
+    def _str_(self):
+        return f"Comentário de {self.endereco} em {self.cafe}: {self.texto}"
+
+class Novidade(models.Model):
+    endereco = models.ForeignKey(User, on_delete=models.CASCADE)
+    texto = models.TextField()
+    data_publicacao = models.DateTimeField(default=timezone.now)
+    cafe = models.ForeignKey(Cafe, on_delete=models.CASCADE, related_name='novidade') 
+
+    def _str_(self):
+        return f"Novidade de {self.endereco} em {self.cafe}: {self.texto}"
     
-class ListaDesejos(models.Model):
-    usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='lista_desejos',null=True)
-    cafes = models.ManyToManyField('Cafe', related_name='desejado_por')
-
-    def __str__(self):
-        return f" Lista de desejos de {self.usuario}"
-
-
-class CoffeeHistory(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    coffee_title = models.CharField(max_length=200)
-    author = models.CharField(max_length=100)
-    date_started = models.DateField(default=timezone.now)
-    date_finished = models.DateField(blank=True, null=True)
-
-    def __str__(self):
-        return f"{self.coffee_title} ({self.author})"
