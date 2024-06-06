@@ -151,11 +151,9 @@ class CafeCreateView(LoginRequiredMixin, View):
 class CafeUpdateView(LoginRequiredMixin, View):
     def get(self, request, pk):
         cafe = get_object_or_404(Cafe, pk=pk)
-        status_cafeteria = cafe.status_cafeteria
         return render(request, 'mainapp/cafe_update.html', {
             'cafe': cafe,
             'categorias': Categoria.objects.all(),
-            'status_cafeteria': status_cafeteria
         })
 
     def post(self, request, pk):
