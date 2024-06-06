@@ -300,8 +300,6 @@ class ListaDesejoView(LoginRequiredMixin, View):
         cafe.save()
         return HttpResponseRedirect(reverse('cafe_detail', kwargs={'pk': pk}))
 
-
-
 class AdicionarNovidadeView(LoginRequiredMixin, View):
     def get(self, request, cafe_id):
         cafe = get_object_or_404(Cafe, id=cafe_id)
