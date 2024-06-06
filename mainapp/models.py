@@ -54,3 +54,11 @@ class Comentario(models.Model):
 
     def _str_(self):
         return f"Comentário de {self.endereco} em {self.cafe}: {self.texto}"
+
+
+class Novidades(models.Model):
+    cafe = models.ForeignKey(Cafe, on_delete=models.CASCADE, related_name='novidades')
+    texto = models.TextField()
+
+    def _str_(self):
+        return f"Novidades do café: {self.cafe} {self.texto}"

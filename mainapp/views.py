@@ -8,7 +8,7 @@ from django.db.models import Count, F
 from django.views.decorators.csrf import csrf_protect
 from django.utils.decorators import method_decorator
 from django.contrib import messages
-from .models import Cafe, Categoria, Comentario
+from .models import Cafe, Categoria, Comentario, Novidades
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.hashers import make_password
 from django.utils import timezone
@@ -300,3 +300,33 @@ class ListaDesejoView(LoginRequiredMixin, View):
         cafe.save()
         return HttpResponseRedirect(reverse('cafe_detail', kwargs={'pk': pk}))
     
+class AdicionarNovidadesView(LoginRequiredMixin, View):
+    def get(self, request, cafe_id):
+        cafe = get_object_or_404(Cafe, id=cafe_id)
+        return render(request, 'mainapp/adicionar_novidades.html', {'cafe': cafe})
+
+    def post(self, request, cafe_id):
+        texto = request.POST.get('texto', '').strip()
+        cafe = get_object_or_404(Cafe, id=cafe_id)
+
+        if not texto:
+            messages.error(request, 'Por favor, adicione um texto às novidades.')
+            return redirect('adicionar_novidades', cafe_id=cafe_id)
+
+        Novidades.objects.create(cafe=cafe, texto=texto)
+        messages.success(request, 'Novidades adicionadas com sucesso.')
+        return redirect('cafe_detail', pk=cafe_id)
+
+class DeletarNovidadesView(LoginRequiredMixin, View):
+    def post(self, request, novidades_id):
+        novidades = get_object_or_404(Novidades, id=novidades_id)
+        if novidades.cafe.owner == request.user:  # Supondo que o Café tem um campo 'owner'
+            is_author = True
+        else:
+            is_author = False
+        if is_author:
+            novidades.delete()
+            messages.success(request, 'Novidades removidas com sucesso.')
+        else:
+            messages.error(request, 'Você não tem permissão para excluir estas novidades.')
+        return redirect('cafe_detail', pk=novidades.cafe.id)
