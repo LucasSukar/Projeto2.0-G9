@@ -22,7 +22,6 @@ urlpatterns = [
     path('sobre/', views.SobreView.as_view(), name='sobre'),
     path('favoritos/<int:pk>/', views.MarcarCafeteriaFavoritaView.as_view(), name='favoritos'),
     path('lista_desejo/<int:pk>/', views.ListaDesejoView.as_view(), name='lista_desejo'), 
-    path('cafe/<int:cafe_id>/adicionar_novidades/', views.AdicionarNovidadesView.as_view(), name='adicionar_novidades'),
-    path('novidades/<int:novidades_id>/deletar/', views.DeletarNovidadesView.as_view(), name='deletar_novidades'),
-
+    path('adicionar_novidade/<int:cafe_id>/', views.AdicionarNovidadeView.as_view(), name='adicionar_novidade'),
+    path('deletar_novidade/<int:novidade_id>/', views.DeletarNovidadeView.as_view(), name='deletar_novidade'),
 ]

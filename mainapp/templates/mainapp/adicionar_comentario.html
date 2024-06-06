@@ -8,7 +8,7 @@
 {% block 'dashboard' %}
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>Adicionar Comentário para a Cafeteria "{{ cafe.titulo }}"</h2>
+        <h2>Adicionar Comentário para a Cafeteria {{ cafe.titulo }}</h2>
     </div>
     <form method="post">
         {% csrf_token %}

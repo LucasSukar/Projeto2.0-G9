@@ -8,7 +8,7 @@ from django.db.models import Count, F
 from django.views.decorators.csrf import csrf_protect
 from django.utils.decorators import method_decorator
 from django.contrib import messages
-from .models import Cafe, Categoria, Comentario, Novidades
+from .models import Cafe, Categoria, Comentario, Novidade
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.hashers import make_password
 from django.utils import timezone
@@ -299,34 +299,33 @@ class ListaDesejoView(LoginRequiredMixin, View):
         cafe.is_wish = not cafe.is_wish
         cafe.save()
         return HttpResponseRedirect(reverse('cafe_detail', kwargs={'pk': pk}))
-    
-class AdicionarNovidadesView(LoginRequiredMixin, View):
+
+
+
+class AdicionarNovidadeView(LoginRequiredMixin, View):
     def get(self, request, cafe_id):
         cafe = get_object_or_404(Cafe, id=cafe_id)
-        return render(request, 'mainapp/adicionar_novidades.html', {'cafe': cafe})
-
+        return render(request, 'mainapp/adicionar_novidade.html', {'cafe': cafe})
     def post(self, request, cafe_id):
-        texto = request.POST.get('texto', '').strip()
+        texto = request.POST.get('texto').strip()
         cafe = get_object_or_404(Cafe, id=cafe_id)
-
         if not texto:
-            messages.error(request, 'Por favor, adicione um texto às novidades.')
-            return redirect('adicionar_novidades', cafe_id=cafe_id)
-
-        Novidades.objects.create(cafe=cafe, texto=texto)
-        messages.success(request, 'Novidades adicionadas com sucesso.')
+            messages.error(request, 'Por favor, adicione um texto à novidade.')
+            return redirect('adicionar_novidade', cafe_id=cafe_id)
+        Novidade.objects.create(endereco=request.user, texto=texto, cafe=cafe)
+        messages.success(request, 'Novidade adicionada com sucesso.')
         return redirect('cafe_detail', pk=cafe_id)
 
-class DeletarNovidadesView(LoginRequiredMixin, View):
-    def post(self, request, novidades_id):
-        novidades = get_object_or_404(Novidades, id=novidades_id)
-        if novidades.cafe.owner == request.user:  # Supondo que o Café tem um campo 'owner'
+class DeletarNovidadeView(LoginRequiredMixin, View):
+    def post(self, request, novidade_id):
+        novidade = get_object_or_404(Novidade, id=novidade_id)
+        if novidade.endereco == request.user:
             is_author = True
         else:
             is_author = False
         if is_author:
-            novidades.delete()
-            messages.success(request, 'Novidades removidas com sucesso.')
+            novidade.delete()
+            messages.success(request, 'Novidade removida com sucesso.')
         else:
-            messages.error(request, 'Você não tem permissão para excluir estas novidades.')
-        return redirect('cafe_detail', pk=novidades.cafe.id)
+            messages.error(request, 'Você não tem permissão para excluir esta novidade.')
+        return redirect('cafe_detail', pk=novidade.cafe.id)
