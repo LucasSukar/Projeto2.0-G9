@@ -9,14 +9,17 @@
 {% endblock %}
 
 {% block 'dashboard' %}
-<div class="container mt-5">
-    <div aria-live="polite" aria-atomic="true" style="position: relative; min-height: 200px;">
-        <div id="toastContainer" style="position: absolute; top: 0;">
+
+<center>
+    <div class="container mt-5">
+        <div aria-live="polite" aria-atomic="true" style="position: relative; min-height: 200px;">
+            <div id="toastContainer" style="position: absolute; top: 0;">
+            </div>
+            <h1 class="display-4" style="color: #387B5B; border: none;text-shadow: 
+            2px 2px 5px rgba(126, 126, 126, 0.3);">Bem-vindo {{ user.username }}!</h1>
         </div>
-        <h1 class="display-4" style="color: #387B5B; border: none;text-shadow: 
-        2px 2px 5px rgba(126, 126, 126, 0.3);">Bem-vindo {{ user.username }}!</h1>
     </div>
-</div>
+</center>
 <div class="container mt-5">
     {% if user.is_authenticated %}
     {% if 'auth.cafe' in perms %}
@@ -34,7 +37,7 @@
         </div>
     {%else%}
     <div class="container text-center">
-        <center><img src="{% static 'interface/images/inovefavicon-Copia.png' %}" alt="logo" class="logohome"/></center>
+        <center><img src="{% static 'interface/images/caiota.jpg' %}" alt="logo" class="logohome"/></center>
     </div>
     {%endif%}
     {% else %}

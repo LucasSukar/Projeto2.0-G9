@@ -63,4 +63,3 @@ class Novidade(models.Model):
 
     def _str_(self):
         return f"Novidade de {self.endereco} em {self.cafe}: {self.texto}"
-    
