@@ -19,19 +19,24 @@
 </div>
 <div class="container mt-5">
     {% if user.is_authenticated %}
+    {% if 'auth.cafe' in perms %}
         <div class="row">
             <div class="col-lg-12">
                 <div class="card text-white bg-info mb-3 p-4">
-                    <div class="card-header"> cafeterias frequentadas </div>
+                    <div class="card-header"> Cafeterias adicionadas </div>
                     <div class="card-body">
                         <h5 class="card-title">{{ total_cafes }}</h5>
-                        <p class="card-text">Este é o total de cafeterias que voce frenquentou. </p>
+                        <p class="card-text">Este é o total de cafeterias que voce adicionou. </p>
                     </div>
                 </div>
             </div>
             
         </div>
-        
+    {%else%}
+    <div class="container text-center">
+        <center><img src="{% static 'interface/images/inovefavicon-Copia.png' %}" alt="logo" class="logohome"/></center>
+    </div>
+    {%endif%}
     {% else %}
     <div class="card text-center">
         <div class="welcome-card-header">
