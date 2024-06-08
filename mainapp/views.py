@@ -8,7 +8,7 @@ from django.db.models import Count, F
 from django.views.decorators.csrf import csrf_protect
 from django.utils.decorators import method_decorator
 from django.contrib import messages
-from .models import Cafe, Categoria, Comentario, Novidade
+from .models import Cafe, Categoria, Comentario, Novidade, Frequentado, Favorito, ListaDesejo
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.hashers import make_password
 from django.utils import timezone
@@ -46,19 +46,21 @@ class HomeView(View):
             contexto['total_cafes'] = total_cafes
 
         return render(request, 'mainapp/home.html', contexto)
+    
 class CadastroView(View):
     def get(self, request):
         return render(request, 'mainapp/cadastro.html')
+    
     def post(self, request):
         username = request.POST.get('username')
         email = request.POST.get('email')  
         password = request.POST.get('password')
-        is_admin = True if request.POST.get('is_admin') == 'cafe' else False
+        is_admin = request.POST.get('is_admin') == 'cafe'
 
         if is_admin:
             try:
                 permission1 = Permission.objects.get(codename='cafe')
-            except:
+            except Permission.DoesNotExist:
                 content_type = ContentType.objects.get_for_model(User)
                 permission1 = Permission.objects.create(
                     codename='cafe',
@@ -66,7 +68,7 @@ class CadastroView(View):
                     content_type=content_type,
                 )
         else:
-            permission1 = ''
+            permission1 = None
 
         if not username or not password:
             return render(request, 'mainapp/cadastro.html', {
@@ -81,9 +83,11 @@ class CadastroView(View):
         user = User(username=username, email=email)
         user.set_password(password)
         user.save()
-        if permission1 != '':
+
+        if permission1:
             user.user_permissions.add(permission1)
-        return redirect('login') 
+        
+        return redirect('login')
 
 class LoginView(LoginView):
     template_name = 'mainapp/login.html'  
@@ -111,19 +115,21 @@ class Biblioteca(View):
 class CafesEmDetalhe(LoginRequiredMixin, View):
     def get(self, request, pk):
         cafe = get_object_or_404(Cafe, pk=pk)
-        if cafe.usuario == request.user:
-            is_owner = True
-        else:
-            is_owner = False
-        coffee_info = None
-        if not cafe.isbn:
-            if coffee_info:
-                cafe.isbn = coffee_info.get('isbn')
-                cafe.cover_url = coffee_info.get('cover_url')
-                cafe.save()
-            else:
-                cafe.cover_url = coffee_info.get('cover_url') if cafe.isbn else None
-        return render(request, 'mainapp/cafe_detail.html', {'cafe': cafe, 'is_owner': is_owner})
+        is_owner = cafe.usuario == request.user
+
+        frequentado = Frequentado.objects.filter(user=request.user, cafe=cafe).exists()
+        favoritado = Favorito.objects.filter(user=request.user, cafe=cafe).exists()
+        wishlist = ListaDesejo.objects.filter(user=request.user, cafe=cafe).exists()
+
+        context = {
+            'cafe': cafe,
+            'is_owner': is_owner,
+            'is_frequentado': frequentado,
+            'is_favorito': favoritado,
+            'is_wishlist': wishlist
+        }
+
+        return render(request, 'mainapp/cafe_detail.html', context)
 
 class CafeCreateView(LoginRequiredMixin, View):
     def get(self, request):
@@ -146,7 +152,7 @@ class CafeCreateView(LoginRequiredMixin, View):
 
         Cafe.objects.create(nome=nome, endereco=endereco, cntt=cntt, usuario=request.user, caracteristicas=caracteristicas)
         messages.success(request, 'Cafeteria adicionada com sucesso!')
-        return redirect('biblioteca')
+        return redirect('/mainapp/all/')
 
 class CafeUpdateView(LoginRequiredMixin, View):
     def get(self, request, pk):
@@ -170,14 +176,19 @@ class CafeUpdateView(LoginRequiredMixin, View):
         messages.success(request, 'Cafeteria atualizada com sucesso!')
         return redirect('home')  
 
-class CafeDeleteView(LoginRequiredMixin,View):
+class CafeDeleteView(LoginRequiredMixin, View):
     def get(self, request, pk):
         cafe = get_object_or_404(Cafe, pk=pk)
         return render(request, 'mainapp/cafe_confirm_delete.html', {'cafe': cafe})
+
     def post(self, request, pk):
         cafe = get_object_or_404(Cafe, pk=pk)
-        cafe.delete()
-        return redirect('biblioteca')
+        if cafe.usuario == request.user:  # Verifica se o usuário é o dono da cafeteria
+            cafe.delete()
+            messages.success(request, 'Cafeteria deletada com sucesso!')
+        else:
+            messages.error(request, 'Você não tem permissão para deletar esta cafeteria.')
+        return redirect('/mainapp/all/')
 
 class PerfilView(LoginRequiredMixin,View):
     def get(self, request):
@@ -244,14 +255,28 @@ class AllCoffes(View):
         else:
             cafes = Cafe.objects.all()
             caracteristica_selecionada = request.GET.get('caracteristicas')
-            todas_caracteristicas = []
+            todas_caracteristicas = set()
             for cafe in cafes:
-                for caracteristica in cafe.caracteristicas.split(","):
-                    if caracteristica.strip() not in todas_caracteristicas:
-                        todas_caracteristicas.append(caracteristica.strip())
+                todas_caracteristicas.update(map(str.strip, cafe.caracteristicas.split(",")))
+                
             if caracteristica_selecionada:
                 cafes = cafes.filter(caracteristicas__icontains=caracteristica_selecionada)
-            return render(request, 'mainapp/all.html', {'cafes': cafes, 'todas_caracteristicas': todas_caracteristicas})
+
+            # Pega favoritos, frequentados e wishlist para o usuário atual
+            favoritos = set(Favorito.objects.filter(user=request.user).values_list('cafe_id', flat=True))
+            frequentados = set(Frequentado.objects.filter(user=request.user).values_list('cafe_id', flat=True))
+            wishlist = set(ListaDesejo.objects.filter(user=request.user).values_list('cafe_id', flat=True))
+
+            context = {
+                'cafes': cafes,
+                'todas_caracteristicas': todas_caracteristicas,
+                'favoritos': favoritos,
+                'frequentados': frequentados,
+                'wishlist': wishlist
+            }
+
+            return render(request, 'mainapp/all.html', context)
+
         
 class AvaliacaoCafeteriaView(LoginRequiredMixin, View):
     def get(self, request, cafe_id):
@@ -267,11 +292,12 @@ class AvaliacaoCafeteriaView(LoginRequiredMixin, View):
         cafe.save()
         return redirect('cafe_detail', pk=cafe_id)
     
-class AdicionarFrequenteView(LoginRequiredMixin, View):
+class MarcarCafeteriaFavoritaView(LoginRequiredMixin, View):
     def post(self, request, pk):
         cafe = get_object_or_404(Cafe, pk=pk)
-        cafe.is_frequente = not cafe.is_frequente
-        cafe.save()
+        favorito, created = Favorito.objects.get_or_create(user=request.user, cafe=cafe)
+        if not created:
+            favorito.delete()
         return HttpResponseRedirect(reverse('cafe_detail', kwargs={'pk': pk}))
     
 class CafesPorCategoriaView(View):
@@ -284,18 +310,21 @@ class SobreView(View):
     def get(self, request):
         return render(request, 'mainapp/sobre.html')
     
-class MarcarCafeteriaFavoritaView(LoginRequiredMixin, View):
+class AdicionarFrequenteView(LoginRequiredMixin, View):
     def post(self, request, pk):
         cafe = get_object_or_404(Cafe, pk=pk)
-        cafe.is_favorita = not cafe.is_favorita
-        cafe.save()
+        frequentado, created = Frequentado.objects.get_or_create(user=request.user, cafe=cafe)
+        if not created:
+            frequentado.delete()
         return HttpResponseRedirect(reverse('cafe_detail', kwargs={'pk': pk}))
+
 
 class ListaDesejoView(LoginRequiredMixin, View):
     def post(self, request, pk):
         cafe = get_object_or_404(Cafe, pk=pk)
-        cafe.is_wish = not cafe.is_wish
-        cafe.save()
+        lista_desejo, created = ListaDesejo.objects.get_or_create(user=request.user, cafe=cafe)
+        if not created:
+            lista_desejo.delete()
         return HttpResponseRedirect(reverse('cafe_detail', kwargs={'pk': pk}))
 
 class AdicionarNovidadeView(LoginRequiredMixin, View):

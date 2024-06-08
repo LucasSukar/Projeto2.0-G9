@@ -18,12 +18,9 @@
             <label for="caracteristicas">Filtrar por características:</label>
             <div>
                 {% for caracteristica in todas_caracteristicas %}
-                    <button type="submit" class="btn btn-primary" name="caracteristicas"
-                            value="{{ caracteristica }}">{{ caracteristica }}</button>
+                    <button type="submit" class="btn btn-primary" name="caracteristicas" value="{{ caracteristica }}">{{ caracteristica }}</button>
                 {% endfor %}
-                <button type="submit" class="btn btn-primary" name="caracteristicas" value="">Todas as
-                    características
-                </button>
+                <button type="submit" class="btn btn-primary" name="caracteristicas" value="">Todas as características</button>
             </div>
         </div>
     </form>
@@ -33,17 +30,17 @@
                 <div>
                     <div>
                         {{ cafe.nome }} na {{ cafe.endereco }} ({{ cafe.cntt }})
-                        {% if cafe.is_frequente %}
+                        {% if cafe.id in frequentados %}
                             <span style="color: blue;">📌 Visitado</span>
                         {% endif %}
-                        {% if cafe.is_favorita %}
+                        {% if cafe.id in favoritos %}
                             <span style="color: red;">❤️ Favorito</span>
                         {% endif %}
-                        {% if cafe.is_wish %}
+                        {% if cafe.id in wishlist %}
                             <span style="color: green;">⏱ Lista de desejo</span>
                         {% endif %}
                     </div>
-                    {% if cafe.usuario == user %}
+                    {% if cafe.usuario == request.user %}
                         <small style="color: gold">⭐Você é o dono desta cafeteria.⭐</small>
                     {% endif %}
                 </div>
