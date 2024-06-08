@@ -15,37 +15,36 @@
             <div class="col-md-8">
                 <h5 class="card-title" style="color: #387B5B; border: none; text-shadow: 1px 1px 2px rgba(190, 182, 182, 0.3), 2px 2px 5px rgba(126, 126, 126, 0.3);">{{ cafe.nome }}</h5>
                 <p class="card-text"><strong>Número de Contato:</strong> {{ cafe.cntt }}</p>
-                {% with media_avaliacoes=cafe.calcular_media_avaliacoes %}
-                    {% if media_avaliacoes %}
-                        <p class="card-text"><strong>Média de Avaliações:</strong> {{ media_avaliacoes }} Estrelas</p>
-                    {% else %}
-                        <p class="card-text"><strong>Avaliação:</strong> Ainda não há avaliações.</p>
-                    {% endif %}
-                {% endwith %}
+                {% if user_avaliacao %}
+                <p class="card-text"><strong>Sua Avaliação:</strong> {{ user_avaliacao.nota }} Estrelas ⭐</p>
+            {% else %}
+                <p class="card-text"><strong>Sua Avaliação:</strong> Você ainda não avaliou esta cafeteria.</p>
+            {% endif %}
                 <p class="card-text"><strong>Características:</strong> {{ cafe.caracteristicas }}</p>
+
                 {% if not is_owner %}
                     {% if is_frequentado %}
-                        <p class="card-text"><strong>Você já visitou essa cafeteria.</strong></p>
+                        <p class="card-text"><strong>Você já visitou essa cafeteria 📌</strong></p>
                     {% else %}
                         <p class="card-text"><strong>Você não visitou esta cafeteria.</strong></p>
                     {% endif %}
                     {% if is_favorito %}
-                        <p class="card-text"><strong>Você favoritou esta cafeteria.</strong></p>
+                        <p class="card-text"><strong>Você favoritou esta cafeteria ❤️</strong></p>
                     {% else %}
                         <p class="card-text"><strong>Você não favoritou esta cafeteria.</strong></p>
                     {% endif %}
                     {% if is_wishlist %}
-                        <p class="card-text"><strong>Você deseja ir futuramente a esta cafeteria.</strong></p>
+                        <p class="card-text"><strong>Você deseja ir futuramente a esta cafeteria ⏱</strong></p>
                     {% else %}
                         <p class="card-text"><strong>Você não deseja ir futuramente a esta cafeteria.</strong></p>
-                    {% endif %}                    
+                    {% endif %}
                     <form id="favoritoForm" method="POST" action="{% url 'adicionar_frequente' cafe.pk %}">
                         {% csrf_token %}
                         <button type="submit" id="favoritoBtn" class="btn btn-primary" style="background-color: #387B5B; color: #FFF;">
                             {% if is_frequentado %}
                                 Marcar como não visitada
                             {% else %}
-                                Marcar como visitada 
+                                Marcar como visitada
                             {% endif %}
                         </button>
                     </form>
@@ -73,7 +72,7 @@
                     </form>
                 {% endif %}
                 <br>
-                <a href="{% url 'home' %}" class="btn btn-primary">Voltar</a>
+                <a href="{% url 'all' %}" class="btn btn-primary">Voltar</a>
                 {% if is_owner %}
                     <a href="{% url 'cafe_update' pk=cafe.pk %}" class="btn btn-primary" id="edit">Editar</a>
                     <a href = "{% url 'adicionar_novidade' cafe.id %}" class = "btn btn-success">Adicionar Novidade</a>

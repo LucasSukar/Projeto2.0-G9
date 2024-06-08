@@ -30,6 +30,13 @@
                 <div>
                     <div>
                         {{ cafe.nome }} na {{ cafe.endereco }} ({{ cafe.cntt }})
+                        {% with media_avaliacoes=cafe.calcular_media_avaliacoes %}
+                    {% if media_avaliacoes %}
+                        <p class="card-text"><strong>Média de Avaliações:</strong> {{ media_avaliacoes }} Estrelas ⭐</p>
+                    {% else %}
+                        <p class="card-text"><strong>Avaliação:</strong> Ainda não há avaliações.</p>
+                    {% endif %}
+                        {% endwith %}
                         {% if cafe.id in frequentados %}
                             <span style="color: blue;">📌 Visitado</span>
                         {% endif %}

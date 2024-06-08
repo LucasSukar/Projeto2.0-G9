@@ -121,12 +121,15 @@ class CafesEmDetalhe(LoginRequiredMixin, View):
         favoritado = Favorito.objects.filter(user=request.user, cafe=cafe).exists()
         wishlist = ListaDesejo.objects.filter(user=request.user, cafe=cafe).exists()
 
+        user_avaliacao = Avaliacao.objects.filter(user=request.user, cafe=cafe).first()
+
         context = {
             'cafe': cafe,
             'is_owner': is_owner,
             'is_frequentado': frequentado,
             'is_favorito': favoritado,
-            'is_wishlist': wishlist
+            'is_wishlist': wishlist,
+            'user_avaliacao': user_avaliacao
         }
 
         return render(request, 'mainapp/cafe_detail.html', context)
