@@ -8,7 +8,7 @@ from django.db.models import Count, F
 from django.views.decorators.csrf import csrf_protect
 from django.utils.decorators import method_decorator
 from django.contrib import messages
-from .models import Cafe, Categoria, Comentario, Novidade, Frequentado, Favorito, ListaDesejo
+from .models import Cafe, Categoria, Comentario, Novidade, Frequentado, Favorito, ListaDesejo, Avaliacao
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.hashers import make_password
 from django.utils import timezone
@@ -280,17 +280,17 @@ class AllCoffes(View):
         
 class AvaliacaoCafeteriaView(LoginRequiredMixin, View):
     def get(self, request, cafe_id):
-        cafe = Cafe.objects.get(pk=cafe_id)
-        return render(request, 'mainapp/avaliacao.html', {'cafe': cafe})
+        cafe = get_object_or_404(Cafe, pk=cafe_id)
+        avaliacao = Avaliacao.objects.filter(user=request.user, cafe=cafe).first()
+        return render(request, 'mainapp/avaliacao.html', {'cafe': cafe, 'avaliacao': avaliacao})
+
     def post(self, request, cafe_id):
-        cafe = Cafe.objects.get(pk=cafe_id)
-        avaliacao = int(request.POST.get('avaliacao'))
-        if cafe.avaliacao:
-            cafe.avaliacao = avaliacao
-        else:
-            cafe.avaliacao = avaliacao
-        cafe.save()
+        cafe = get_object_or_404(Cafe, pk=cafe_id)
+        nota = int(request.POST.get('avaliacao'))
+        Avaliacao.objects.update_or_create(user=request.user, cafe=cafe, defaults={'nota': nota})
+        messages.success(request, 'Avaliação registrada com sucesso!')
         return redirect('cafe_detail', pk=cafe_id)
+
     
 class MarcarCafeteriaFavoritaView(LoginRequiredMixin, View):
     def post(self, request, pk):
