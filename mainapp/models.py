@@ -2,7 +2,6 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.utils import timezone
-from django.db import models
     
 class Categoria(models.Model):
     tipo = models.CharField(max_length=100, unique=True)
@@ -28,7 +27,6 @@ class Cafe(models.Model):
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='cafes')
     isbn = models.CharField(max_length=13, null=True)
     in_collection = models.BooleanField(default=True)
-    avaliacao = models.IntegerField(choices=AVALIACAO_CHOICES, null=True, blank=True)
     is_frequente = models.BooleanField(default=False)
     is_favorita = models.BooleanField(default=False)
     is_wish = models.BooleanField(default=False)
@@ -52,7 +50,7 @@ class Comentario(models.Model):
     data_publicacao = models.DateTimeField(default=timezone.now)
     cafe = models.ForeignKey(Cafe, on_delete=models.CASCADE, related_name='comentarios') 
 
-    def _str_(self):
+    def __str__(self):
         return f"Comentário de {self.endereco} em {self.cafe}: {self.texto}"
 
 class Novidade(models.Model):
@@ -61,5 +59,5 @@ class Novidade(models.Model):
     data_publicacao = models.DateTimeField(default=timezone.now)
     cafe = models.ForeignKey(Cafe, on_delete=models.CASCADE, related_name='novidade') 
 
-    def _str_(self):
+    def __str__(self):
         return f"Novidade de {self.endereco} em {self.cafe}: {self.texto}"

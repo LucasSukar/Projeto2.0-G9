@@ -74,7 +74,7 @@
                 <br>
                 <a href="{% url 'home' %}" class="btn btn-primary">Voltar</a>
                 {% if is_owner %}
-                    <a href="{% url 'cafe_update' pk=cafe.pk %}" class="btn btn-primary">Editar</a>
+                    <a href="{% url 'cafe_update' pk=cafe.pk %}" class="btn btn-primary" id="edit">Editar</a>
                     <a href = "{% url 'adicionar_novidade' cafe.id %}" class = "btn btn-success">Adicionar Novidade</a>
                 {% endif %}
                 {% if not is_owner %}

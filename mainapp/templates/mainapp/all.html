@@ -29,7 +29,7 @@
     </form>
     <div class="list-group mt-3">
         {% for cafe in cafes %}
-            <a href="{% url 'cafe_detail' cafe.id %}" class="list-group-item list-group-item-action d-flex align-items-start">
+            <a href="{% url 'cafe_detail' cafe.id %}" class="list-group-item list-group-item-action d-flex align-items-start" id="cafeteriadetail">
                 <div>
                     <div>
                         {{ cafe.nome }} na {{ cafe.endereco }} ({{ cafe.cntt }})

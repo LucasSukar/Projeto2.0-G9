@@ -1,14 +1,14 @@
 {
-  "name": "inovecafe",
+  "name": "inovecoffee",
   "version": "1.0.0",
-  "description": "inovecafe",
+  "description": "testes e2e inove coffee",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "inovecafe",
+  "author": "inovecoffee",
   "license": "ISC",
   "dependencies": {
-    "cypress": "^13.10.0"
+    "cypress": "^13.11.0"
   }
 }
