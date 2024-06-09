@@ -32,7 +32,9 @@
 
    - Google Sites: https://sites.google.com/cesar.school/projetos-2-grupo-nove/in%C3%ADcio
 
-   - Relatório de Programação em Par : https://docs.google.com/document/d/1tT1aOI1bNuQX62PqV5vBoj1Zjg1ET494rFGXAGmbASU/edit?amp;usp=embed_facebook
+   - Relatório de Programação em Par: https://docs.google.com/document/d/1tT1aOI1bNuQX62PqV5vBoj1Zjg1ET494rFGXAGmbASU/edit?amp;usp=embed_facebook
+
+   - Figma: 
 
 </details>
 
@@ -99,5 +101,20 @@
 <details>
 
 <summary>SR2</summary>
+
+  - Link Screencast prototipo lo-fi:
+
+  - Link Screencast Aplicação Web: 
+   
+![Imagem do WhatsApp de 2024-06-09 à(s) 12 28 43_936048e2](https://github.com/LucasSukar/Projeto2.0-G9/assets/142420463/168d197a-1a16-4ec8-9d68-e974b4025f50)
+
+<br>
+
+![Imagem do WhatsApp de 2024-06-09 à(s) 12 34 36_7ad48dff](https://github.com/LucasSukar/Projeto2.0-G9/assets/142420463/8954a8e8-f4bd-406f-9501-5fc827c004c5)
+
+<br>
+
+![Imagem do WhatsApp de 2024-06-09 à(s) 12 35 57_42a03389](https://github.com/LucasSukar/Projeto2.0-G9/assets/142420463/11218b77-3a2a-4b45-b122-d4c480704bf8)
+
 
 </details>
