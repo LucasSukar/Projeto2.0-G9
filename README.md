@@ -85,7 +85,6 @@
 <details>
 
 <summary>SR1</summary>
-## SR 1️⃣
 
   - Link Screencast prototipo lo-fi: https://youtu.be/SuXOQSHHxKM?si=R35TclnKRMp-wZq1
 
@@ -100,6 +99,5 @@
 <details>
 
 <summary>SR2</summary>
-## SR 2️⃣
 
 </details>
