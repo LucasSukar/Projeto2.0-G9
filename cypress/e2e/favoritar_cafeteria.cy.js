@@ -50,8 +50,5 @@ describe('test suite Favoritar Cafeteria', () => {
         cy.get('.deletelink').click();
         cy.get('div > [type="submit"]').click();
         cy.visit("/");
-    })
+    })
 })
-
-
-

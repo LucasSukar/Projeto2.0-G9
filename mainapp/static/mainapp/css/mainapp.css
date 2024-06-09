@@ -15,7 +15,13 @@
 
 }
 
-
+.logohome{
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    font-style: italic;
+    padding: 0rem 2rem;
+}
 
 .btn-principal{
     color:white;

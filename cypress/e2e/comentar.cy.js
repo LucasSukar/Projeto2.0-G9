@@ -27,7 +27,7 @@ describe('test suite Comentario Sobre A Cafeteria', () => {
         cy.get('#id_password').type('XD123');
         cy.get('.btn').click();
         cy.get(':nth-child(3) > a > .bx').click();
-        cy.get('.list-group-item > :nth-child(1) > div').click();
+        cy.get('#cafeteriadetail > :nth-child(1) > div').click();
         cy.get('.btn-success').click();
         cy.get('#comentario_texto').type('comentariokkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk');
         cy.get('.btn-primary').click();
@@ -63,5 +63,5 @@ describe('test suite Comentario Sobre A Cafeteria', () => {
         cy.get('.deletelink').click();
         cy.get('div > [type="submit"]').click();
         cy.visit("/");
-    })
+    })
 })

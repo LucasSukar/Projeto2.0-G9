@@ -18,32 +18,36 @@
             <label for="caracteristicas">Filtrar por características:</label>
             <div>
                 {% for caracteristica in todas_caracteristicas %}
-                    <button type="submit" class="btn btn-primary" name="caracteristicas"
-                            value="{{ caracteristica }}">{{ caracteristica }}</button>
+                    <button type="submit" class="btn btn-primary" name="caracteristicas" value="{{ caracteristica }}">{{ caracteristica }}</button>
                 {% endfor %}
-                <button type="submit" class="btn btn-primary" name="caracteristicas" value="">Todas as
-                    características
-                </button>
+                <button type="submit" class="btn btn-primary" name="caracteristicas" value="">Todas as características</button>
             </div>
         </div>
     </form>
     <div class="list-group mt-3">
         {% for cafe in cafes %}
-            <a href="{% url 'cafe_detail' cafe.id %}" class="list-group-item list-group-item-action d-flex align-items-start">
+            <a href="{% url 'cafe_detail' cafe.id %}" class="list-group-item list-group-item-action d-flex align-items-start" id="cafeteriadetail">
                 <div>
                     <div>
                         {{ cafe.nome }} na {{ cafe.endereco }} ({{ cafe.cntt }})
-                        {% if cafe.is_frequente %}
+                        {% with media_avaliacoes=cafe.calcular_media_avaliacoes %}
+                    {% if media_avaliacoes %}
+                        <p class="card-text"><strong>Média de Avaliações:</strong> {{ media_avaliacoes }} Estrelas ⭐</p>
+                    {% else %}
+                        <p class="card-text"><strong>Avaliação:</strong> Ainda não há avaliações.</p>
+                    {% endif %}
+                        {% endwith %}
+                        {% if cafe.id in frequentados %}
                             <span style="color: blue;">📌 Visitado</span>
                         {% endif %}
-                        {% if cafe.is_favorita %}
+                        {% if cafe.id in favoritos %}
                             <span style="color: red;">❤️ Favorito</span>
                         {% endif %}
-                        {% if cafe.is_wish %}
+                        {% if cafe.id in wishlist %}
                             <span style="color: green;">⏱ Lista de desejo</span>
                         {% endif %}
                     </div>
-                    {% if cafe.usuario == user %}
+                    {% if cafe.usuario == request.user %}
                         <small style="color: gold">⭐Você é o dono desta cafeteria.⭐</small>
                     {% endif %}
                 </div>
