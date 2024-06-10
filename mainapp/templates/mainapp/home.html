@@ -1,93 +1,115 @@
 {% extends "base.html" %}
 
-
 {% block 'head' %}
     {% load static %}
     <link rel="stylesheet" href="{% static 'mainapp/css/mainapp.css' %}">
-    
-    
 {% endblock %}
 
 {% block 'dashboard' %}
 
 <center>
-    <div class="container mt-5">
-        <div aria-live="polite" aria-atomic="true" style="position: relative; min-height: 200px;">
+    <div class="container mt-3">
+        <div aria-live="polite" aria-atomic="true" style="position: relative; min-height: 100px;">
             <div id="toastContainer" style="position: absolute; top: 0;">
             </div>
-            <h1 class="display-4" style="color: #387B5B; border: none;text-shadow: 
-            2px 2px 5px rgba(126, 126, 126, 0.3);">Bem-vindo {{ user.username }}!</h1>
+            <h1 class="display-4" style="color: #387B5B; border: none; text-shadow: 2px 2px 5px rgba(126, 126, 126, 0.3);">Bem-vindo {{ user.username }}!</h1>
         </div>
     </div>
 </center>
-<div class="container mt-5">
+<div class="container mt-4">
     {% if user.is_authenticated %}
-    {% if 'auth.cafe' in perms %}
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card text-white bg-info mb-3 p-4">
-                    <div class="card-header"> Cafeterias adicionadas </div>
-                    <div class="card-body">
-                        <h5 class="card-title">{{ total_cafes }}</h5>
-                        <p class="card-text">Este é o total de cafeterias que voce adicionou. </p>
+        {% if 'auth.cafe' in perms %}
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card text-white bg-info mb-3 p-4">
+                        <div class="card-header">Cafeterias adicionadas</div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ total_cafes }}</h5>
+                            <p class="card-text">Este é o total de cafeterias que você adicionou.</p>
+                        </div>
                     </div>
                 </div>
             </div>
+        {% else %}
+        <div class="row">
+                <div class="col-lg-12">
+                    <div class="card text-white bg-info mb-3 p-4">
+                        <div class="card-header">Cafeterias Visitadas</div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ total_frequentados }}</h5>
+                            <p class="card-text">Este é o total de cafeterias que você visitou.</p>
+                        </div>
+                    </div>
+                </div>
             
-        </div>
-    {%else%}
-    <div class="container text-center">
-        <center><img src="{% static 'interface/images/caiota.jpg' %}" alt="logo" class="logohome"/></center>
-    </div>
-    {%endif%}
+                <div class="col-lg-6">
+                    <div class="card text-white bg-info mb-3 p-4">
+                        <div class="card-header">Cafeterias Favoritadas</div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ total_favoritos }}</h5>
+                            <p class="card-text">Este é o total de cafeterias que estão nos seus favoritos.</p>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="col-lg-6">
+                    <div class="card text-white bg-info mb-3 p-4">
+                        <div class="card-header">Cafeterias na Lista de Desejos</div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ total_lista_desejo }}</h5>
+                            <p class="card-text">Este é o total de cafeterias na sua lista de desejo.</p>
+                        </div>
+                    </div>
+                </div>
+            
+        {% endif %}
     {% else %}
-    <div class="card text-center">
-        <div class="welcome-card-header">
-            Bem-vindo ao iNove Coffee!
+        <div class="card text-center">
+            <div class="welcome-card-header">
+                Bem-vindo ao iNove Coffee!
+            </div>
+            <div class="welcome-card-body">
+                <h5 class="card-title">Parece que você não está logado.</h5>
+                <p class="welcome-card-text">Para acessar suas informações de conta, por favor faça o login ou cadastre-se.</p>
+                <a href="{% url 'login' %}" class="btn btn-primary btn-lg">Logue</a>
+                <a href="{% url 'cadastro' %}" class="btn btn-secondary btn-lg">Cadastre-se</a>
+            </div>
         </div>
-        <div class="welcome-card-body">
-            <h5 class="card-title">Parece que você não está logado.</h5>
-            <p class="welcome-card-text">Para acessar suas informações de conta, por favor faça o login ou cadastre-se.</p>
-            <a href="{% url 'login' %}" class="btn btn-primary btn-lg">Logue</a>
-            <a href="{% url 'cadastro' %}" class="btn btn-secondary btn-lg">Cadastre-se</a>
-        </div>
-    </div>
     {% endif %}
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         {% if messages %}
             {% for message in messages %}
-            const toastContainer = document.getElementById('toastContainer');
-            let toastClass = "";
-            switch("{{ message.tags }}") {
-                case "success":
-                    toastClass = "bg-success text-white";
-                    break;
-                case "error":
-                    toastClass = "bg-danger text-white";
-                    break;
-                
-                default:
-                    toastClass = "bg-primary text-white";
-            }
-    
-            const toastHtml = `
-                <div class="toast ${toastClass}" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000">
-                    <div class="toast-header">
-                        <strong class="mr-auto">Notificação</strong>
-                        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="toast-body">
-                        {{ message }}
-                    </div>
-                </div>`;
-            toastContainer.insertAdjacentHTML('beforeend', toastHtml);
+                const toastContainer = document.getElementById('toastContainer');
+                let toastClass = "";
+                switch ("{{ message.tags }}") {
+                    case "success":
+                        toastClass = "bg-success text-white";
+                        break;
+                    case "error":
+                        toastClass = "bg-danger text-white";
+                        break;
+                    default:
+                        toastClass = "bg-primary text-white";
+                }
+
+                const toastHtml = `
+                    <div class="toast ${toastClass}" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000">
+                        <div class="toast-header">
+                            <strong class="mr-auto">Notificação</strong>
+                            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="toast-body">
+                            {{ message }}
+                        </div>
+                    </div>`;
+                toastContainer.insertAdjacentHTML('beforeend', toastHtml);
             {% endfor %}
             $('.toast').toast('show');
         {% endif %}
     });
-    </script>
+</script>
 {% endblock %}

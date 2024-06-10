@@ -137,3 +137,8 @@ GitHub.sublime-settings
 
 # Databases
 db.sqlite3
+
+# cypress
+node_modules
+package.json
+package-lock.json

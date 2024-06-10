@@ -24,19 +24,19 @@
 
                 {% if not is_owner %}
                     {% if is_frequentado %}
-                        <p class="card-text"><strong>Você já visitou essa cafeteria 📌</strong></p>
+                        <p class="card-text"><strong>Cafeteria visitada 📌</strong></p>
                     {% else %}
-                        <p class="card-text"><strong>Você não visitou esta cafeteria.</strong></p>
+                        <p class="card-text"><strong>Cafeteria não visitada.</strong></p>
                     {% endif %}
                     {% if is_favorito %}
-                        <p class="card-text"><strong>Você favoritou esta cafeteria ❤️</strong></p>
+                        <p class="card-text"><strong>Cafeteria Favoritada ❤️</strong></p>
                     {% else %}
-                        <p class="card-text"><strong>Você não favoritou esta cafeteria.</strong></p>
+                        <p class="card-text"><strong>Cafeteria não favoritada.</strong></p>
                     {% endif %}
                     {% if is_wishlist %}
-                        <p class="card-text"><strong>Você deseja ir futuramente a esta cafeteria ⏱</strong></p>
+                        <p class="card-text"><strong>Cafeteria na lista de desejos ⏱</strong></p>
                     {% else %}
-                        <p class="card-text"><strong>Você não deseja ir futuramente a esta cafeteria.</strong></p>
+                        <p class="card-text"><strong>Cafeteria fora da lista de desejos.</strong></p>
                     {% endif %}
                     <form id="favoritoForm" method="POST" action="{% url 'adicionar_frequente' cafe.pk %}">
                         {% csrf_token %}

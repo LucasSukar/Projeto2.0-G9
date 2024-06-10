@@ -45,6 +45,15 @@ class HomeView(View):
 
             contexto['total_cafes'] = total_cafes
 
+            # Estatísticas do usuário
+            total_favoritos = Favorito.objects.filter(user=request.user).count()
+            total_lista_desejo = ListaDesejo.objects.filter(user=request.user).count()
+            total_frequentados = Frequentado.objects.filter(user=request.user).count()
+
+            contexto['total_favoritos'] = total_favoritos
+            contexto['total_lista_desejo'] = total_lista_desejo
+            contexto['total_frequentados'] = total_frequentados
+
         return render(request, 'mainapp/home.html', contexto)
     
 class CadastroView(View):
