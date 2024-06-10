@@ -32,7 +32,7 @@
 
    - Google Sites: https://sites.google.com/cesar.school/projetos-2-grupo-nove/in%C3%ADcio
 
-   - Relatório de Programação em Par: https://docs.google.com/document/d/1tT1aOI1bNuQX62PqV5vBoj1Zjg1ET494rFGXAGmbASU/edit?amp;usp=embed_facebook
+   - Relatório de Programação em Par: https://docs.google.com/document/d/1tT1aOI1bNuQX62PqV5vBoj1Zjg1ET494rFGXAGmbASU/edit?amp;usp=embed_facebook&pli=1
 
    - Figma: https://www.figma.com/design/VcNzYoaZ8U8pSmNniSbKWX/Prot%C3%B3tipos-G9?node-id=0-1&t=PRLn2ZlheV4FjNCs-0
 
