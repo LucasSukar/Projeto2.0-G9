@@ -27,11 +27,11 @@ describe('admin', () => {
         cy.get('.btn-success').click();
         cy.get('#novidade_texto').type("Promoção do dia: tudo 2 reais");
         cy.get('.btn-primary').click();
-        cy.get(':nth-child(2) > .card > .card-body > p').invoke('text').should('have.string', 'Promoção do dia: tudo 2 reais');
+        cy.get('h6.card-text').invoke('text').should('have.string', 'Promoção do dia: tudo 2 reais');
         cy.get('.btn-sm').click();
         cy.get('.modal-footer > .btn-danger').click();
         cy.get(':nth-child(3) > .card > .card-body > p').invoke('text').should('have.string', 'Ainda não há novidades.');
         cy.get('.col-md-8 > .btn-danger').click();
-        cy.get('form > .btn').click();
+        cy.get('.btn-secondary').click();
     })
 })

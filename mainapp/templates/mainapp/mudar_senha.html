@@ -34,8 +34,8 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         {% if messages %}
-            {% for message in messages %}
             const toastContainer = document.getElementById('toastContainer');
+            {% for message in messages %}
             let toastClass = "";
             switch("{{ message.tags }}") {
                 case "success":
@@ -44,7 +44,6 @@
                 case "error":
                     toastClass = "bg-danger text-white";
                     break;
-                
                 default:
                     toastClass = "bg-primary text-white";
             }
@@ -66,5 +65,5 @@
             $('.toast').toast('show');
         {% endif %}
     });
-    </script>
+</script>
 {% endblock %}

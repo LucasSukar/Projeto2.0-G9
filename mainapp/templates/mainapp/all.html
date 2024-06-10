@@ -61,11 +61,10 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         {% if messages %}
-            {% for message in messages %}
             const toastContainer = document.getElementById('toastContainer');
-            
+            {% for message in messages %}
             let toastClass = "";
-            switch("{{ message.tags }}") {
+            switch ("{{ message.tags }}") {
                 case "success":
                     toastClass = "bg-success text-white";
                     break;
@@ -75,7 +74,7 @@
                 default:
                     toastClass = "bg-primary text-white";
             }
-    
+
             const toastHtml = `
                 <div class="toast ${toastClass}" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000">
                     <div class="toast-header">
@@ -85,12 +84,17 @@
                         </button>
                     </div>
                     <div class="toast-body">
-                        {{ message }}
+                        {{ message|escapejs }}
                     </div>
                 </div>`;
             toastContainer.insertAdjacentHTML('beforeend', toastHtml);
             {% endfor %}
-            $('.toast').toast('show');
+            
+            if (typeof $ !== 'undefined') {
+                $('.toast').toast('show');
+            } else {
+                console.error('jQuery não carregado');
+            }
         {% endif %}
     });
 </script>
