@@ -100,7 +100,7 @@
 
 <summary>SR2</summary>
 
-  - Link Screencast prototipo lo-fi: 
+  - Link Screencast prototipo lo-fi: https://www.youtube.com/watch?v=NrfMao5S0Ro
 
   - Link Screencast Aplicação Web: https://www.youtube.com/watch?v=jGb-jFP6ao4
    
