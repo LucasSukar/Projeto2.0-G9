@@ -32,9 +32,11 @@
 
    - Google Sites: https://sites.google.com/cesar.school/projetos-2-grupo-nove/in%C3%ADcio
 
-   - Relatório de Programação em Par: https://docs.google.com/document/d/1tT1aOI1bNuQX62PqV5vBoj1Zjg1ET494rFGXAGmbASU/edit?amp;usp=embed_facebook
+   - Nosso Canal no Youtube : https://www.youtube.com/@INoveCoffee
 
-   - Figma: 
+   - Relatório de Programação em Par: https://docs.google.com/document/d/1tT1aOI1bNuQX62PqV5vBoj1Zjg1ET494rFGXAGmbASU/edit?amp;usp=embed_facebook&pli=1
+
+   - Figma: https://www.figma.com/design/VcNzYoaZ8U8pSmNniSbKWX/Prot%C3%B3tipos-G9?node-id=0-1&t=PRLn2ZlheV4FjNCs-0
 
 </details>
 
@@ -100,9 +102,11 @@
 
 <summary>SR2</summary>
 
-  - Link Screencast prototipo lo-fi:
+  - Link Screencast prototipo lo-fi: https://www.youtube.com/watch?v=NrfMao5S0Ro
 
-  - Link Screencast Aplicação Web: 
+  - Link Screencast Aplicação Web: https://www.youtube.com/watch?v=jGb-jFP6ao4
+
+  - Link Screencast E2E: https://www.youtube.com/watch?v=z7Gf_taW2wM
    
 ![Imagem do WhatsApp de 2024-06-09 à(s) 12 28 43_936048e2](https://github.com/LucasSukar/Projeto2.0-G9/assets/142420463/168d197a-1a16-4ec8-9d68-e974b4025f50)
 
