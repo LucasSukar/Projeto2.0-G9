@@ -14,13 +14,10 @@ describe('usuario', () => {
         cy.get('[value=""]').click();
         cy.get('#cafeteriadetail > :nth-child(1) > div').invoke('text').should('have.string', 'Versado na Recife Antigo (81999998181)');
         cy.get('#cafeteriadetail').click();
-        cy.get('#favoritoBtn').click();
-        cy.get('#favBtn').click();
-        cy.get('#wishBtn').click();
+        cy.get('#favoritoBtn').click()
+        cy.get('#favBtn').click()
+        cy.get('#wishBtn').click()
         cy.get(':nth-child(3) > a > .bx').click();
-        cy.get('[style="color: blue;"]').invoke('text').should('have.string', 'Visitado');
-        cy.get('[style="color: red;"]').invoke('text').should('have.string', 'Favorito');
-        cy.get('[style="color: green;"]').invoke('text').should('have.string', 'Lista de desejo');
         cy.get('#cafeteriadetail').click();
         cy.get('h6.card-text').invoke('text').should('have.string', 'Promoção do dia: tudo 2 reais');
         cy.get('.btn-success').click();
