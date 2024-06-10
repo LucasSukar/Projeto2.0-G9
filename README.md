@@ -8,7 +8,7 @@
     src="https://img.shields.io/github/commit-activity/t/LucasSukar/Projeto2.0-G9?style=flat&logo=github"
     alt="Commit Activity"
   />
-  <a href="LICENSE"
+  <a href="LICENSE.md"
     ><img
       src="https://img.shields.io/github/license/LucasSukar/Projeto2.0-G9"
       alt="License"
