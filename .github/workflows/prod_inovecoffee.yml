@@ -7,7 +7,7 @@ name: Build and deploy Python app to Azure Web App - inovecoffee
 on:
   push:
     branches:
-      - main
+      - prod
   workflow_dispatch:
 
 jobs:
@@ -32,14 +32,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           npm ci
-
       - name: Run local server
         run: |
           python manage.py migrate
           python manage.py runserver &
           sleep 5
           npx cypress run
-
       - name: Cleaning testing files
         run: |
           rm .env
@@ -49,5 +47,44 @@ jobs:
           rm package.json
           rm -rf cypress
           rm -rf node_modules
+      - name: Zip artifact for deployment
+        run: zip release.zip ./* -r
 
+      - name: Upload artifact for deployment jobs
+        uses: actions/upload-artifact@v3
+        with:
+          name: python-app
+          path: |
+            release.zip
+            !venv/
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    permissions:
+      id-token: write #This is required for requesting the JWT
+
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v3
+        with:
+          name: python-app
+
+      - name: Unzip artifact for deployment
+        run: unzip release.zip
       
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_75F32B146B6B4BC2971B7CCEC5BA9B0A }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_2D40330A944744BAB9AA0AAB9D082BA6 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_6BBE66880E8346A6BFB5B5A0B0787B92 }}
+
+      - name: 'Deploy to Azure Web App'
+        uses: azure/webapps-deploy@v2
+        id: deploy-to-webapp
+        with:
+          app-name: 'inovecoffee'
+          slot-name: 'Production'
