@@ -1,0 +1,14 @@
+{
+  "name": "inovecoffee",
+  "version": "1.0.0",
+  "description": "iNove Coffee",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "inove-devs",
+  "license": "ISC",
+  "dependencies": {
+    "cypress": "^13.11.0"
+  }
+}
