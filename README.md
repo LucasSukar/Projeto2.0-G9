@@ -100,9 +100,9 @@
 
 <summary>SR2</summary>
 
-  - Link Screencast prototipo lo-fi:
+  - Link Screencast prototipo lo-fi: 
 
-  - Link Screencast Aplicação Web: 
+  - Link Screencast Aplicação Web: https://www.youtube.com/watch?v=jGb-jFP6ao4
    
 ![Imagem do WhatsApp de 2024-06-09 à(s) 12 28 43_936048e2](https://github.com/LucasSukar/Projeto2.0-G9/assets/142420463/168d197a-1a16-4ec8-9d68-e974b4025f50)
 
