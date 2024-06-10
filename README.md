@@ -34,7 +34,7 @@
 
    - Relatório de Programação em Par: https://docs.google.com/document/d/1tT1aOI1bNuQX62PqV5vBoj1Zjg1ET494rFGXAGmbASU/edit?amp;usp=embed_facebook
 
-   - Figma: 
+   - Figma: https://www.figma.com/design/VcNzYoaZ8U8pSmNniSbKWX/Prot%C3%B3tipos-G9?node-id=0-1&t=PRLn2ZlheV4FjNCs-0
 
 </details>
 
@@ -89,8 +89,6 @@
 <summary>SR1</summary>
 
   - Link Screencast prototipo lo-fi: https://youtu.be/SuXOQSHHxKM?si=R35TclnKRMp-wZq1
-
-  - Link protótipo de baixa - Figma: https://www.figma.com/design/VcNzYoaZ8U8pSmNniSbKWX/Prot%C3%B3tipos-G9?node-id=0-1&t=PRLn2ZlheV4FjNCs-0
 
   - Link Screencast Aplicação Web: https://youtu.be/R5HmjUs3CyE?si=oUZa4673nMmMVvT1
 
