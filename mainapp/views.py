@@ -195,7 +195,7 @@ class CafeDeleteView(LoginRequiredMixin, View):
 
     def post(self, request, pk):
         cafe = get_object_or_404(Cafe, pk=pk)
-        if cafe.usuario == request.user:  # Verifica se o usuário é o dono da cafeteria
+        if cafe.usuario == request.user:
             cafe.delete()
             messages.success(request, 'Cafeteria deletada com sucesso!')
         else:

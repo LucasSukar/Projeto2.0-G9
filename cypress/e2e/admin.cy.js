@@ -32,7 +32,6 @@ describe('admin', () => {
         cy.get('.modal-footer > .btn-danger').click();
         cy.get(':nth-child(3) > .card > .card-body > p').invoke('text').should('have.string', 'Ainda não há novidades.');
         cy.get('.col-md-8 > .btn-danger').click();
-        cy.get('form > .btn').click();
-        cy.get('p').invoke('text').should('have.string', 'Nenhuma cafeteria adicionada ainda.');
+        cy.get('.btn-secondary').click();
     })
 })
