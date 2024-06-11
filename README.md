@@ -107,6 +107,8 @@
   - Link Screencast Aplicação Web: https://www.youtube.com/watch?v=jGb-jFP6ao4
 
   - Link Screencast E2E: https://www.youtube.com/watch?v=z7Gf_taW2wM
+
+  - Link Screencast CI/CD : https://youtu.be/0Cz_DaNMMwI
    
 ![Imagem do WhatsApp de 2024-06-09 à(s) 12 28 43_936048e2](https://github.com/LucasSukar/Projeto2.0-G9/assets/142420463/168d197a-1a16-4ec8-9d68-e974b4025f50)
 
