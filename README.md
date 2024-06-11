@@ -96,8 +96,6 @@
 
   - Link Screencast Aplicação Web: https://youtu.be/R5HmjUs3CyE?si=oUZa4673nMmMVvT1
 
-  - Protótipo de Média : https://www.figma.com/design/fMTqdaw8nCckZ05uxZQoaQ/GRID-INOVE-COFFEE?node-id=0-1&t=jI2ee6UC6lIu5NOX-1
-
 ![Imagem do WhatsApp de 2024-04-25 à(s) 07 51 03_674332df](https://github.com/LucasSukar/Projeto2.0-G9/assets/142420463/d9ef0948-038e-4318-ad0d-d84936a38b11)
 
 </details>
